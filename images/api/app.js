@@ -45,10 +45,10 @@ app.post('/cells', async (req, res, next) => {
 	res.send(200)
 })
 
-app.post('/answer', async (req, res, next) => {
+app.post('/schema/:uuid/answer', async (req, res, next) => {
 	const insert = {};
 	insert["cellID"] = req.body["cellID"];
-	insert["tableID"] = req.body["tableID"];
+	insert["tableID"] = req.param("uuid");
 	insert["userID"] = uuidV1();
 	insert["username"] = faker.name.firstName().toLowerCase() + "." + faker.name.lastName().toLowerCase();
 	insert["usermail"] = faker.internet.email();
