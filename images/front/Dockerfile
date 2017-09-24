@@ -1,9 +1,9 @@
 FROM node:6-slim
 
-COPY . /front
-COPY package.json /front/package.json
+COPY . /public
+COPY package.json /public/package.json
 
-WORKDIR /front
+WORKDIR /public
 
 ENV NODE_ENV production
 RUN yarn install --production

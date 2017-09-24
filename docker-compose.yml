@@ -4,13 +4,13 @@ services:
   mongo:
     image: mongo:3.4
 
-  web:
-    build: images/front
+  public:
+    build: images/public
     ports:
      - "8080:8080"
     volumes:
-     - images/front:/front
-     - /front/node_modules
+     - images/public:/public
+     - /public/node_modules
 
   api:
     build: images/api
