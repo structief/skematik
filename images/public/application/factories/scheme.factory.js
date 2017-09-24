@@ -1,6 +1,6 @@
 //Scheme factory
 skematikFactories.factory('SchemeFactory',["$resource", function($resource) {
-  return $resource('/scheme/:uuid', {uuid: "@uuid"}, {
+  return $resource('/scheme/:uuid/:type', {uuid: "@uuid"}, {
     get: {
       method: 'GET',
       isArray: false,
@@ -11,6 +11,13 @@ skematikFactories.factory('SchemeFactory',["$resource", function($resource) {
                 return result;
             }
         }
+    },
+    participate: {
+      method: 'POST',
+      isArray: false,
+      params: {
+        type: "answer"
+      }
     }
   });
 }]);

@@ -1,4 +1,4 @@
-<h4>I'm a table!</h4>
+<h4>{{scheme.title}}</h4>
 <table class="u-full-width">
 	<thead>
 		<tr>
@@ -7,6 +7,16 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr skematik-row ng-repeat="row in scheme.rows" row="row" ng-show="scheme.rows"></tr>
+		<tr ng-repeat="row in scheme.rows" row="row" ng-show="scheme.rows">
+			<td>
+				{{row.name}}
+			</td>
+			<td ng-repeat="cell in row.cells" ng-click="showPopup(row, cell)">
+				{{cell.current}} / {{cell.max}} 
+			</td>
+
+		</tr>
 	</tbody>
 </table>
+
+<skematik-popup></skematik-popup>

@@ -1,0 +1,13 @@
+table{
+	thead tr{
+		background-color: #ffffff;
+
+		td{
+			font-weight: 600;
+		}
+	}
+
+	td:first-of-type{
+		padding-left: 10px;
+	}
+}
