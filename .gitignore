@@ -1,3 +1,5 @@
 .idea
+.DS_Store
 images/api/node_modules
-images/front/node_modules
+images/public/node_modules
+images/public/bower_components

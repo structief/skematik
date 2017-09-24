@@ -1,0 +1,36 @@
+{
+  "name": "skematik",
+  "version": "0.1.0",
+  "authors": [
+    "Koen Everaert <koen@beformed.be>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "application/assets/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "summernote": "~0.6.16",
+    "angular": "~1.4.8",
+    "angular-bootstrap": "~0.13.4",
+    "angular-cookies": "~1.4.6",
+    "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.6.0",
+    "angular-resource": "~1.4.6",
+    "angular-summernote": "~0.5.1",
+    "angular-ui-router": "~0.2.15",
+    "angular-ui-sortable": "~0.13.4",
+    "font-awesome": "~4.4.0",
+    "is_js": "~0.7.4",
+    "jquery-ui": "~1.11.4",
+    "PACE": "pace#~1.0.2",
+    "ui.bootstrap": "ui-bootstrap#~0.13.4"
+  },
+  "resolutions": {
+    "angular": "~1.4.8"
+  }
+}
