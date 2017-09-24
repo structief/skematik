@@ -6,22 +6,54 @@ services:
 
   public:
     build: images/public
+networks:
+  default:
+    driver: bridge
+
+services:
+  db:
+    image: postgres
+    build:
+      context: ./images/db
     ports:
      - "8080:8080"
     volumes:
      - images/public:/public
      - /public/node_modules
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+
+#  public:
+#    build:
+#      context: ./images/public/
+#    ports:
+#     - "8080:8080"
+#    volumes:
+#     - ./images/public:/public
+#     - /public/node_modules
 
   api:
     build: images/api
+    build:
+      context: ./images/api/
+    networks:
+      - default
     environment:
       - MONGODB_URI=mongodb://mongo:27017/test
+      PG_CONNECTION_STRING: postgres://admin:admin@db:5432/skematik
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
     links:
       - mongo
+      - db
     depends_on:
       - mongo
+      - db
     volumes:
       - images/api:/api
       - /api/node_modules
+      - ./images/api:/api
     ports:
       - "3000:3000"
