@@ -1,0 +1,10 @@
+<section ng-show="show.popup" class="popup--overlay">
+	<a href="#" ng-click="closePopup()" class="icon--close">x</a>
+	<h4>Participate in: {{row.name}}?</h4>
+
+	<label for="email">Enter your e-mailaddress:</label>
+	<input type="email" id="email" ng-model="email" placeholder="me@live.com" required>
+	<br/>
+	<input type="button" value="Jah bitte!" ng-click="participate()" />
+</section>
+<div class="overlay--dark" ng-show="show.popup"></div>
