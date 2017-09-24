@@ -48,6 +48,7 @@ app.post('/cells', async (req, res, next) => {
 app.post('/answer', async (req, res, next) => {
 	const insert = {};
 	insert["cellID"] = req.body["cellID"];
+	insert["tableID"] = req.body["tableID"];
 	insert["userID"] = uuidV1();
 	insert["username"] = faker.name.firstName().toLowerCase() + "." + faker.name.lastName().toLowerCase();
 	insert["usermail"] = faker.internet.email();
@@ -55,23 +56,44 @@ app.post('/answer', async (req, res, next) => {
 	insert["created_at"] = new Date();
 	insert["updated_at"] = new Date();
 	
-	await pg("answers").insert(insert).returning("id").then(function(id) {
-		
-		res.send(200, id)
+	// asses if can register
+	let go = false;
+	await pg.select().table('answers').where({ cellID: insert['cellID']}).join('cells', 'cells.uuid', '=', 'answers.cellID').then(function(d) {
+		if(d.length > d[0].max) {
+			//do not allow
+			res.send(401);
+		} else {
+			go = true;
+		}
 	})
+	
+	// add to answers
+	if( go ) {
+		await pg("answers").insert(insert).returning("id").then(function(id) {
+			res.send(200, id)
+		}).catch(function(error) {
+			res.send("error" + error)
+		})
+	}
 	
 })
 
 app.get('/schema/:uuid', async (req, res, next) => {
 	let result = {};
 	const rowstructure = [];
+	
+	let answers = [];
+	await pg.select().table("answers").where({tableID: req.param("uuid")}).then(function(a) {
+		answers = a;
+	})
+	
 	await pg.select()
 		.table("schema")
 		.where({"schema.uuid": req.param("uuid")})
 		.join('cells', 'schema.id', "=", "cells.tableID")
 		.then( function (r) {
 			
-			result["uuid"] = r[0].uuid;
+			result["uuid"] = req.param("uuid");
 			result["title"] = r[0].title;
 			const temp = [];
 			Object.keys(r[0].headers).map((key, index) => {
@@ -88,9 +110,11 @@ app.get('/schema/:uuid', async (req, res, next) => {
 				const found = [];
 				for( let i = 0; i<r.length; i++ ) {
 					if(r[i]["row"] === key) {
+						const num = answers.filter(answer => answer.cellID === r[i].uuid);
+						console.log(num)
 						found.push({
 							max: r[i].max,
-							current: r[i].current,
+							current: num,
 							col: r[i].col,
 							uuid: r[i].uuid
 						})
@@ -105,6 +129,7 @@ app.get('/schema/:uuid', async (req, res, next) => {
 			
 		}).then(function() {
 			result["rows"] = rowstructure;
+			result["answers"] = answers;
 			res.send(result);
 		}).catch(function(error) {
 			res.send("error" + error)
@@ -173,6 +198,7 @@ async function initialiseTables() {
 		table.increments();
 		table.uuid("cellID");
 		table.uuid("userID");
+		table.uuid("tableID");
 		table.string("username");
 		table.string("usermail");
 		table.timestamps();
