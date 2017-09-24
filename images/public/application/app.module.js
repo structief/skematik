@@ -7,5 +7,6 @@ var skematik = angular.module('skematik', [
     'skematik.controllers',
     'skematik.directives',
     'skematik.factories',
-    'ui.router'
+    'ui.router',
+    'ngResource',
 ]);

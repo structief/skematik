@@ -4,10 +4,6 @@ var base_url = "application/components/";
 skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", function($stateProvider, $urlRouterProvider, $locationProvider) {
 
 	$locationProvider.html5Mode(true).hashPrefix('!');
-  	$urlRouterProvider.otherwise( function($injector, $location) {
-        var $state = $injector.get("$state");
-        $state.go("fe.landing");
-    });
 
 	// Now set up the states
 	$stateProvider
@@ -15,17 +11,17 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", fu
 		url: '',
 		views: {
 			"navigation":{
-				templateUrl: base_url + "../core/header/headerView.html",
+				templateUrl: base_url + "../core/header/header.view.html",
 				controller: "HeaderController"
 			}
 		}
 	})
-	.state('fe.landing', {
-		url: "/",
+	.state('fe.scheme', {
+		url: "/id/:tableId",
 		views: {
 			"pageContent@": {
-				templateUrl: base_url + "landing/landingView.html",
-				controller: "LandingController",
+				templateUrl: base_url + "scheme/scheme.view.html",
+				controller: "SchemeController",
 			}
 		}
 	})
@@ -33,7 +29,7 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", fu
 		url: "/",
 		views: {
 			"pageContent@": {
-				templateUrl: base_url + "entry/entryView.html",
+				templateUrl: base_url + "entry/entry.view.html",
 				controller: "EntryController",
 			}
 		}

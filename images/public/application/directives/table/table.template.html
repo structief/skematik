@@ -1,0 +1,12 @@
+<h4>I'm a table!</h4>
+<table class="u-full-width">
+	<thead>
+		<tr>
+			<td><i>Shiftnaam</i></td>
+			<td ng-repeat="header in scheme.headers">{{header}}</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr skematik-row ng-repeat="row in scheme.rows" row="row" ng-show="scheme.rows"></tr>
+	</tbody>
+</table>

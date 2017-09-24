@@ -167,9 +167,10 @@ gulp.task('inject-raw', function(){
                 config.development.root + '/bower_components/bootstrap/dist/js/bootstrap.min.js',
                 config.development.root + '/bower_components/angular/angular.min.js',
                 config.development.root + '/bower_components/angular-ui-router/release/angular-ui-router.min.js',
+                config.development.root + '/bower_components/angular-resource/angular-resource.min.js',
                 ], {read: false}
             ), 
-            {name: 'head', relative: true}
+            {name: 'head'}
         )
     )
     .pipe(
@@ -185,8 +186,7 @@ gulp.task('inject-raw', function(){
                     config.development.application + '/**/*.js',
                 ],
                 {read: false}
-            ),
-            {relative: true}
+            )
         )
     )
     .pipe(gulp.dest(config.development.root + '/'));

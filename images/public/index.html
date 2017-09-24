@@ -17,9 +17,9 @@
     <link rel="icon" href="assets/images/icons/favicon.png">
 
     <!-- Stylesheets -->
-	<link rel='stylesheet' id='fonts-style-css'  href='http://fonts.googleapis.com/css?family=Lato:300,300italic,700' type='text/css' media='all' />
+	<link rel='stylesheet' id='fonts-style-css'  href='http://fonts.googleapis.com/css?family=Lato:300,300italic,700&v=fc04e509670d1121007194a83461eb63' type='text/css' media='all' />
 	<!-- inject:css -->
-	<link rel="stylesheet" href="assets/css/minified/skematik_stylesheets.css">
+	<link rel="stylesheet" href="/assets/css/minified/skematik_stylesheets.css">
 	<!-- endinject -->
     <base href="/">
 	</head>
@@ -28,15 +28,20 @@
     	<section ui-view="pageContent"></section>
 	</body>
     <!-- head:js -->
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/angular/angular.min.js"></script>
-    <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/bower_components/angular/angular.min.js"></script>
+    <script src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="/bower_components/angular-resource/angular-resource.min.js"></script>
     <!-- endinject -->
 	<!-- inject:js -->
-	<script src="application/app.module.js"></script>
-	<script src="application/app.settings.js"></script>
-	<script src="application/components/entry/entryController.js"></script>
-	<script src="application/components/landing/landingController.js"></script>
-	<script src="application/core/header/headerController.js"></script>
+	<script src="/application/app.module.js"></script>
+	<script src="/application/app.settings.js"></script>
+	<script src="/application/factories/scheme.factory.js"></script>
+	<script src="/application/components/entry/entry.controller.js"></script>
+	<script src="/application/components/scheme/scheme.controller.js"></script>
+	<script src="/application/directives/row/row.directive.js"></script>
+	<script src="/application/core/header/header.controller.js"></script>
+	<script src="/application/directives/table/table.controller.js"></script>
+	<script src="/application/directives/table/table.directive.js"></script>
 	<!-- endinject -->
 </html>
