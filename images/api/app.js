@@ -3,6 +3,7 @@ const http = require("http");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const uuidV1 = require('uuid/v1');
+const faker = require("Faker");
 
 const pg = require('knex')({
 	client: 'pg',
@@ -32,6 +33,7 @@ app.post('/schema', async (req, res, next) => {
 	const id = await pg("schema").insert(req.body).returning('id');
 	res.send(id)
 })
+
 app.post('/cells', async (req, res, next) => {
 	const request = req.body;
 	console.log("request", request)
@@ -43,18 +45,40 @@ app.post('/cells', async (req, res, next) => {
 	res.send(200)
 })
 
+app.post('/answer', async (req, res, next) => {
+	const insert = {};
+	insert["cellID"] = req.body["cellID"];
+	insert["userID"] = uuidV1();
+	insert["username"] = faker.name.firstName().toLowerCase() + "." + faker.name.lastName().toLowerCase();
+	insert["usermail"] = faker.internet.email();
+	
+	insert["created_at"] = new Date();
+	insert["updated_at"] = new Date();
+	
+	await pg("answers").insert(insert).returning("id").then(function(id) {
+		
+		res.send(200, id)
+	})
+	
+})
+
 app.get('/schema/:uuid', async (req, res, next) => {
 	let result = {};
 	const rowstructure = [];
 	await pg.select()
 		.table("schema")
-		.where({uuid: req.param("uuid")})
+		.where({"schema.uuid": req.param("uuid")})
 		.join('cells', 'schema.id', "=", "cells.tableID")
 		.then( function (r) {
 			
 			result["uuid"] = r[0].uuid;
 			result["title"] = r[0].title;
-			result["headers"] = r[0].headers;
+			const temp = [];
+			Object.keys(r[0].headers).map((key, index) => {
+				temp.push(key);
+			});
+			result["headers"] = temp;
+			
 			result["created_at"] = r[0].created_at;
 			result["created_at"] = r[0].created_at;
 			result["updated_at"] = r[0].updated_at;
@@ -67,7 +91,8 @@ app.get('/schema/:uuid', async (req, res, next) => {
 						found.push({
 							max: r[i].max,
 							current: r[i].current,
-							col: r[i].col
+							col: r[i].col,
+							uuid: r[i].uuid
 						})
 					}
 				}
@@ -129,6 +154,8 @@ async function initialiseTables() {
 		console.log("created tables")
 	});
 	
+	
+	
 	await pg.schema.createTableIfNotExists('cells', function (table) {
 		table.increments();
 		table.integer("tableID");
@@ -144,8 +171,8 @@ async function initialiseTables() {
 	
 	await pg.schema.createTableIfNotExists('answers', function (table) {
 		table.increments();
-		table.integer("cellID");
-		table.integer("userID");
+		table.uuid("cellID");
+		table.uuid("userID");
 		table.string("username");
 		table.string("usermail");
 		table.timestamps();
