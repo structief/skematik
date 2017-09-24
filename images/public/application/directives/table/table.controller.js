@@ -4,11 +4,11 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 	};
 
 	$scope.showPopup = function(row, cell){
-		$rootScope.$broadcast('popup.show', {"row": row, "cell": cell});
+		$rootScope.$broadcast('popup.show', {'row': row, 'cell': cell});
 	};
 
-	$rootScope.$on('cell.participate', function(event, {cell, participant}){
-		/*SchemeFactory.participate({uuid: $scope.$parent.scheme.uuid, cellID: cell.uuid, participant: participant}, function(response){
+	$rootScope.$on('cell.participate', function(event, data){
+		/*SchemeFactory.participate({uuid: $scope.$parent.scheme.uuid, cellID: data.cell.uuid, participant: data.participant}, function(response){
 
 		});*/
 	});

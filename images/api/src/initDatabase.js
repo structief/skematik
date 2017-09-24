@@ -1,5 +1,3 @@
-
-
 const initDatabase = {
 	checkDatabase(db) {
 		return true

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+  <head>
+		<title>Skematik</title>
+		<meta charset="UTF-8">
+    <!--[if IE]>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Koen Everaert - koen@beformed.be">
+    
+    <!-- Meta -->
+    <meta id="view" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <!-- Favicon -->
+    <link rel="icon" href="assets/images/icons/favicon.png">
+
+    <!-- Stylesheets -->
+	<link rel='stylesheet' id='fonts-style-css'  href='http://fonts.googleapis.com/css?family=Lato:300,300italic,700&v=ee60c4e2863795c5dfcc8f9a51c851ac' type='text/css' media='all' />
+	<!-- inject:css -->
+	<link rel="stylesheet" href="/assets/css/minified/skematik_stylesheets.css?v=ee60c4e2863795c5dfcc8f9a51c851ac">
+	<!-- endinject -->
+    <base href="/">
+	</head>
+	<body ng-app="skematik">
+		<nav ui-view="navigation"></nav>
+    	<section ui-view="pageContent"></section>
+	</body>
+    <!-- head:js -->
+    <!-- endinject -->
+	<!-- inject:js -->
+	<script src="/assets/js/minified/skematik_vendor_scripts.js?v=ee60c4e2863795c5dfcc8f9a51c851ac"></script>
+	<script src="/assets/js/minified/skematik_scripts.js?v=ee60c4e2863795c5dfcc8f9a51c851ac"></script>
+	<!-- endinject -->
+</html>
