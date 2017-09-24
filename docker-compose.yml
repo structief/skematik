@@ -1,0 +1,27 @@
+
+version: '2'
+services:
+  mongo:
+    image: mongo:3.4
+
+  web:
+    build: images/front
+    ports:
+     - "8080:8080"
+    volumes:
+     - images/front:/front
+     - /front/node_modules
+
+  api:
+    build: images/api
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/test
+    links:
+      - mongo
+    depends_on:
+      - mongo
+    volumes:
+      - images/api:/api
+      - /api/node_modules
+    ports:
+      - "3000:3000"
