@@ -36,6 +36,7 @@ app.post('/cells', async (req, res, next) => {
 	const request = req.body;
 	console.log("request", request)
 	for(let i = 0; i < request.cells.length; i++) {
+		request.cells[i]["uuid"] = uuidV1();
 		await pg("cells").insert(request.cells[i]);
 	}
 	
@@ -44,17 +45,46 @@ app.post('/cells', async (req, res, next) => {
 
 app.get('/schema/:uuid', async (req, res, next) => {
 	let result = {};
-	
-	await pg.select().table("schema").where({uuid: req.param("uuid")}).then(function(r) {
-		result = r[0];
-		
-		Object.keys(result["rows"]).map((key, index) => {
-			result["rows"]  = [];
+	const rowstructure = [];
+	await pg.select()
+		.table("schema")
+		.where({uuid: req.param("uuid")})
+		.join('cells', 'schema.id', "=", "cells.tableID")
+		.then( function (r) {
+			
+			result["uuid"] = r[0].uuid;
+			result["title"] = r[0].title;
+			result["headers"] = r[0].headers;
+			result["created_at"] = r[0].created_at;
+			result["created_at"] = r[0].created_at;
+			result["updated_at"] = r[0].updated_at;
+			
+			
+			Object.keys( r[0].rows ).map((key, index) => {
+				const found = [];
+				for( let i = 0; i<r.length; i++ ) {
+					if(r[i]["row"] === key) {
+						found.push({
+							max: r[i].max,
+							current: r[i].current,
+							col: r[i].col
+						})
+					}
+				}
+				rowstructure.push({
+					name: key,
+					cells: found
+				});
+			});
+			
+			
+		}).then(function() {
+			result["rows"] = rowstructure;
+			res.send(result);
+		}).catch(function(error) {
+			res.send("error" + error)
 		})
-	})
-	
-	res.json(result)
-})
+});
 
 app.get('/', async (req, res, next) => {
 	const result = {};
@@ -106,9 +136,11 @@ async function initialiseTables() {
 		table.string("row");
 		table.integer("max");
 		table.integer("current");
+		table.uuid("uuid");
 	}).then(function() {
 		console.log("created cells")
 	});
+	
 	
 	await pg.schema.createTableIfNotExists('answers', function (table) {
 		table.increments();
