@@ -1,7 +1,7 @@
 //Initiate all config settings!
 var base_url = "application/components/";
 
-beformedApp.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", function($stateProvider, $urlRouterProvider, $locationProvider) {
+skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", function($stateProvider, $urlRouterProvider, $locationProvider) {
 
 	$locationProvider.html5Mode(true).hashPrefix('!');
   	$urlRouterProvider.otherwise( function($injector, $location) {
@@ -15,17 +15,16 @@ beformedApp.config(["$stateProvider", "$urlRouterProvider", "$locationProvider",
 		url: '',
 		views: {
 			"navigation":{
-				templateUrl: base_url + "landing/landingHeaderView.html.php",
-				controller: "LandingHeaderController"
-			},
-			"menu": {}
+				templateUrl: base_url + "../core/header/headerView.html",
+				controller: "HeaderController"
+			}
 		}
 	})
 	.state('fe.landing', {
 		url: "/",
 		views: {
 			"pageContent@": {
-				templateUrl: base_url + "landing/landingView.html.php",
+				templateUrl: base_url + "landing/landingView.html",
 				controller: "LandingController",
 			}
 		}
@@ -34,14 +33,14 @@ beformedApp.config(["$stateProvider", "$urlRouterProvider", "$locationProvider",
 		url: "/",
 		views: {
 			"pageContent@": {
-				templateUrl: base_url + "entry/entryView.html.php",
+				templateUrl: base_url + "entry/entryView.html",
 				controller: "EntryController",
 			}
 		}
 	});
 }]);
 
-beformedApp.run(["$rootScope", "$state", "$stateParams", function($rootScope, $state, $stateParams){	
+skematik.run(["$rootScope", "$state", "$stateParams", function($rootScope, $state, $stateParams){	
     $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
     	//End loading screen
     	console.log("View loaded");

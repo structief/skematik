@@ -3,3 +3,5 @@
 images/api/node_modules
 images/public/node_modules
 images/public/bower_components
+images/public/assets/css/minified
+images/public/assets/js/minified

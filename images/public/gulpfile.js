@@ -90,14 +90,14 @@ gulp.task('minify-js', function(){
     ];
 
     //JS - minify own js
-    return gulp.src(patterns)
+    gulp.src(patterns)
         .pipe(uglify())
         .pipe(concat({ path: 'skematik_scripts.js'}))
         .pipe(header(banner, {pkg: pkg}))
         .pipe(gulp.dest(config.development.assets + '/js/minified'));
 
         //JS - minify vendor js
-        gulp.src(mainBowerFiles())
+    return gulp.src(mainBowerFiles())
         .pipe(scriptsFilter)
         .pipe(concat({ path: 'skematik_vendor_scripts.js'}))
         .pipe(uglify())
@@ -147,7 +147,6 @@ gulp.task('inject-minified', ['minify-css', 'minify-js'], function(){
                 config.development.assets + '/css/minified/*.*', 
                 config.development.assets + '/js/minified/skematik_vendor_scripts.js',
                 config.development.assets + '/js/minified/skematik_scripts.js',
-                config.development.assets + '/js/core/app.js',
             ], {read: false}
             )
         )
@@ -164,13 +163,13 @@ gulp.task('inject-raw', function(){
     .pipe(
         inject(
             gulp.src([
-                config.development.assets + '/bower_components/jquery/dist/jquery.min.js',
-                config.development.assets + '/bower_components/bootstrap/dist/js/bootstrap.min.js',
-                config.development.assets + '/bower_components/angular/angular.min.js',
-                config.development.assets + '/js/core/app.js',
+                config.development.root + '/bower_components/jquery/dist/jquery.min.js',
+                config.development.root + '/bower_components/bootstrap/dist/js/bootstrap.min.js',
+                config.development.root + '/bower_components/angular/angular.min.js',
+                config.development.root + '/bower_components/angular-ui-router/release/angular-ui-router.min.js',
                 ], {read: false}
             ), 
-            {name: 'head'}
+            {name: 'head', relative: true}
         )
     )
     .pipe(
@@ -180,13 +179,14 @@ gulp.task('inject-raw', function(){
                     config.development.assets + '/css/minified/skematik_vendor_stylesheets.css',
                     config.development.assets + '/css/minified/skematik_stylesheets.css',
                     config.development.assets + '/css/*.*', 
-                    config.development.assets + '/js/minified/skematik_vendor_scripts.js',
+                    //config.development.assets + '/js/minified/skematik_vendor_scripts.js',
                     config.development.application + '/*.*',
                     "!" + config.development.application + '/**/*.template.js',
                     config.development.application + '/**/*.js',
                 ],
                 {read: false}
-            )
+            ),
+            {relative: true}
         )
     )
     .pipe(gulp.dest(config.development.root + '/'));

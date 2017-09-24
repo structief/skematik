@@ -3,9 +3,9 @@ var skematikControllers = angular.module('skematik.controllers', []);
 var skematikDirectives = angular.module('skematik.directives', []);
 var skematikFactories = angular.module('skematik.factories', []);
 
-var skematikApp = angular.module('skematik', [
-    skematikControllers,
-    skematikDirectives,
-    skematikFactories
+var skematik = angular.module('skematik', [
+    'skematik.controllers',
+    'skematik.directives',
+    'skematik.factories',
+    'ui.router'
 ]);
-
