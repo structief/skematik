@@ -4,7 +4,7 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 	};
 
 	$scope.showPopup = function(row, cell){
-		$rootScope.$broadcast('popup.show', {row, cell});
+		$rootScope.$broadcast('popup.show', {"row": row, "cell": cell});
 	};
 
 	$rootScope.$on('cell.participate', function(event, {cell, participant}){
