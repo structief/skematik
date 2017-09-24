@@ -2,7 +2,7 @@ const express = require("express");
 const http = require("http");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-
+const uuidV1 = require('uuid/v1');
 
 const pg = require('knex')({
 	client: 'pg',
@@ -28,8 +28,8 @@ app.post('/schema', async (req, res, next) => {
 	const request = req.body;
 	request["created_at"] = new Date();
 	request["updated_at"] = new Date();
+	request["uuid"] = uuidV1();
 	const id = await pg("schema").insert(req.body).returning('id');
-	
 	res.send(id)
 })
 app.post('/cells', async (req, res, next) => {
@@ -42,6 +42,19 @@ app.post('/cells', async (req, res, next) => {
 	res.send(200)
 })
 
+app.get('/schema/:uuid', async (req, res, next) => {
+	let result = {};
+	
+	await pg.select().table("schema").where({uuid: req.param("uuid")}).then(function(r) {
+		result = r[0];
+		
+		Object.keys(result["rows"]).map((key, index) => {
+			result["rows"]  = [];
+		})
+	})
+	
+	res.json(result)
+})
 
 app.get('/', async (req, res, next) => {
 	const result = {};
@@ -76,7 +89,7 @@ async function initialiseTables() {
 	await pg.schema.createTableIfNotExists('schema', function (table) {
 		table.increments();
 		table.string('title');
-		table.json('cols');
+		table.json('headers');
 		table.json('rows');
 		table.dateTime("opens");
 		table.dateTime("closes");
@@ -89,14 +102,13 @@ async function initialiseTables() {
 	await pg.schema.createTableIfNotExists('cells', function (table) {
 		table.increments();
 		table.integer("tableID");
-		table.integer("col");
-		table.integer("row");
+		table.string("col");
+		table.string("row");
 		table.integer("max");
 		table.integer("current");
 	}).then(function() {
 		console.log("created cells")
 	});
-	
 	
 	await pg.schema.createTableIfNotExists('answers', function (table) {
 		table.increments();
