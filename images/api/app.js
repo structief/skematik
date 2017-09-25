@@ -3,7 +3,7 @@ const http = require("http");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const uuidV1 = require('uuid/v1');
-const faker = require("Faker");
+const faker = require("faker");
 
 const pg = require('knex')({
 	client: 'pg',
@@ -168,6 +168,7 @@ async function initialiseTables() {
 	
 	await pg.schema.createTableIfNotExists('schema', function (table) {
 		table.increments();
+		table.uuid("uuid");
 		table.string('title');
 		table.json('headers');
 		table.json('rows');
@@ -178,8 +179,13 @@ async function initialiseTables() {
 	}).then(function() {
 		console.log("created tables")
 	});
-	
-	
+
+	//Because he forgot to add the field..
+	await pg.schema.alterTable('schema', function(table) { 
+		table.uuid("uuid");
+	}).then(function() {
+		console.log("altered"); 
+	});
 	
 	await pg.schema.createTableIfNotExists('cells', function (table) {
 		table.increments();

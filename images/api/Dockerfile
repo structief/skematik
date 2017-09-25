@@ -1,14 +1,12 @@
 FROM node:7.9.0
 
-RUN mkdir -p /api/lib
+RUN mkdir -p /api
 
 COPY package.json /api
-COPY src /api/src
+COPY . /api
 
 WORKDIR /api
 
 RUN npm install --quiet || cat npm-debug.log
-
-VOLUME /api/src
 
 CMD ["npm", "start"]
