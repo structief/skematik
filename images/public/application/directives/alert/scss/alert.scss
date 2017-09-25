@@ -1,0 +1,75 @@
+//This is probably not needed, but the compiler is flippin'
+$error-color: #dd342f;
+$warning-color: #ff5819;
+$info-color: #349bff;
+$success-color: #19b319;
+$lighten-factor: 40;
+
+.alert{
+	border: 1px solid black;
+	padding: 20px 40px;
+	position: fixed;
+	right: 20px;
+	top: 20px;
+	min-width: 400px;
+	z-index: 50;
+	transition: 0.4s all;
+	visibility: hidden;
+	opacity: 0;
+
+	img{
+		max-width: 30px;
+		margin: 7px 0px 7px -14px;
+	}
+	p{
+		margin-bottom: 0px;
+	}
+	a.icon--close{
+		&:hover{
+			background: none;
+			color: inherit;
+		}
+	}
+
+	&.alert--show{
+		visibility: visible;
+		opacity: 1;
+	}
+}
+
+.alert--error{
+	color: $error-color;
+	border-color: $error-color;
+	background-color: lighten($error-color, $lighten-factor);
+
+	a.icon--close{
+		color: $error-color;
+	}
+}
+.alert--warning{
+	color: #ff4500;
+	border-color: $warning-color;
+	background-color: lighten($warning-color, $lighten-factor);
+	
+	a.icon--close{
+		color: $warning-color;
+	}
+}
+.alert--info{
+	color: #1e90ff;
+	border-color: $info-color;
+	background-color: lighten($info-color, $lighten-factor);
+	
+	a.icon--close{
+		color: $info-color;
+	}
+}
+.alert--success{
+	color: #00aa00;
+	border-color: $success-color;
+	background-color: lighten($success-color, $lighten-factor);
+	
+	a.icon--close{
+		color: $success-color;
+	}
+}

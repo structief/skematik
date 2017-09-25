@@ -7,7 +7,18 @@ table{
 		}
 	}
 
-	td:first-of-type{
-		padding-left: 10px;
+	td{
+		cursor: default;
+		
+		&.cell--disabled{
+			color: #cccccc;
+		}
+
+		&:first-of-type{
+			padding-left: 10px;
+		}
+		&:not(:first-of-type):not(.cell--disabled){
+			cursor: pointer;
+		}
 	}
 }

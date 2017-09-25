@@ -48,10 +48,10 @@ app.post('/cells', async (req, res, next) => {
 app.post('/schema/:uuid/answer', async (req, res, next) => {
 	const insert = {};
 	insert["cellID"] = req.body["cellID"];
-	insert["tableID"] = req.param("uuid");
+	insert["tableID"] = req.params.uuid;
 	insert["userID"] = uuidV1();
 	insert["username"] = faker.name.firstName().toLowerCase() + "." + faker.name.lastName().toLowerCase();
-	insert["usermail"] = faker.internet.email();
+	insert["usermail"] = req.body["participant"];
 	
 	insert["created_at"] = new Date();
 	insert["updated_at"] = new Date();
@@ -59,7 +59,7 @@ app.post('/schema/:uuid/answer', async (req, res, next) => {
 	// asses if can register
 	let go = false;
 	await pg.select().table('answers').where({ cellID: insert['cellID']}).join('cells', 'cells.uuid', '=', 'answers.cellID').then(function(d) {
-		if(d.length > d[0].max) {
+		if(d.length > 0 && d.length >= d[0].max) {
 			//do not allow
 			res.send(401);
 		} else {
@@ -75,7 +75,6 @@ app.post('/schema/:uuid/answer', async (req, res, next) => {
 			res.send("error" + error)
 		})
 	}
-	
 })
 
 app.get('/schema/:uuid', async (req, res, next) => {
@@ -83,56 +82,60 @@ app.get('/schema/:uuid', async (req, res, next) => {
 	const rowstructure = [];
 	
 	let answers = [];
-	await pg.select().table("answers").where({tableID: req.param("uuid")}).then(function(a) {
+	await pg.select().table("answers").where({tableID: req.params.uuid}).then(function(a) {
 		answers = a;
 	})
+
+	// @TODO: make sure param 'uuid' is of type uuid 
 	
 	await pg.select()
 		.table("schema")
 		.where({"schema.uuid": req.param("uuid")})
 		.join('cells', 'schema.id', "=", "cells.tableID")
 		.then( function (r) {
-			
-			result["uuid"] = req.param("uuid");
-			result["title"] = r[0].title;
-			const temp = [];
-			Object.keys(r[0].headers).map((key, index) => {
-				temp.push(key);
-			});
-			result["headers"] = temp;
-			
-			result["created_at"] = r[0].created_at;
-			result["created_at"] = r[0].created_at;
-			result["updated_at"] = r[0].updated_at;
-			
-			
-			Object.keys( r[0].rows ).map((key, index) => {
-				const found = [];
-				for( let i = 0; i<r.length; i++ ) {
-					if(r[i]["row"] === key) {
-						const num = answers.filter(answer => answer.cellID === r[i].uuid);
-						console.log(num)
-						found.push({
-							max: r[i].max,
-							current: num,
-							col: r[i].col,
-							uuid: r[i].uuid
-						})
-					}
-				}
-				rowstructure.push({
-					name: key,
-					cells: found
+			if(r.length == 0){
+				// @TODO: send 404 if schema is not found
+			}else{
+				result["uuid"] = req.param("uuid");
+				result["title"] = r[0].title;
+				const temp = [];
+				Object.keys(r[0].headers).map((key, index) => {
+					temp.push(key);
 				});
-			});
-			
-			
+				result["headers"] = temp;
+				
+				result["created_at"] = r[0].created_at;
+				result["created_at"] = r[0].created_at;
+				result["updated_at"] = r[0].updated_at;
+				
+				
+				Object.keys( r[0].rows ).map((key, index) => {
+					const found = [];
+					for( let i = 0; i<r.length; i++ ) {
+						if(r[i]["row"] === key) {
+							const num = answers.filter(answer => answer.cellID === r[i].uuid);
+							console.log(num)
+							found.push({
+								max: r[i].max,
+								current: num,
+								col: r[i].col,
+								uuid: r[i].uuid
+							})
+						}
+					}
+					rowstructure.push({
+						name: key,
+						cells: found
+					});
+				});
+			}
 		}).then(function() {
 			result["rows"] = rowstructure;
 			result["answers"] = answers;
 			res.send(result);
 		}).catch(function(error) {
-			res.send("error" + error)
+			res.status(error);
+			res.send(error);
 		})
 });
 
@@ -178,13 +181,6 @@ async function initialiseTables() {
 		table.timestamps();
 	}).then(function() {
 		console.log("created tables")
-	});
-
-	//Because he forgot to add the field..
-	await pg.schema.alterTable('schema', function(table) { 
-		table.uuid("uuid");
-	}).then(function() {
-		console.log("altered"); 
 	});
 	
 	await pg.schema.createTableIfNotExists('cells', function (table) {

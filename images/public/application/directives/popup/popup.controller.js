@@ -9,8 +9,19 @@ skematikControllers.controller('PopupController',["$scope", "$rootScope", "Schem
 		$scope.row = data.row;
 	});
 
+	$rootScope.$on('popup.hide', function(event, data) {
+		if(data.wipe){
+			$scope.cell = null;
+			$scope.email = null;
+			$scope.row = null;
+		}
+		$scope.closePopup();
+	});
+
 	$scope.closePopup = function(){
-		$scope.show.popup = false;
+		$scope.show = {
+			popup: false
+		};
 	}
 
 	$scope.participate = function(){
