@@ -89,7 +89,7 @@ app.get('/schema/:uuid', async (req, res, next) => {
 	
 	await pg.select()
 		.table("schema")
-		.where({"schema.id": req.param("uuid")})
+		.where({"schema.uuid": req.param("uuid")})
 		.join('cells', 'schema.id', "=", "cells.tableID")
 		.then( function (r) {
 			
@@ -168,6 +168,7 @@ async function initialiseTables() {
 	
 	await pg.schema.createTableIfNotExists('schema', function (table) {
 		table.increments();
+		table.uuid("uuid");
 		table.string('title');
 		table.json('headers');
 		table.json('rows');
@@ -178,8 +179,13 @@ async function initialiseTables() {
 	}).then(function() {
 		console.log("created tables")
 	});
-	
-	
+
+	//Because he forgot to add the field..
+	await pg.schema.alterTable('schema', function(table) { 
+		table.uuid("uuid");
+	}).then(function() {
+		console.log("altered"); 
+	});
 	
 	await pg.schema.createTableIfNotExists('cells', function (table) {
 		table.increments();
