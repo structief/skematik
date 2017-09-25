@@ -37,7 +37,7 @@ services:
       - db
     depends_on:
       - db
-    volumes:
-      - ./images/api:/api
+#    volumes:
+#      - ./images/api:/api
     ports:
       - "3000:3000"

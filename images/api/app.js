@@ -3,7 +3,7 @@ const http = require("http");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const uuidV1 = require('uuid/v1');
-const faker = require("Faker");
+const faker = require("faker");
 
 const pg = require('knex')({
 	client: 'pg',
@@ -89,7 +89,7 @@ app.get('/schema/:uuid', async (req, res, next) => {
 	
 	await pg.select()
 		.table("schema")
-		.where({"schema.uuid": req.param("uuid")})
+		.where({"schema.id": req.param("uuid")})
 		.join('cells', 'schema.id', "=", "cells.tableID")
 		.then( function (r) {
 			
