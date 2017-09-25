@@ -11,7 +11,7 @@
 			<td>
 				{{row.name}}
 			</td>
-			<td ng-repeat="cell in row.cells" ng-click="showPopup(row, cell)">
+			<td ng-repeat="cell in row.cells" ng-click="showPopup(row, cell)" ng-class="{'cell--disabled': cell.current.length >= cell.max}">
 				{{cell.current.length}} / {{cell.max}} 
 			</td>
 

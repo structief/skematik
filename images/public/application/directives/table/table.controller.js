@@ -4,7 +4,11 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 	};
 
 	$scope.showPopup = function(row, cell){
-		$rootScope.$broadcast('popup.show', {'row': row, 'cell': cell});
+		if(cell.current.length < cell.max){
+			$rootScope.$broadcast('popup.show', {'row': row, 'cell': cell});
+		}else{
+			$rootScope.$broadcast('alert.show', {'title': "Sorry :(", 'message': "No seats left for this spot", type: 'error'}); 
+		}
 	};
 
 	$rootScope.$on('cell.participate', function(event, data){

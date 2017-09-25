@@ -85,53 +85,57 @@ app.get('/schema/:uuid', async (req, res, next) => {
 	await pg.select().table("answers").where({tableID: req.params.uuid}).then(function(a) {
 		answers = a;
 	})
+
+	// @TODO: make sure param 'uuid' is of type uuid 
 	
 	await pg.select()
 		.table("schema")
 		.where({"schema.uuid": req.param("uuid")})
 		.join('cells', 'schema.id', "=", "cells.tableID")
 		.then( function (r) {
-			
-			result["uuid"] = req.param("uuid");
-			result["title"] = r[0].title;
-			const temp = [];
-			Object.keys(r[0].headers).map((key, index) => {
-				temp.push(key);
-			});
-			result["headers"] = temp;
-			
-			result["created_at"] = r[0].created_at;
-			result["created_at"] = r[0].created_at;
-			result["updated_at"] = r[0].updated_at;
-			
-			
-			Object.keys( r[0].rows ).map((key, index) => {
-				const found = [];
-				for( let i = 0; i<r.length; i++ ) {
-					if(r[i]["row"] === key) {
-						const num = answers.filter(answer => answer.cellID === r[i].uuid);
-						console.log(num)
-						found.push({
-							max: r[i].max,
-							current: num,
-							col: r[i].col,
-							uuid: r[i].uuid
-						})
-					}
-				}
-				rowstructure.push({
-					name: key,
-					cells: found
+			if(r.length == 0){
+				// @TODO: send 404 if schema is not found
+			}else{
+				result["uuid"] = req.param("uuid");
+				result["title"] = r[0].title;
+				const temp = [];
+				Object.keys(r[0].headers).map((key, index) => {
+					temp.push(key);
 				});
-			});
-			
-			
+				result["headers"] = temp;
+				
+				result["created_at"] = r[0].created_at;
+				result["created_at"] = r[0].created_at;
+				result["updated_at"] = r[0].updated_at;
+				
+				
+				Object.keys( r[0].rows ).map((key, index) => {
+					const found = [];
+					for( let i = 0; i<r.length; i++ ) {
+						if(r[i]["row"] === key) {
+							const num = answers.filter(answer => answer.cellID === r[i].uuid);
+							console.log(num)
+							found.push({
+								max: r[i].max,
+								current: num,
+								col: r[i].col,
+								uuid: r[i].uuid
+							})
+						}
+					}
+					rowstructure.push({
+						name: key,
+						cells: found
+					});
+				});
+			}
 		}).then(function() {
 			result["rows"] = rowstructure;
 			result["answers"] = answers;
 			res.send(result);
 		}).catch(function(error) {
-			res.send("error" + error)
+			res.status(error);
+			res.send(error);
 		})
 });
 
