@@ -15,15 +15,6 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
 
-#  public:
-#    build:
-#      context: ./images/public/
-#    ports:
-#     - "8080:8080"
-#    volumes:
-#     - ./images/public:/public
-#     - /public/node_modules
-
   api:
     build:
       context: ./images/api/
@@ -37,7 +28,11 @@ services:
       - db
     depends_on:
       - db
-#    volumes:
-#      - ./images/api:/api
     ports:
       - "3000:3000"
+
+  php:
+    build:
+      context: ./images/public/
+    ports:
+      - "80:80"
