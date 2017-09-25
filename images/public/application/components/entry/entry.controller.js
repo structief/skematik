@@ -1,4 +1,4 @@
-skematikControllers.controller('EntryController',["$scope", "$state", function($scope, $stateProvider) {
+skematikControllers.controller('EntryController',["$scope", "$state", "$rootScope", function($scope, $stateProvider, $rootScope) {
 	$scope.input = {
 		uuid: null
 	};
@@ -8,7 +8,8 @@ skematikControllers.controller('EntryController',["$scope", "$state", function($
 			$stateProvider.go('fe.scheme', {tableId: $scope.input.uuid});
 			$scope.input.error = null;
 		}else{
-			$scope.input.error = "Please provide a valid UUID";
+			$rootScope.$broadcast('alert.show', {'title': "Not a valid UUID", 'message': "Try entering a valid UUID", type: 'error'}); 
+			$scope.input.error = true;
 		}
 	}
 }]);

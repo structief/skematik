@@ -48,10 +48,10 @@ app.post('/cells', async (req, res, next) => {
 app.post('/schema/:uuid/answer', async (req, res, next) => {
 	const insert = {};
 	insert["cellID"] = req.body["cellID"];
-	insert["tableID"] = req.param("uuid");
+	insert["tableID"] = req.params.uuid;
 	insert["userID"] = uuidV1();
 	insert["username"] = faker.name.firstName().toLowerCase() + "." + faker.name.lastName().toLowerCase();
-	insert["usermail"] = faker.internet.email();
+	insert["usermail"] = req.body["participant"];
 	
 	insert["created_at"] = new Date();
 	insert["updated_at"] = new Date();
@@ -59,7 +59,7 @@ app.post('/schema/:uuid/answer', async (req, res, next) => {
 	// asses if can register
 	let go = false;
 	await pg.select().table('answers').where({ cellID: insert['cellID']}).join('cells', 'cells.uuid', '=', 'answers.cellID').then(function(d) {
-		if(d.length > d[0].max) {
+		if(d.length > 0 && d.length >= d[0].max) {
 			//do not allow
 			res.send(401);
 		} else {
@@ -75,7 +75,6 @@ app.post('/schema/:uuid/answer', async (req, res, next) => {
 			res.send("error" + error)
 		})
 	}
-	
 })
 
 app.get('/schema/:uuid', async (req, res, next) => {
@@ -83,7 +82,7 @@ app.get('/schema/:uuid', async (req, res, next) => {
 	const rowstructure = [];
 	
 	let answers = [];
-	await pg.select().table("answers").where({tableID: req.param("uuid")}).then(function(a) {
+	await pg.select().table("answers").where({tableID: req.params.uuid}).then(function(a) {
 		answers = a;
 	})
 	
@@ -178,13 +177,6 @@ async function initialiseTables() {
 		table.timestamps();
 	}).then(function() {
 		console.log("created tables")
-	});
-
-	//Because he forgot to add the field..
-	await pg.schema.alterTable('schema', function(table) { 
-		table.uuid("uuid");
-	}).then(function() {
-		console.log("altered"); 
 	});
 	
 	await pg.schema.createTableIfNotExists('cells', function (table) {

@@ -17,20 +17,25 @@
     <link rel="icon" href="assets/images/icons/favicon.png">
 
     <!-- Stylesheets -->
-	<link rel='stylesheet' id='fonts-style-css'  href='http://fonts.googleapis.com/css?family=Lato:300,300italic,700&v=ee60c4e2863795c5dfcc8f9a51c851ac' type='text/css' media='all' />
+	<link rel='stylesheet' id='fonts-style-css'  href='http://fonts.googleapis.com/css?family=Lato:300,300italic,700&v=44e970ca694e90755918938e39606081' type='text/css' media='all' />
 	<!-- inject:css -->
-	<link rel="stylesheet" href="/assets/css/minified/skematik_stylesheets.css?v=ee60c4e2863795c5dfcc8f9a51c851ac">
+	<link rel="stylesheet" href="/assets/css/minified/skematik_stylesheets.css?v=44e970ca694e90755918938e39606081">
 	<!-- endinject -->
     <base href="/">
 	</head>
 	<body ng-app="skematik">
 		<nav ui-view="navigation"></nav>
     	<section ui-view="pageContent"></section>
+        <skematik-alert></skematik-alert>
 	</body>
     <!-- head:js -->
+    <script src="/bower_components/jquery/dist/jquery.min.js?v=44e970ca694e90755918938e39606081"></script>
+    <script src="/bower_components/angular/angular.min.js?v=44e970ca694e90755918938e39606081"></script>
+    <script src="/bower_components/angular-ui-router/release/angular-ui-router.min.js?v=44e970ca694e90755918938e39606081"></script>
+    <script src="/bower_components/angular-resource/angular-resource.min.js?v=44e970ca694e90755918938e39606081"></script>
     <!-- endinject -->
 	<!-- inject:js -->
-	<script src="/assets/js/minified/skematik_vendor_scripts.js?v=ee60c4e2863795c5dfcc8f9a51c851ac"></script>
-	<script src="/assets/js/minified/skematik_scripts.js?v=ee60c4e2863795c5dfcc8f9a51c851ac"></script>
+	<script src="/assets/js/minified/skematik_vendor_scripts.js?v=44e970ca694e90755918938e39606081"></script>
+	<script src="/assets/js/minified/skematik_scripts.js?v=44e970ca694e90755918938e39606081"></script>
 	<!-- endinject -->
 </html>
