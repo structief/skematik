@@ -1,7 +1,16 @@
+# Ignore weird files
 .idea
 .DS_Store
+images/public/package-lock.json
+images/api/package-lock.json
+
+# Ignore Node mdoules
 images/api/node_modules
 images/public/node_modules
+
+# Ignore bower components
 images/public/bower_components
+
+# Ignore minified files
 images/public/assets/css/minified
 images/public/assets/js/minified
