@@ -79,8 +79,7 @@ gulp.task('minify-css', ['sass-compile'], function(){
     return stream;
 });
 
-gulp.task('minify-js', function(){
-
+gulp.task('minify-own-js', function(){
     // Globbing patterns
     var patterns = [
         "!" + config.development.application + '/**/*.template.js',
@@ -90,13 +89,23 @@ gulp.task('minify-js', function(){
     ];
 
     //JS - minify own js
-    gulp.src(patterns)
+    return gulp.src(patterns)
         .pipe(uglify())
         .pipe(concat({ path: 'skematik_scripts.js'}))
         .pipe(header(banner, {pkg: pkg}))
         .pipe(gulp.dest(config.development.assets + '/js/minified'));
+});
 
-        //JS - minify vendor js
+gulp.task('minify-vendor-js', function(){
+    // Globbing patterns
+    var patterns = [
+        "!" + config.development.application + '/**/*.template.js',
+        config.development.application + '/app.module.js',
+        config.development.application + '/app.settings.js', 
+        config.development.application + '/**/*.js'
+    ];
+
+    //JS - minify vendor js
     return gulp.src(mainBowerFiles())
         .pipe(scriptsFilter)
         .pipe(concat({ path: 'skematik_vendor_scripts.js'}))
@@ -104,9 +113,9 @@ gulp.task('minify-js', function(){
         .pipe(stripDebug())
         .pipe(header(banner, {pkg: pkg}))
         .pipe(gulp.dest(config.development.assets + '/js/minified'));
-})
+});
 
-gulp.task('uglify', ['minify-css', 'minify-js'], function(){
+gulp.task('uglify', ['minify-css', 'minify-own-js', 'minify-vendor-js'], function(){
     //Uglify css
     gulp.src(config.development.assets + '/css/minified/*.css')
     .pipe(uglifycss({
@@ -138,7 +147,7 @@ gulp.task("inject", function(){
     }
 });
 
-gulp.task('inject-minified', ['minify-css', 'minify-js'], function(){
+gulp.task('inject-minified', ['minify-css', 'minify-own-js', 'minify-vendor-js', 'uglify'], function(){
     //Inject in header and footer
     var stream = gulp.src(config.development.root + '/*.html')
     .pipe(
@@ -232,8 +241,8 @@ gulp.task('bump-version', function(){
 });
 
 /* CHAIN TASKS */
-gulp.task('prod', ['version-prod', 'minify-css', 'minify-js', 'uglify', 'inject']);
-gulp.task('test', ['version-test', 'minify-css', 'minify-js', 'inject']);
+gulp.task('prod', ['version-prod', 'minify-css', 'minify-own-js', 'minify-vendor-js', 'uglify', 'inject-minified']);
+gulp.task('test', ['version-test', 'minify-css', 'minify-own-js', 'minify-vendor-js', 'inject']);
 gulp.task('dev', ['version-dev', 'inject']);
 
 /* WATCH .SCSS FILES FOR CHANGES */

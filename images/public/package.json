@@ -1,9 +1,9 @@
 {
   "name": "skematik-frontend",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "v": {
-    "app": "0.1.4",
-    "build": "0.1.4-compile.78"
+    "app": "0.1.0",
+    "build": "0.1.1-compile.8"
   },
   "description": "Frontend for the Skematik application",
   "main": "index.html",
@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/kliptonize/skematik#readme",
   "devDependencies": {
-    "gulp": "^3.9.0",
+    "gulp": "^3.9.1",
     "gulp-strip-debug": "^1.1.0",
     "main-bower-files": "^2.11.1",
     "skeleton-sass-official": "^3.1.4"

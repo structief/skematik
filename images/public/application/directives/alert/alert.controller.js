@@ -14,9 +14,6 @@ skematikControllers.controller('AlertController',["$scope", "$rootScope", "$time
 			$scope.alert[key] = data[key];
 		});
 
-		//Show alert
-		$scope.alert.show = true;
-
 		//Fill up styling if necessary
 		if(data.icon == null){
 			switch($scope.alert.type){
@@ -36,6 +33,9 @@ skematikControllers.controller('AlertController',["$scope", "$rootScope", "$time
 					break;
 			}
 		}
+
+		//Show alert
+		$scope.alert.show = true;
 
 		// Auto hide if necessary
 		if($scope.alert.hide){

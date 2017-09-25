@@ -6,7 +6,7 @@ Skematik is a tool to have participants take action in a certain event or thing,
 
 ### How do I set this up?
 If you're familiar with Docker (and we suggest you do, cause everything else might be some setup), it's as easy as following these steps:
-1) Run `npm install` && `gulp prod` in /public to make sure you have the right front-end files
+1) Run `npm install`, `bower install` & `gulp prod` in /public to make sure you have the right front-end files
 2) Run `docker-compose up --build` in root-folder
 3) ..
 4) Profit!
