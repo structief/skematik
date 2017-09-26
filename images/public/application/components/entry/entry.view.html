@@ -1,0 +1,21 @@
+<section class="container">
+	<div class="row">
+		<div class="one-half column popup__form" style="margin: 0 auto;float:inherit;margin-top: 20px">
+			<h3>Enter a UUID</h3>
+			<label for="UUID-input">UUID for the table</label>
+			<input 
+				class="u-full-width" 
+				type="text" 
+				placeholder="1234-5678-9101-1213" 
+				id="UUID-input"
+				ng-model="input.uuid"
+				ng-class="{'input--error' : input.error}"
+				required>
+			<input 
+				class="button-primary" 
+				type="button" 
+				value="Go"
+				ng-click="submitUUID()">
+		</div>
+	</div>
+</section>

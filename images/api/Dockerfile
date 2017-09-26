@@ -1,13 +1,12 @@
-FROM node:6-slim
+FROM node:7.9.0
 
+RUN mkdir -p /api
+
+COPY package.json /api
 COPY . /api
-COPY package.json /api/package.json
 
 WORKDIR /api
 
-ENV NODE_ENV production
-RUN yarn install --production
+RUN npm install --quiet || cat npm-debug.log
 
-CMD ["npm","start"]
-
-EXPOSE 3000
+CMD ["npm", "start"]

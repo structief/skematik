@@ -1,0 +1,27 @@
+{
+  "name": "api-skematik",
+  "version": "0.0.1",
+  "description": "Api backend of skematik",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "Jan Everaert",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.15.4",
+    "faker": "^4.1.0",
+    "http": "0.0.0",
+    "knex": "^0.13.0",
+    "mongodb": "^2.2.31",
+    "mongoose": "^4.11.12",
+    "pg": "^7.3.0",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  }
+}

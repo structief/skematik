@@ -1,0 +1,25 @@
+{
+  "name": "skematik",
+  "version": "0.1.0",
+  "authors": [
+    "Koen Everaert <koen@beformed.be>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "application/assets/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "angular": "^1.6.5",
+    "angular-resource": "~1.4.6",
+    "angular-ui-router": "^1.0.0"
+  },
+  "resolutions": {
+    "angular": "~1.6.5"
+  }
+}

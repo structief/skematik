@@ -1,0 +1,29 @@
+//This is probably not needed, but the compiler is flippin'
+$error-color: #dd342f;
+$warning-color: #ff5819;
+$info-color: #349bff;
+$success-color: #19b319;
+$lighten-factor: 40;
+
+.popup__form{
+	border: 1px solid #eeeeee;
+	padding: 40px;
+	text-align: center;
+	background-color: white;
+}
+
+.input--error{
+	border-color: $error-color !important;
+}
+
+.input--warning{
+	border-color: $warning-color !important;
+}
+
+.input--info{
+	border-color: $info-color !important;
+}
+
+.input--success{
+	border-color: $success-color !important;
+}

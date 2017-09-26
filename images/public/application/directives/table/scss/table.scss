@@ -1,0 +1,24 @@
+table{
+	thead tr{
+		background-color: #ffffff;
+
+		td{
+			font-weight: 600;
+		}
+	}
+
+	td{
+		cursor: default;
+		
+		&.cell--disabled{
+			color: #cccccc;
+		}
+
+		&:first-of-type{
+			padding-left: 10px;
+		}
+		&:not(:first-of-type):not(.cell--disabled){
+			cursor: pointer;
+		}
+	}
+}
