@@ -10,6 +10,7 @@ const Cells = require('./src/Cells.js');
 const Users = require('./src/Users.js');
 const Answers = require('./src/Answers.js');
 const Organisations = require('./src/Organisations.js');
+const Participants = require('./src/Participants.js');
 
 
 
@@ -68,6 +69,7 @@ class App {
     new Users().assignFields(app, this.pg);
     new Answers().assignFields(app, this.pg);
     new Organisations().assignFields(app, this.pg);
+    new Participants().assignFields(app, this.pg);
 
     server.listen(PORT, () => {
       console.log(`server up and listening on ${PORT}`)
@@ -129,17 +131,29 @@ class App {
     });
 
 
+
     await this.pg.schema.createTableIfNotExists('users', function (table) {
       table.increments();
       table.uuid("uuid");
       table.uuid("organisation");
       table.string("username");
       table.string("usermail");
+      table.timestamps(true, true);
+    }).then(function() {
+      console.log("created users")
+    });
+
+
+    await this.pg.schema.createTableIfNotExists('participants', function (table) {
+      table.increments();
+      table.uuid("uuid");
+      table.uuid("user");
+      table.uuid("schema");
       table.string("token");
       table.dateTime("expires_on");
       table.timestamps(true, true);
     }).then(function() {
-      console.log("created users")
+      console.log("created participants")
     });
 
 
