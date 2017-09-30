@@ -16,6 +16,13 @@ class Organisations {
       console.log("tested")
     })
 
+    app.delete('/organisations', async (req, res, next) => {
+      await pg("organisations").where({uuid: req.body.uuid}).del().then(function(r) {
+        res.send(r)
+      })
+      console.log("tested")
+    })
+
     app.get('/organisations/:uuid', async (req, res, next) => {
       await pg.select().table("organisations").where({uuid: req.params.uuid}).then(async (r) => {
         await pg.select().table("users").where({organisation: req.params.uuid}).then(function(result) {

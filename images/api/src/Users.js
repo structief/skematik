@@ -16,6 +16,12 @@ class Users {
       console.log("tested")
     })
 
+    app.delete('/users', async (req, res, next) => {
+      await pg("users").where({uuid: req.body.uuid}).del().then(function(r) {
+        res.send(200)
+      })
+    })
+
 
     app.post('/users/list', async (req, res, next) => {
       const request = req.body;

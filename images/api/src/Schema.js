@@ -18,6 +18,11 @@ class Schema {
     })
 
 
+    app.get('/schema', async (req, res, next) => {
+      await pg("schema").where({uuid: req.body.uuid}).then(function(r) {
+        res.send(200)
+      })
+    })
 
     app.get('/schema/:uuid', async (req, res, next) => {
       let result = {};
