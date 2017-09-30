@@ -1,13 +1,18 @@
-FROM node:6-slim
+FROM php:7.1-apache
+MAINTAINER Kliptonize <koen@ebro.me>
 
-COPY . /public
-COPY package.json /public/package.json
+# Install needed dependencies
+RUN apt-get update && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /public
+# Activate mod_rewrite
+RUN a2enmod rewrite
 
-ENV NODE_ENV production
-RUN yarn install --production
+# Copy App
+COPY index.html /var/www/html/
+COPY .htaccess /var/www/html/
 
-CMD ["npm","start"]
+COPY application /var/www/html/application
+COPY assets /var/www/html/assets
 
-EXPOSE 8080
+# Expose the default port
+EXPOSE 80
