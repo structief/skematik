@@ -10,7 +10,7 @@ class Users {
 
 
     app.get('/users', async (req, res, next) => {
-      await pg.select().table("cells").then(function(r) {
+      await pg.select().table("users").then(function(r) {
         res.send(r)
       })
       console.log("tested")
@@ -18,13 +18,18 @@ class Users {
 
     app.post('/users', async (req, res, next) => {
       const request = req.body;
-      console.log("request", request)
-      for(let i = 0; i < request.cells.length; i++) {
-        request.cells[i]["uuid"] = uuidV1();
-        await pg("cells").insert(request.cells[i]);
-      }
 
-      res.send(200)
+      console.log("request", request)
+      request["uuid"] = uuidV1();
+      await pg("users").insert(request).then(function() {
+        res.send({ uuid: request['uuid']})
+      })
+    })
+
+    app.put('/users/:uuid/:organisationID', async (req, res, next) => {
+      await pg("users").where({uuid: req.params.uuid}).update({organisation: req.params.organisationID}).then(function() {
+        res.send({ uuid: req.params.uuid })
+      })
     })
 
   }

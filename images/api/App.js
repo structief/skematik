@@ -9,6 +9,7 @@ const Schema = require('./src/Schema.js');
 const Cells = require('./src/Cells.js');
 const Users = require('./src/Users.js');
 const Answers = require('./src/Answers.js');
+const Organisations = require('./src/Organisations.js');
 
 
 
@@ -66,6 +67,7 @@ class App {
     new Cells().assignFields(app, this.pg);
     new Users().assignFields(app, this.pg);
     new Answers().assignFields(app, this.pg);
+    new Organisations().assignFields(app, this.pg);
 
     server.listen(PORT, () => {
       console.log(`server up and listening on ${PORT}`)
@@ -101,7 +103,6 @@ class App {
       console.log("created cells")
     });
 
-
     await this.pg.schema.createTableIfNotExists('answers', function (table) {
       table.increments();
       table.uuid("cellID");
@@ -113,6 +114,35 @@ class App {
     }).then(function() {
       console.log("created answers")
     });
+
+    await this.pg.schema.createTableIfNotExists('organisations', function (table) {
+      table.increments();
+      table.uuid("uuid");
+      table.string("name");
+      table.uuid("owner");
+      table.string("mainPhone");
+      table.string("mainAddress");
+      table.string("billInfo");
+      table.timestamps();
+    }).then(function() {
+      console.log("created organisations")
+    });
+
+
+    await this.pg.schema.createTableIfNotExists('users', function (table) {
+      table.increments();
+      table.uuid("uuid");
+      table.uuid("organisation");
+      table.string("username");
+      table.string("usermail");
+      table.string("token");
+      table.dateTime("expires_on");
+      table.timestamps(true, true);
+    }).then(function() {
+      console.log("created users")
+    });
+
+
 
 
     // // there is a valid connection in the pool
