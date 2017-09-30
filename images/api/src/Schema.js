@@ -35,7 +35,6 @@ class Schema {
         .where({"schema.uuid": req.params.uuid})
         .join('cells', 'schema.id', "=", "cells.tableID")
         .then( function (r) {
-          // @TODO: send 404 if schema is not found
 
           if(req.length > 0) {
 
