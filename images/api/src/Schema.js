@@ -37,44 +37,49 @@ class Schema {
         .then( function (r) {
           // @TODO: send 404 if schema is not found
 
-          result["uuid"] = req.params.uuid;
-          result["title"] = r[0].title;
-          const temp = [];
-          Object.keys(r[0].headers).map((key, index) => {
-            temp.push(key);
-          });
-          result["headers"] = temp;
+          if(req.length > 0) {
 
-          result["created_at"] = r[0].created_at;
-          result["created_at"] = r[0].created_at;
-          result["updated_at"] = r[0].updated_at;
-
-
-          Object.keys( r[0].rows ).map((key, index) => {
-            const found = [];
-            for( let i = 0; i<r.length; i++ ) {
-              if(r[i]["row"] === key) {
-                const num = answers.filter(answer => answer.cellID === r[i].uuid);
-                console.log(num)
-                found.push({
-                  max: r[i].max,
-                  current: num,
-                  col: r[i].col,
-                  uuid: r[i].uuid
-                })
-              }
-            }
-            rowstructure.push({
-              name: key,
-              cells: found
+            result["uuid"] = req.params.uuid;
+            result["title"] = r[0].title;
+            const temp = [];
+            Object.keys(r[0].headers).map((key, index) => {
+              temp.push(key);
             });
-          });
+            result["headers"] = temp;
+
+            result["created_at"] = r[0].created_at;
+            result["created_at"] = r[0].created_at;
+            result["updated_at"] = r[0].updated_at;
+
+            Object.keys(r[0].rows).map((key, index) => {
+              const found = [];
+              for (let i = 0; i < r.length; i++) {
+                if (r[i]["row"] === key) {
+                  const num = answers.filter(answer => answer.cellID === r[i].uuid);
+                  console.log(num)
+                  found.push({
+                    max: r[i].max,
+                    current: num,
+                    col: r[i].col,
+                    uuid: r[i].uuid
+                  })
+                }
+              }
+              rowstructure.push({
+                name: key,
+                cells: found
+              });
+            });
+            result["rows"] = rowstructure;
+            result["answers"] = answers;
+            res.send(result);
+          } else {
+            res.sendStatus(404);
+
+          }
         }).then(function() {
-          result["rows"] = rowstructure;
-          result["answers"] = answers;
-          res.send(result);
         }).catch(function(error) {
-          res.send(error);
+          res.sendStatus(404);
         })
     });
 
