@@ -9,4 +9,5 @@ var skematik = angular.module('skematik', [
     'skematik.factories',
     'ui.router',
     'ngResource',
+    'ngSanitize'
 ]);

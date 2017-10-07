@@ -1,51 +1,81 @@
-skematikControllers.controller('AlertController',["$scope", "$rootScope", "$timeout", function($scope, $rootScope, $timeout) {
-	$scope.alert = {
-		show: false,
-		icon: null, //Can be whatever you want, but it better be an image
-		title: null, //String
-		message: null, //The same, as long as it's a string
-		type: 'error', //error, warning, info, success
-		hide: 4000 //Can be false as well
-	};
+skematikControllers.controller('AlertController',["$scope", "$rootScope", "$timeout", "$sce", function($scope, $rootScope, $timeout, $sce) {
+	$scope.alerts = [];
 
 	$rootScope.$on('alert.show', function(event, data){	
+		var alert = {
+			show: false,
+			icon: null, //Can be whatever you want, but it better be an image
+			title: null, //String
+			message: null, //The same, as long as it's a string
+			type: 'error', //error, warning, info, success
+			hide: 4000, //Can be false as well
+			clickCallback: null //Callback to be triggered when alert is clicked
+		};
+
 		//Overwrite parameters
 		Object.keys(data).forEach(function(key) {
-			$scope.alert[key] = data[key];
+			alert[key] = data[key];
 		});
+
+		//Trust html in title and message
+		alert.title = $sce.trustAsHtml(alert.title);
+		alert.message = $sce.trustAsHtml(alert.message);
 
 		//Fill up styling if necessary
 		if(data.icon == null){
-			switch($scope.alert.type){
+			switch(alert.type){
 				case 'error':
 				default:
-					$scope.alert.icon = "https://icongram.jgog.in/feather/alert-circle.svg?color=d91e18";
-					$scope.alert.type = "error";
+					alert.icon = "https://icongram.jgog.in/feather/alert-circle.svg?color=d91e18";
+					alert.type = "error";
 					break;
 				case 'warning':
-					$scope.alert.icon = "https://icongram.jgog.in/feather/help-circle.svg?color=ff4500"
+					alert.icon = "https://icongram.jgog.in/feather/help-circle.svg?color=ff4500"
 					break;
 				case 'info':
-					$scope.alert.icon = "https://icongram.jgog.in/feather/info.svg?color=1e90ff"
+					alert.icon = "https://icongram.jgog.in/feather/info.svg?color=1e90ff"
 					break;
 				case 'success':
-					$scope.alert.icon = "https://icongram.jgog.in/feather/check-circle.svg?color=00aa00"
+					alert.icon = "https://icongram.jgog.in/feather/check-circle.svg?color=00aa00"
 					break;
 			}
 		}
 
 		//Show alert
-		$scope.alert.show = true;
+		alert.show = true;
+
+		//Add to alerts
+		$scope.alerts.push(alert);
 
 		// Auto hide if necessary
-		if($scope.alert.hide){
-			$timeout(function(){
-				$scope.alert.show = false;
-			}, $scope.alert.hide);
+		if(alert.hide){
+			var index = $scope.alerts.indexOf(alert);
+			$scope.alerts[index].timeout = $timeout(function(){
+				$scope.alerts[index].show = false;
+				$timeout(function(){
+					$scope.alerts.splice(index, 1);
+				}, 400);
+			}, alert.hide);
 		}
 	});
 
-	$scope.closeAlert = function(){
-		$scope.alert.show = false;
-	}
+	$scope.closeAlert = function(alertId){
+		$scope.alerts[alertId].show = false;
+
+		//Unset timeout from autohide
+		$timeout.cancel($scope.alerts[alertId].timeout);
+
+		//Wait until animation is done and delete element from array
+		$timeout(function(){
+			$scope.alerts.splice(alertId, 1);
+		}, 400);
+	};
+
+	$scope.triggerClickCallback = function(alertId){
+		var getType = {};
+ 		if($scope.alerts[alertId].clickCallback && getType.toString.call($scope.alerts[alertId].clickCallback) === '[object Function]'){
+			$scope.closeAlert(alertId);
+			$scope.alerts[alertId].clickCallback();
+		}
+	};
 }]);

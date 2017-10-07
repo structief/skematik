@@ -33,6 +33,51 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", fu
 				controller: "EntryController",
 			}
 		}
+	})
+	.state('be', {
+		url: '/admin',
+		views: {
+			"navigation":{
+				templateUrl: base_url + "../core/header/header.view.html",
+				controller: "HeaderController"
+			}
+		}
+	})
+	.state('be.dashboard', {
+		url: "/dashboard",
+		views: {
+			"pageContent@": {
+				templateUrl: base_url + "backend/dashboard/dashboard.view.html",
+				controller: "BeDashboardController",
+			}
+		}
+	})
+	.state('be.users', {
+		url: "/dashboard",
+		views: {
+			"pageContent@": {
+				templateUrl: base_url + "backend/users/users.view.html",
+				controller: "BeUsersController",
+			}
+		}
+	})
+	.state('be.scheme', {
+		url: "/scheme/:schemeId",
+		views: {
+			"pageContent@": {
+				templateUrl: base_url + "backend/scheme/scheme.view.html",
+				controller: "BeSchemeController",
+			}
+		}
+	})
+	.state('be.account', {
+		url: "/dashboard",
+		views: {
+			"pageContent@": {
+				templateUrl: base_url + "backend/account/account.view.html",
+				controller: "BeAccountController",
+			}
+		}
 	});
 }]);
 

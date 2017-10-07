@@ -1,0 +1,61 @@
+<div class="container">
+	<section class="row">
+		<div class="eight columns">
+			<h4>Title of this scheme: {{scheme.id}}</h4>
+		</div>
+		<div class="four columns text--right">
+			<button>Save</button>
+		</div>
+	</section>
+</div>
+<section class="u--full-width scheme__wide">
+	<div class="row box--white padding--15 scheme__title">
+		<div class="two columns">
+			Function name
+		</div>
+		<div class="one column text--center">
+			<a ng-click="previous()" ng-disabled="nav.min==0">
+				<img src="https://icongram.jgog.in/feather/chevron-left.svg?color=dddddd&size=14"></img>
+				Earlier
+			</a>
+		</div>
+		<!-- MAX EIGHT -->
+		<div class="one column text--center" ng-repeat="col in scheme.cols" ng-if="$index >= nav.min && $index < (nav.min+8)">
+			<span class="hour">{{col}}</span>
+			<span class="minutes">00</span>
+		</div>
+		<div class="one column text--center">
+			<a ng-click="next()" ng-disabled="nav.min >= (scheme.cols.length-8)">
+				Later
+				<img src="https://icongram.jgog.in/feather/chevron-right.svg?color=dddddd&size=14"></img>
+			</a>
+		</div>
+	</div>
+	<div class="row scheme__body" ng-repeat="row in scheme.rows">
+		<a href="#" ng-click="deleteRow($index)" class="icon__action">
+			<img src="https://icongram.jgog.in/feather/minus-circle.svg?color=666666&size=20"></img>
+		</a>
+		<div class="two columns box--white padding--15">
+			<input type="text" placeholder="Function name" ng-model="row.name" />
+		</div>
+		<div class="one column text--center">
+			{{nav.min == 0 ? '&nbsp;' : '...'}}
+		</div>
+		<div 
+			class="one column padding--15" 
+			ng-class="{'box--white': col}"
+			ng-repeat="col in row.cols track by $index" 
+			ng-if="$index >= nav.min && $index < (nav.min+8)" 
+			ng-click="toggleAvailability($parent.$parent.$index, $index)">
+			&nbsp;
+		</div>
+		<div class="one column text--center">
+			{{nav.min >= (scheme.cols.length-8) ? '&nbsp;' : '...'}}
+		</div>
+	</div>
+	<div class="row">
+		<div class="two columns padding--15">
+			<button ng-click="addRow()">Add row</button>
+		</div>
+	</div>
+</section>
