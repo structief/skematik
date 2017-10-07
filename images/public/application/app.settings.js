@@ -1,8 +1,8 @@
 //Initiate all config settings!
 var base_url = "application/components/";
 
-skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", function($stateProvider, $urlRouterProvider, $locationProvider) {
-
+skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$httpProvider", function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+	// Crazy prefixes
 	$locationProvider.html5Mode(true).hashPrefix('!');
 
 	// Now set up the states
@@ -34,6 +34,8 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", fu
 			}
 		}
 	});
+
+    $httpProvider.interceptors.push('resourceInterceptor');
 }]);
 
 skematik.run(["$rootScope", "$state", "$stateParams", function($rootScope, $state, $stateParams){	

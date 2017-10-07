@@ -5,26 +5,12 @@ skematikFactories.factory('SchemeFactory',["$resource", "$location", function($r
     get: {
       method: 'GET',
       isArray: false,
-      interceptor: {
-          response: function(response) {      
-              var result = response.resource;        
-              result.$status = response.status;
-              return result;
-          }
-      }
     },
     participate: {
       method: 'POST',
       isArray: true,
       params: {
         type: "answer"
-      },
-      interceptor: {
-          response: function(response) {      
-              var result = response.resource;        
-              result.$status = response.status;
-              return result;
-          }
       }
     }
   });
