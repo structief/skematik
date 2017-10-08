@@ -8,7 +8,7 @@
 				type="text" 
 				placeholder="1234-5678-9101-1213" 
 				id="username"
-				ng-model="input.username"
+				ng-model="user.username"
 				ng-class="{'input--error' : input.error}"
 				required>
 			<label for="password">Password</label>
@@ -17,9 +17,10 @@
 				type="password" 
 				placeholder="1234-5678-9101-1213" 
 				id="password"
-				ng-model="input.password"
+				ng-model="user.password"
 				ng-class="{'input--error' : input.error}"
 				required>
+			<p>{{error}}</p>
 			<input 
 				class="button-primary" 
 				type="button" 

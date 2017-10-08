@@ -2,13 +2,13 @@ skematikControllers.controller('HeaderController',["$scope", "$state", "$rootSco
 	$scope.account = null;
 
 	//Check if account is logged in
-	AccountFactory.isLoggedIn().then(function(data){
-		if(data){
-			$scope.account = AccountFactory.getAccount();
-		}
+	AccountFactory.getAccount().then(function(account){
+		$scope.account = account;
 	});
 
+
 	$scope.$on("account.login", function(event, data){
+		//An event fired when a user is logged in in
 		$scope.account = data.account;
 	});
 

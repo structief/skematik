@@ -59,7 +59,6 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 		});
 	});
 
-	//Fake data
 	SchemeFactory.get({uuid: $scope.scheme.uuid}, function(response){
 		if(response.status == 404){
 			//Scheme not found

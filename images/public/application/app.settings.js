@@ -14,6 +14,9 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 				templateUrl: base_url + "../core/header/header.view.html",
 				controller: "HeaderController"
 			}
+		},
+		data: {
+			requiresLogin: false
 		}
 	})
 	.state('fe.scheme', {
@@ -99,7 +102,7 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 	        if (options && options.url.substr(options.url.length - 5) == '.html') {
 	          return null;
 	        }
-	        return localStorage.getItem('id_token');
+	        return localStorage.getItem('jwt-token');
 		}],
 		whiteListedDomains: ['api.skematik.io', 'localhost'],
 		unauthenticatedRedirectPath: '/login'
@@ -111,9 +114,24 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
     $httpProvider.interceptors.push('jwtInterceptor');
 }]);
 
-skematik.run(["$rootScope", "$state", "$stateParams", "authManager", function($rootScope, $state, $stateParams, authManager){	
-
+skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFactory", function($rootScope, $stateProvider, $stateParams, authManager, AccountFactory){	
+	//Account check
+	AccountFactory.isLoggedIn();
+	
 	//Check authentication on refresh and redirect to login if necessairy
     authManager.checkAuthOnRefresh();
     authManager.redirectWhenUnauthenticated();
+
+
+    //On login, redirect automatically to /dashboard
+    $rootScope.$on("account.login", function(data){
+		$stateProvider.go('be.dashboard');
+		$rootScope.isAuthenticated = true;
+    });
+
+    //On logout, redirect automatically to homepage
+    $rootScope.$on("account.logout", function(data){
+		$stateProvider.go('fe.entry');
+        $rootScope.isAuthenticated = false;
+    });
 }]);

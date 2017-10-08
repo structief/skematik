@@ -1,8 +1,8 @@
 //Account factory
-skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", function($resource, $q, $location) {
+skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", "$rootScope", function($resource, $q, $location, $rootScope) {
     var account, host = $location.host();
     return {
-        api: $resource('http://' + host + ':3000/account/:type', {type: "@type"}, {
+        api: $resource('http://' + host + ':3000/:type', {type: "@type"}, {
             me: {
                 method: 'GET',
                 isArray: false,
@@ -17,7 +17,7 @@ skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", fun
                 }
             },
             logout: {
-                method: "GET",
+                method: "POST",
                 params: {
                     type: "logout"
                 }
@@ -27,47 +27,71 @@ skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", fun
             account = theAccount;
         },
         getAccount : function(){
-            // Fake account for now
-            account =  {
-                name: "Kaithlyn",
-                img_url: "assets/images/profiles/kaithlyn.jpg"
-            }
-            return account;
-        },
-        isLoggedIn : function($scope){
-            var deferred = $q.defer();
+            var deferred = $q.defer(), wrapper = this;
 
             //Return true or false
-            /*
             if(typeof account == "undefined"){
                 //Check online if account is logged in
                 wrapper = this;
 
                 this.api.me(function(data){
-                    wrapper.setaccount(data.toJSON());
-                    if(typeof wrapper.getAccount().account_id == "undefined"){
+                    if(typeof data.username == "undefined"){
                         //No clue what came true (either nothing or a weird set), but the account has no ID, so he can't be logged in.
                         deferred.resolve(false);
+                        $rootScope.isAuthenticated = false;
                     }else{
-                        //We should fire an event here, to make sure every view loads the account
-                        $scope.$broadcast('account.login', {account: wrapper.getAccount()});
-                        deferred.resolve(true);
+                        wrapper.setAccount(data.toJSON());
+                        deferred.resolve(account);
+                        $rootScope.isAuthenticated = true;
                     }
                 });
             }else{
-                //$scope.$broadcast('accountIsLoggedIn', {account: this.getaccount()});
-                deferred.resolve(true);
+                deferred.resolve(account);
+                $rootScope.isAuthenticated = true;
             }
-            */
-            deferred.resolve(false);
+
             return deferred.promise;
         },
-        logOut : function($scope){
+        login: function(account){
+            var deferred = $q.defer(), wrapper = this;
+
+            this.api.login(account, function(data){
+                if(data.$status == 200){
+                    //Save jwt-token in local storage
+                    localStorage.setItem("jwt-token", data.token);
+                    wrapper.setAccount(account);
+                    $rootScope.$broadcast('account.login', {account: wrapper.getAccount()});
+                    $rootScope.isAuthenticated = true;
+                }
+
+                //Component has no use for the response, unless it's an error
+                deferred.resolve(data);
+            }, function(error){
+                console.log(error);
+                deferred.resolve(false);
+            });
+
+            return deferred.promise;
+        },
+        isLoggedIn : function(){
+            this.getAccount().then(function(account){
+                if(account.username === undefined){
+                    $rootScope.isAuthenticated = false;
+                    return false;
+                }else{
+                    return true;
+                }
+            })
+        },
+        logout : function(){
+            localStorage.removeItem("jwt-token");
+            $rootScope.isAuthenticated = false;
+
             wrapper = this;
             this.api.logout(function(data){
                 if(data.message == "ok"){
                     wrapper.setAccount({});
-                    $scope.$broadcast('account.logout', {redirect: data.redirect});
+                    $rootScope.$broadcast('account.logout');
                 }
             })
         }
