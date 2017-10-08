@@ -9,4 +9,4 @@ WORKDIR /api
 
 RUN npm install --quiet || cat npm-debug.log
 
-CMD ["npm", "run-script", "watch"];
+CMD ["npm", "run-script", "watch"]
