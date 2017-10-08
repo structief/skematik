@@ -11,9 +11,14 @@ class Cells {
 
     app.get('/cells', async (req, res, next) => {
       await pg.select().table("cells").then(function(r) {
-        res.send(r)
+        res.send(200)
       })
-      console.log("tested")
+    })
+
+    app.delete('/cells', async (req, res, next) => {
+      await pg("cells"),where({uuid: req.body.uuid}).del().then(function(r) {
+        res.sendStatus(200)
+      })
     })
 
     app.post('/cells', async (req, res, next) => {

@@ -6,21 +6,25 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "watch": "nodemon index.js",
-    "prod": "node index.js",
-    "dev": "nodemon index.js"
+    "watch": "nodemon index.js"
   },
   "author": "Jan Everaert",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.4",
     "express": "^4.15.4",
     "faker": "^4.1.0",
     "http": "0.0.0",
+    "jwt-simple": "^0.5.1",
     "knex": "^0.13.0",
     "mongodb": "^2.2.31",
     "mongoose": "^4.11.12",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "passport-oauth": "^1.0.0",
+    "passport-oauth2": "^1.4.0",
     "pg": "^7.3.0",
     "uuid": "^3.1.0"
   },
