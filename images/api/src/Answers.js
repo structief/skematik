@@ -11,11 +11,17 @@ class Answers {
   assignFields(app, pg) {
 
 
-    app.get('/cells', async (req, res, next) => {
-      await pg.select().table("cells").then(function(r) {
+    app.get('/answers', async (req, res, next) => {
+      await pg.select().table("answers").then(function(r) {
         res.send(r)
       })
       console.log("tested")
+    })
+
+    app.delete('/answers', async (req, res, next) => {
+      await pg("answers").where({uuid: req.body.uuid}).del().then(function(r) {
+        res.send(200)
+      })
     })
 
 
