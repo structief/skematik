@@ -5,13 +5,15 @@ skematikFactories.factory('SchemeFactory',["$resource", "$location", function($r
     get: {
       method: 'GET',
       isArray: false,
+      skipAuthorization: true
     },
     participate: {
       method: 'POST',
       isArray: true,
       params: {
         type: "answer"
-      }
+      },
+      skipAuthorization: true
     }
   });
 }]);

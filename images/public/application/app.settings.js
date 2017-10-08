@@ -1,7 +1,7 @@
 //Initiate all config settings!
 var base_url = "application/components/";
 
-skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$httpProvider", function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$httpProvider", "jwtOptionsProvider", function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, jwtOptionsProvider) {
 	// Crazy prefixes
 	$locationProvider.html5Mode(true).hashPrefix('!');
 
@@ -50,6 +50,9 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 				templateUrl: base_url + "../core/header/header.view.html",
 				controller: "HeaderController"
 			}
+		},
+		data: {
+			requiresLogin: true
 		}
 	})
 	.state('be.dashboard', {
@@ -89,12 +92,28 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 		}
 	});
 
+	//Add config for jwt
+	jwtOptionsProvider.config({
+		tokenGetter: ['options', function(options) {
+			// Skip authentication for any requests ending in .html
+	        if (options && options.url.substr(options.url.length - 5) == '.html') {
+	          return null;
+	        }
+	        return localStorage.getItem('id_token');
+		}],
+		whiteListedDomains: ['api.skematik.io', 'localhost'],
+		unauthenticatedRedirectPath: '/login'
+    });
+
+
+	//Push interceptors for HTTP calls
     $httpProvider.interceptors.push('resourceInterceptor');
+    $httpProvider.interceptors.push('jwtInterceptor');
 }]);
 
-skematik.run(["$rootScope", "$state", "$stateParams", function($rootScope, $state, $stateParams){	
-    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-    	//End loading screen
-    	console.log("View loaded");
-    });
+skematik.run(["$rootScope", "$state", "$stateParams", "authManager", function($rootScope, $state, $stateParams, authManager){	
+
+	//Check authentication on refresh and redirect to login if necessairy
+    authManager.checkAuthOnRefresh();
+    authManager.redirectWhenUnauthenticated();
 }]);

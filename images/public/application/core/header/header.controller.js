@@ -16,8 +16,7 @@ skematikControllers.controller('HeaderController',["$scope", "$state", "$rootSco
 		$scope.account = null;
 	});
 
-	$rootScope.$on('request.loading', function(event, config){
-		console.log("AYYYY");
-		console.log(config);
-	}
+	$rootScope.$on('tokenHasExpired', function() {
+	  console.log('Your session has expired!');
+	});
 }]);
