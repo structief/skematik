@@ -18,7 +18,8 @@ class Auth {
   assignFields(app, pg) {
 
     app.get('/tokenCheck/:token', async(req, res, next) => {
-      this.verifyToken(pg, req.params.token).then((check) => {
+      await this.verifyToken(pg, req.params.token, (check) => {
+        console.log(check)
         if(check) {
           res.send(check)
         } else {
@@ -29,20 +30,26 @@ class Auth {
 
     app.post('/login',  async (req, res, next) => {
       pg.select().table("users").where({"username": req.body.username}).then((result) =>{
-
         if(result.length > 0) {
           if(this.comparePass(req.body.password, result[0].password)) {
-
             const token = jwt.encode(req.body.username, "xxx");
-            pg("tokens").insert({
-              token: token,
-              user: result[0].uuid
-            }).returning("id").then(() => {
-              res.send(token);
+            pg.select().table("tokens").then((result2) => {
+              if (!result2) {
+                pg("tokens").insert({
+                  token: token,
+                  user: result[0].uuid
+                }).returning("id").then(() => {
+                  res.send({
+                    token: token
+                  })
+                })
+              } else {
+                res.send({
+                  token: result2[0].token
+                })
+              }
             })
-
           } else {
-
             res.send(401, { message: "username or password does not match or does not exist", status: 401});
           }
         } else {
@@ -62,14 +69,9 @@ class Auth {
       })
     })
   }
-  async verifyToken(pg, token) {
+  async verifyToken(pg, token, resolve) {
     await pg.select().table("tokens").where({token: token}).then((result) => {
-      console.log(result);
-      if(result.length > 0) {
-        return result[0]
-      } else {
-        return false
-      }
+      resolve(result)
     })
   }
   createUser (req, pg) {

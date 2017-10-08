@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "v": {
     "app": "0.3.0",
-    "build": "0.3.0"
+    "build": "0.3.1-compile.3"
   },
   "description": "Frontend for the Skematik application",
   "main": "index.html",
@@ -46,8 +46,5 @@
     "gulp-uglifyjs": "^0.6.2",
     "gulp-version-number": "^0.1.4",
     "wiredep": "^3.0.0"
-  }
-}
-.0"
   }
 }
