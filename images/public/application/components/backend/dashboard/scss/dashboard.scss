@@ -1,0 +1,26 @@
+.row .four.columns:first-of-type{
+	margin-left: 0px;
+}
+
+.scheme__box.four.columns{
+	transition: all 0.4s;
+	cursor: pointer;
+
+	&:hover{
+		background-color: #fcfcfc;
+		border-color: darken(#eee, 3);
+		-webkit-box-shadow: 1px 1px 10px 0px rgba(0,0,0,0.05);
+		-moz-box-shadow: 1px 1px 10px 0px rgba(0,0,0,0.05);
+		box-shadow: 1px 1px 10px 0px rgba(0,0,0,0.05);
+	}
+
+	a{
+		text-decoration: none;
+		color: inherit;
+		display: inherit;
+
+		&:hover, &:active, &:focus, &:visited{
+			color: inherit;
+		}
+	}
+}

@@ -5,17 +5,21 @@ $info-color: #349bff;
 $success-color: #19b319;
 $lighten-factor: 40;
 
+.alert__group{
+	position: fixed;
+	right: 20px;
+	top: 60px;
+	z-index: 50;
+}
 .alert{
 	border: 1px solid black;
 	padding: 20px 40px;
-	position: fixed;
-	right: 20px;
-	top: 20px;
+	margin-top: 20px;
 	min-width: 400px;
-	z-index: 50;
 	transition: 0.4s all;
 	visibility: hidden;
 	opacity: 0;
+	position: relative;
 
 	img{
 		max-width: 30px;

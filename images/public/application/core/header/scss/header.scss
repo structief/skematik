@@ -14,4 +14,46 @@
     	margin: O;
         line-height: 60px;
     }
+
+    ul{
+        height: 100%;
+        margin: 0px;
+        max-height: 6.5rem;
+        padding: 0px;
+
+        li{
+            display: inline-block;
+            list-style-type: none;
+            border-right: 1px solid #eee;
+            height: 100%;
+            vertical-align: middle;
+
+            a{
+                padding: 10px 40px;
+                line-height: 60px;
+                text-decoration: none;
+                color: #666666;
+                transition: color 0.4s;
+
+                img{
+                    width: 20px;
+                    height: auto;
+                    margin-right: 12px;
+                    vertical-align: middle;
+                    margin-top: -2px;
+                }
+                &:hover{
+                    color: #000000;
+                }
+            }
+
+            &:first-of-type{
+                border-left: 1px solid #eee;
+            }
+        }
+    }
+
+    a{
+        text-decoration: none;
+    }
 }

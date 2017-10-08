@@ -1,6 +1,54 @@
 <nav class="navbar" ng-controller="HeaderController">
-	<div class="container">
-		<img src="https://icongram.jgog.in/feather/minus-square.svg?color=dddddd" style="float:left;margin:12px"></img>
-		<h6>Yay, this is a working version of Skematik!</h6>
+	<div class="container" ng-if="!account">
+		<div class="row">
+			<div class="eight columns">
+				<a ui-sref="fe.entry" href="/">
+					<img src="https://icongram.jgog.in/feather/minus-square.svg?color=dddddd" style="float:left;margin:12px"></img>
+					<h6>Yay, this is a working version of Skematik!</h6>
+				</a>
+			</div>
+			<div class="four columns">
+				<ul>
+					<li>
+						<a ui-sref="fe.login" href="/login">
+							<img src="https://icongram.jgog.in/feather/user.svg?color=dddddd"></img>
+							Login
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="row row--full-width" ng-if="account">
+		<div class="two columns">
+			<img src="https://icongram.jgog.in/feather/minus-square.svg?color=dddddd" style="float:left;margin:12px"></img>
+			<h6>Skematik</h6>
+		</div>
+		<div class="six columns">
+			<ul>
+				<li>
+					<a ui-sref="be.dashboard" href="/admin/dashboard">
+						<img src="https://icongram.jgog.in/feather/sidebar.svg?color=dddddd"></img>
+						Dashboard
+					</a>
+				</li>
+				<li>
+					<a ui-sref="be.users" href="/admin/users">
+						<img src="https://icongram.jgog.in/feather/users.svg?color=dddddd"></img>
+						Users
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="four columns text--right">
+			<ul>
+				<li>
+					<a ui-sref="be.account" href="/admin/account">
+						<img ng-src="{{account.img_url}}" alt="{{account.name}}" class="image--rounded"></img>
+						{{account.name}}
+					</a>
+				</li>
+			</ul>
+		</div>
 	</div>
 </nav>

@@ -33,6 +33,60 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 				controller: "EntryController",
 			}
 		}
+	})
+	.state('fe.login', {
+		url: "/login",
+		views: {
+			"pageContent@": {
+				templateUrl: base_url + "backend/login/login.view.html",
+				controller: "BeLoginController",
+			}
+		}
+	})
+	.state('be', {
+		url: '/admin',
+		views: {
+			"navigation":{
+				templateUrl: base_url + "../core/header/header.view.html",
+				controller: "HeaderController"
+			}
+		}
+	})
+	.state('be.dashboard', {
+		url: "/dashboard",
+		views: {
+			"pageContent@": {
+				templateUrl: base_url + "backend/dashboard/dashboard.view.html",
+				controller: "BeDashboardController",
+			}
+		}
+	})
+	.state('be.users', {
+		url: "/users",
+		views: {
+			"pageContent@": {
+				templateUrl: base_url + "backend/users/users.view.html",
+				controller: "BeUsersController",
+			}
+		}
+	})
+	.state('be.scheme', {
+		url: "/scheme/:schemeId",
+		views: {
+			"pageContent@": {
+				templateUrl: base_url + "backend/scheme/scheme.view.html",
+				controller: "BeSchemeController",
+			}
+		}
+	})
+	.state('be.account', {
+		url: "/account",
+		views: {
+			"pageContent@": {
+				templateUrl: base_url + "backend/account/account.view.html",
+				controller: "BeAccountController",
+			}
+		}
 	});
 
     $httpProvider.interceptors.push('resourceInterceptor');

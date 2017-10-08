@@ -1,0 +1,69 @@
+// CRAZY GRID STUFF
+.u--full-width{
+	width: 90vw; //90% of total viewport
+	margin: 0 auto;
+}
+
+
+
+
+// BOX COLORS
+.box--white{
+	border: 1px solid #eeeeee;
+	background-color: white;
+}
+.box--error{
+	border: 1px solid $error-color;
+	background-color: lighten($error-color, $lighten-factor);
+}
+.box--warning{
+	border: 1px solid $warning-color;
+	background-color: lighten($warning-color, $lighten-factor);
+}
+.box--info{
+	border: 1px solid $info-color;
+	background-color: lighten($info-color, $lighten-factor);
+}
+.box--success{
+	border: 1px solid $success-color;
+	background-color: lighten($success-color, $lighten-factor);
+}
+
+// TEXT
+.text--left{
+	text-align: left;
+}
+.text--right{
+	text-align: right;
+}
+.text--center{
+	text-align: center;
+}
+
+// ROWS
+.row--full-width{
+    width: 100%;
+    margin: 0px 10px;
+    .columns{
+        padding-top: 3px;
+    }
+}
+.row--close{
+	margin-bottom: 0rem !important;
+}
+
+
+// IMAGES
+.image--rounded{
+    border-radius: 50%;
+}
+
+// PADDINGS
+@for $i from 0 through 10 {
+    .padding--#{$i*5} {
+        padding: $i*5px;
+    }
+    .margin--#{$i*5} {
+        margin: $i*5px;
+    }
+}
