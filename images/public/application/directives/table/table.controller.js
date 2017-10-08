@@ -2,6 +2,23 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 	$scope.scheme = {
 		uuid: $scope.uuid
 	};
+	$scope.nav = {
+		min: 0
+	}
+
+	
+	// Functions
+	$scope.next = function(){
+		console.log($scope.nav.min);
+		if($scope.nav.min + 8 < $scope.scheme.cols.length){
+			$scope.nav.min++;
+		}
+	}
+	$scope.previous = function(){
+		if($scope.nav.min > 0){
+			$scope.nav.min--;
+		}
+	}
 
 	$scope.showPopup = function(row, cell){
 		if(cell.current.length < cell.max){
@@ -53,4 +70,6 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 			$scope.scheme = response;
 		}
 	});
+
+
 }]);

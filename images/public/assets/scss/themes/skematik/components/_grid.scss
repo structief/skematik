@@ -63,4 +63,7 @@
     .padding--#{$i*5} {
         padding: $i*5px;
     }
+    .margin--#{$i*5} {
+        margin: $i*5px;
+    }
 }

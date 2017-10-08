@@ -34,6 +34,15 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", fu
 			}
 		}
 	})
+	.state('fe.login', {
+		url: "/login",
+		views: {
+			"pageContent@": {
+				templateUrl: base_url + "backend/login/login.view.html",
+				controller: "BeLoginController",
+			}
+		}
+	})
 	.state('be', {
 		url: '/admin',
 		views: {
@@ -53,7 +62,7 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", fu
 		}
 	})
 	.state('be.users', {
-		url: "/dashboard",
+		url: "/users",
 		views: {
 			"pageContent@": {
 				templateUrl: base_url + "backend/users/users.view.html",
@@ -71,7 +80,7 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", fu
 		}
 	})
 	.state('be.account', {
-		url: "/dashboard",
+		url: "/account",
 		views: {
 			"pageContent@": {
 				templateUrl: base_url + "backend/account/account.view.html",

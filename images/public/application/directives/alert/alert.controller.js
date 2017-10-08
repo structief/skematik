@@ -51,6 +51,7 @@ skematikControllers.controller('AlertController',["$scope", "$rootScope", "$time
 		if(alert.hide){
 			var index = $scope.alerts.indexOf(alert);
 			$scope.alerts[index].timeout = $timeout(function(){
+				// @TODO: Index is changed, so 'index' does not match anymore
 				$scope.alerts[index].show = false;
 				$timeout(function(){
 					$scope.alerts.splice(index, 1);

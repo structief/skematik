@@ -1,0 +1,30 @@
+<section class="container">
+	<div class="row">
+		<div class="one-half column box--white" style="margin: 0 auto;float:inherit;margin-top: 20px;padding: 40px;">
+			<h3>Welcome back!</h3>
+			<label for="username">Username</label>
+			<input 
+				class="u-full-width" 
+				type="text" 
+				placeholder="1234-5678-9101-1213" 
+				id="username"
+				ng-model="input.username"
+				ng-class="{'input--error' : input.error}"
+				required>
+			<label for="password">Password</label>
+			<input 
+				class="u-full-width" 
+				type="password" 
+				placeholder="1234-5678-9101-1213" 
+				id="password"
+				ng-model="input.password"
+				ng-class="{'input--error' : input.error}"
+				required>
+			<input 
+				class="button-primary" 
+				type="button" 
+				value="Login"
+				ng-click="login()">
+		</div>
+	</div>
+</section>
