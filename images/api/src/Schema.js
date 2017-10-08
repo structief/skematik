@@ -1,5 +1,7 @@
 const uuidV1 = require('uuid/v1');
 
+const {checkToken} = require("./helpers/auth")
+
 class Schema {
 
   constructor() {
@@ -9,24 +11,36 @@ class Schema {
   assignFields(app, pg) {
 
     app.post('/schema', async (req, res, next) => {
-      const request = req.body;
-      request["created_at"] = new Date();
-      request["updated_at"] = new Date();
-      request["uuid"] = uuidV1();
-      const id = await pg("schema").insert(req.body).returning('id');
-      res.send(id)
+
+
+      if(req.headers.authorization) {
+        // TODO: check if token exists
+        checkToken(pg, req.headers.authorization, async (result) => {
+          if(result.length > 0) {
+            const request = req.body;
+            request["created_at"] = new Date();
+            request["updated_at"] = new Date();
+            request["uuid"] = uuidV1();
+            request["creator"] = result[0].user;
+            const id = await pg("schema").insert(req.body).returning('id');
+            res.send(id);
+          } else {
+            res.send(401, {status: 401, message: "token not found"})
+          }
+        })
+
+      } else {
+        res.sendStatus(401);
+      }
+
     })
 
 
-    app.get('/schema', async (req, res, next) => {
-      await pg("schema").where({uuid: req.body.uuid}).then(function(r) {
-        res.send(200)
-      })
-    })
 
     app.get('/schema/:uuid', async (req, res, next) => {
       let result = {};
       const rowstructure = [];
+
 
       let answers = [];
       await pg.select().table("answers").where({tableID: req.params.uuid}).then(function(a) {
@@ -41,7 +55,7 @@ class Schema {
         .join('cells', 'schema.id', "=", "cells.tableID")
         .then( function (r) {
 
-          if(req.length > 0) {
+          if(r.length > 0) {
 
             result["uuid"] = req.params.uuid;
             result["title"] = r[0].title;
@@ -60,7 +74,6 @@ class Schema {
               for (let i = 0; i < r.length; i++) {
                 if (r[i]["row"] === key) {
                   const num = answers.filter(answer => answer.cellID === r[i].uuid);
-                  console.log(num)
                   found.push({
                     max: r[i].max,
                     current: num,

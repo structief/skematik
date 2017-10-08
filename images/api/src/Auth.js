@@ -1,6 +1,9 @@
 const uuidV1 = require('uuid/v1');
 const bcrypt = require('bcryptjs');
 const jwt = require("jwt-simple");
+const Identicon = require("identicon.js");
+const {checkToken} = require("./helpers/auth")
+
 
 class Auth {
 
@@ -28,13 +31,43 @@ class Auth {
       })
     })
 
+    app.get('/me', async (req, res, next) => {
+      // return name, org, and image url
+      if(req.headers.authorization) {
+        checkToken(pg, req.headers.authorization, async (result) => {
+          if(result.length > 0) {
+            console.log(result);
+            pg.select().table('users').where({ uuid: result[0].user }).then((data) => {
+              console.log(data)
+              if(data.length > 0) {
+                res.send({
+                  username: data[0].username,
+                  usermail: data[0].usermail,
+                  organisation: data[0].organisation
+                })
+              } else {
+                res.send(401, {message: "No user found"});
+              }
+            })
+          } else {
+            res.send(401, {message: "Invalid token"});
+          }
+        })
+      } else {
+        res.send(401, {message: "no token found"})
+      }
+    })
+
     app.post('/login',  async (req, res, next) => {
       pg.select().table("users").where({"username": req.body.username}).then((result) =>{
         if(result.length > 0) {
+
           if(this.comparePass(req.body.password, result[0].password)) {
+
             const token = jwt.encode(req.body.username, "xxx");
-            pg.select().table("tokens").then((result2) => {
-              if (!result2) {
+            console.log(result[0])
+            pg.select().table("tokens").where({"token": token}).then((result2) => {
+              if (!result2.length  > 0) {
                 pg("tokens").insert({
                   token: token,
                   user: result[0].uuid
@@ -55,6 +88,14 @@ class Auth {
         } else {
           res.send(401, { message: "username or password does not match or does not exist", status: 401});
         }
+      })
+
+    })
+
+
+    app.post('/logout',  async (req, res, next) => {
+      pg('tokens').del().where({token: req.headers.authorization}).then((data) => {
+        res.send(200, data)
       })
 
     })
