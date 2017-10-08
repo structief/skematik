@@ -94,9 +94,9 @@ class Auth {
 
 
     app.post('/logout',  async (req, res, next) => {
-      pg('tokens').del().where({token: req.headers.authorization}).then((data) => {
+      pg('tokens').del().where({token: req.headers.authorization.split(" ")[1]}).then((data) => {
         res.send(200, data)
-      })
+      }).catch((error) => { res.sendStatus(401)})
 
     })
 
