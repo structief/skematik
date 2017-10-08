@@ -2,8 +2,8 @@
   "name": "skematik-frontend",
   "version": "0.1.0",
   "v": {
-    "app": "0.2.0",
-    "build": "0.2.0"
+    "app": "0.3.0",
+    "build": "0.3.0"
   },
   "description": "Frontend for the Skematik application",
   "main": "index.html",
@@ -48,6 +48,6 @@
     "wiredep": "^3.0.0"
   }
 }
-0.0"
+.0"
   }
 }

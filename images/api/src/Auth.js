@@ -43,11 +43,10 @@ class Auth {
 
           } else {
 
-            res.send("username or password does not match or does not exist");
+            res.send(401, { message: "username or password does not match or does not exist", status: 401});
           }
         } else {
-          res.send("username or password does not match or does not exist");
-          return ""
+          res.send(401, { message: "username or password does not match or does not exist", status: 401});
         }
       })
 
