@@ -26,8 +26,8 @@
 			</div>
 		</div>
 		<!-- MAX EIGHT -->
-		<div class="one column text--center" ng-repeat="col in scheme.cols track by $index" ng-if="$index >= nav.min && $index < (nav.min+8)">
-			<input type="text" placeholder="Function name" ng-model="scheme.cols[$index]" class="text--center" />
+		<div class="one column text--center" ng-repeat="header in scheme.headers track by $index" ng-if="$index >= nav.min && $index < (nav.min+8)">
+			<input type="text" placeholder="Function name" ng-model="scheme.headers[$index]" class="text--center" />
 			<a href="#" ng-click="deleteColumn($index)" class="icon__action" tabindex="-1">
 				<img src="https://icongram.jgog.in/feather/minus-circle.svg?color=666666&size=20"></img>
 			</a>
@@ -37,7 +37,7 @@
 				<a ng-click="addColumn('after')">
 					Add column
 				</a>
-				<a ng-click="next()" ng-disabled="nav.min >= (scheme.cols.length-8)">
+				<a ng-click="next()" ng-disabled="nav.min >= (scheme.headers.length-8)">
 					<img src="https://icongram.jgog.in/feather/chevron-right.svg?color=555555&size=14"></img>
 				</a>
 			</div>
@@ -55,18 +55,18 @@
 		</div>
 		<div 
 			class="one column padding--15" 
-			ng-class="{'box--info': col, 'text--center': !col}"
-			ng-repeat="col in row.cols track by $index" 
+			ng-class="{'box--info': cell.max, 'text--center': !cell.max}"
+			ng-repeat="cell in row.cells track by $index" 
 			ng-if="$index >= nav.min && $index < (nav.min+8)" >
-			<img src="https://icongram.jgog.in/feather/plus-circle.svg?color=dddddd&size=20" ng-click="addSpace($parent.$parent.$parent.$index, $index, false)" ng-if="!col" style="margin-top: 10px;cursor:pointer"></img>
+			<img src="https://icongram.jgog.in/feather/plus-circle.svg?color=dddddd&size=20" ng-click="addSpace($parent.$parent.$parent.$index, $index, false)" ng-if="!cell.max" style="margin-top: 10px;cursor:pointer"></img>
 
-			<input type="number" ng-model="row.cols[$index]" ng-if="col" placeholder="Free spaces">
-			<a href="#" ng-click="addSpace($parent.$parent.$parent.$index, $index, true)" class="icon__action" ng-if="col" tabindex="-1">
+			<input type="number" ng-model="row.cells[$index].max" ng-if="cell.max" placeholder="Free spaces">
+			<a href="#" ng-click="addSpace($parent.$parent.$parent.$index, $index, true)" class="icon__action" ng-if="cell.max" tabindex="-1">
 				<img src="https://icongram.jgog.in/feather/minus-circle.svg?color=666666&size=20"></img>
 			</a>
 		</div>
 		<div class="one column text--center">
-			{{nav.min >= (scheme.cols.length-8) ? '&nbsp;' : '...'}}
+			{{nav.min >= (scheme.headers.length-8) ? '&nbsp;' : '...'}}
 		</div>
 	</div>
 	<div class="row">

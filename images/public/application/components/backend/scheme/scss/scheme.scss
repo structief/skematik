@@ -105,6 +105,7 @@ h4 input{
 	max-width: 100%;
 	-moz-appearance: textfield;
 	font-weight: 400;
+	background-color: transparent !important;
 
 	&:not(:focus){
 	 	border: none;

@@ -100,7 +100,15 @@ class Schema {
         })
     });
 
+    app.get('/schema', async (req, res, next) => {
+      var result = {};
 
+      await pg.select().table("schema").then(function(r) {
+        result = r;
+      })
+
+      res.send(result);
+    })
   }
 
 }

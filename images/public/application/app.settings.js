@@ -77,7 +77,7 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 		}
 	})
 	.state('be.scheme', {
-		url: "/scheme/:schemeId",
+		url: "/scheme/:schemeUuid",
 		views: {
 			"pageContent@": {
 				templateUrl: base_url + "backend/scheme/scheme.view.html",
