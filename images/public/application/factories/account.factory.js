@@ -14,7 +14,8 @@ skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", "$r
                 method: "POST",
                 params: {
                     type: "login",
-                }
+                },
+                skipAuthorization: true
             },
             logout: {
                 method: "POST",
@@ -36,7 +37,7 @@ skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", "$r
 
                 this.api.me(function(data){
                     if(typeof data.username == "undefined"){
-                        //No clue what came true (either nothing or a weird set), but the account has no ID, so he can't be logged in.
+                        //No clue what came true (either nothing or a weird set), but the account has no username, so he can't be logged in.
                         deferred.resolve(false);
                         $rootScope.isAuthenticated = false;
                     }else{
@@ -74,14 +75,19 @@ skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", "$r
             return deferred.promise;
         },
         isLoggedIn : function(){
-            this.getAccount().then(function(account){
-                if(account.username === undefined){
-                    $rootScope.isAuthenticated = false;
-                    return false;
-                }else{
-                    return true;
-                }
-            })
+            if(!$rootScope.isAuthenticated){
+                this.getAccount().then(function(account){
+                    if(account.username === undefined){
+                        $rootScope.isAuthenticated = false;
+                        return false;
+                    }else{
+                        $rootScope.isAuthenticated = true;
+                        return true;
+                    }
+                });
+            }else{
+                return true;
+            }
         },
         logout : function(){
             localStorage.removeItem("jwt-token");

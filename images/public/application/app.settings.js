@@ -118,13 +118,15 @@ skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFac
 	//Account check
 	AccountFactory.isLoggedIn();
 	
-	//Check authentication on refresh and redirect to login if necessairy
+	//Check authentication on refresh and redirect to login if necessary
     authManager.checkAuthOnRefresh();
     authManager.redirectWhenUnauthenticated();
 
 
     //On login, redirect automatically to /dashboard
     $rootScope.$on("account.login", function(data){
+    	console.log("User logged in");
+    	console.info(data);
 		$stateProvider.go('be.dashboard');
 		$rootScope.isAuthenticated = true;
     });
@@ -132,6 +134,8 @@ skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFac
     //On logout, redirect automatically to homepage
     $rootScope.$on("account.logout", function(data){
 		$stateProvider.go('fe.entry');
+    	console.log("User logged out");
+    	console.info(data);
         $rootScope.isAuthenticated = false;
     });
 }]);
