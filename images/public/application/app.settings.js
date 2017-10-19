@@ -10,34 +10,47 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 	.state('fe', {
 		url: '',
 		views: {
-			"navigation":{
+			"header": {
 				templateUrl: base_url + "../core/header/header.view.html",
 				controller: "HeaderController"
+			},
+			"footer": {
+				templateUrl: base_url + "../core/footer/footer.view.html",
+				controller: "FooterController"
 			}
 		},
 		data: {
 			requiresLogin: false
 		}
 	})
+	.state('fe.landing', {
+		url: "/",
+		views: {
+			"pageContent@": {
+				templateUrl: base_url + "frontend/landing/landing.view.html",
+				controller: "LandingController",
+			}
+		}
+	})
 	.state('fe.scheme', {
 		url: "/id/:tableId",
 		views: {
 			"pageContent@": {
-				templateUrl: base_url + "scheme/scheme.view.html",
+				templateUrl: base_url + "frontend/scheme/scheme.view.html",
 				controller: "SchemeController",
 			}
 		}
 	})
 	.state('fe.entry', {
-		url: "/",
+		url: "/entry",
 		views: {
 			"pageContent@": {
-				templateUrl: base_url + "entry/entry.view.html",
+				templateUrl: base_url + "frontend/entry/entry.view.html",
 				controller: "EntryController",
 			}
 		}
 	})
-	.state('fe.login', {
+	.state('be.login', {
 		url: "/login",
 		views: {
 			"pageContent@": {
@@ -49,9 +62,13 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 	.state('be', {
 		url: '/admin',
 		views: {
-			"navigation":{
+			"header":{
 				templateUrl: base_url + "../core/header/header.view.html",
 				controller: "HeaderController"
+			},
+			"footer": {
+				templateUrl: base_url + "../core/footer/footer.view.html",
+				controller: "FooterController"
 			}
 		},
 		data: {
@@ -105,13 +122,13 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 	        return localStorage.getItem('jwt-token');
 		}],
 		whiteListedDomains: ['api.skematik.io', 'localhost'],
-		unauthenticatedRedirectPath: '/login'
+		unauthenticatedRedirectPath: '/admin/login'
     });
 
 
 	//Push interceptors for HTTP calls
     $httpProvider.interceptors.push('resourceInterceptor');
-    $httpProvider.interceptors.push('jwtInterceptor');
+   // $httpProvider.interceptors.push('jwtInterceptor');
 }]);
 
 skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFactory", function($rootScope, $stateProvider, $stateParams, authManager, AccountFactory){	
@@ -131,7 +148,7 @@ skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFac
 
     //On logout, redirect automatically to homepage
     $rootScope.$on("account.logout", function(data){
-		$stateProvider.go('fe.entry');
+		$stateProvider.go('fe.landing');
         $rootScope.isAuthenticated = false;
     });
 }]);

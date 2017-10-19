@@ -51,9 +51,21 @@
                 border-left: 1px solid #eee;
             }
         }
+
+        &.list--no-border{
+            li{
+                border: none !important;
+            }
+        }
     }
 
     a{
         text-decoration: none;
+
+        &.button{
+            margin: 5px 30px 5px -20px;
+            line-height: 20px;
+            padding: 10px 20px;
+        }
     }
 }

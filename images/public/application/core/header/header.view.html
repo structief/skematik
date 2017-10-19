@@ -1,22 +1,24 @@
 <nav class="navbar" ng-controller="HeaderController">
-	<div class="container" ng-if="!account">
-		<div class="row">
-			<div class="eight columns">
-				<a ui-sref="fe.entry" href="/">
-					<img src="https://icongram.jgog.in/feather/minus-square.svg?color=dddddd" style="float:left;margin:12px"></img>
-					<h6>Yay, this is a working version of Skematik!</h6>
-				</a>
-			</div>
-			<div class="four columns">
-				<ul>
-					<li>
-						<a ui-sref="fe.login" href="/login">
-							<img src="https://icongram.jgog.in/feather/user.svg?color=dddddd"></img>
-							Login
-						</a>
-					</li>
-				</ul>
-			</div>
+	<div class="row row--full-width" ng-if="!account">
+		<div class="eight columns">
+			<a ui-sref="fe.entry" href="/">
+				<img src="https://icongram.jgog.in/feather/minus-square.svg?color=dddddd" style="float:left;margin:12px"></img>
+				<h6>Yay, this is a working version of Skematik!</h6>
+			</a>
+		</div>
+		<div class="four columns text--right">
+			<ul class="list--no-border">
+				<li>
+					<a ui-sref="be.login" href="/admin/login">
+						Login
+					</a>
+				</li>
+				<li>
+					<a ui-sref="fe.register" href="/register" class="button">
+						Try for free
+					</a>
+				</li>
+			</ul>
 		</div>
 	</div>
 	<div class="row row--full-width" ng-if="account">
