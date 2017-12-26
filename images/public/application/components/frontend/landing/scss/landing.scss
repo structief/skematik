@@ -21,11 +21,14 @@ section{
 		margin: 0 auto;
 		display: block;
 	}
+	a{
+		color: #999999;
+	}
 }
 
 .section__grid{
 	.row{
-		margin: 200px 0px;
+		margin: 100px 0px 150px 0px;
 	}
 	.columns{
 		vertical-align: middle;
@@ -49,7 +52,8 @@ section{
 }
 
 .section--with-background{
-	background-color: #86c6d2;
+	background-color: rgba(51, 195, 240, 0.8);
+	position: relative;
 
 	h4{
 		font-weight: 400;
@@ -83,5 +87,14 @@ section{
 		max-height: 400px;
 		width: auto;
 		margin-bottom: -7px;
+	}
+	svg{
+		position: absolute;
+		top: 0px;
+		right:0px;
+	}
+	svg:not(:root){
+		width: auto;
+		height: 100%;
 	}
 }

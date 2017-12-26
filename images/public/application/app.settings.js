@@ -50,6 +50,15 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 			}
 		}
 	})
+	.state('fe.page', {
+		url: "/:slug",
+		views: {
+			"pageContent@": {
+				templateUrl: base_url + "frontend/page/page.view.html",
+				controller: "PageController",
+			}
+		}
+	})
 	.state('be.login', {
 		url: "/login",
 		views: {

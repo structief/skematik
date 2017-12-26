@@ -1,0 +1,33 @@
+<!-- Default: 404 page -->
+<section class="section__grid container" ng-if="page == 404">
+	<div class="row">
+		<div class="twelve columns">
+			<h4>404</h4>
+			<p>Well, you found a strange place.<br/>Let's just <a href="/" ui-sref="fe.landing">go back to home</a>, shall we?</p>
+		</div>
+	</div>
+</section>
+
+<section class="section__grid container" ng-repeat="block in page.blocks" ng-if="page !== 404">
+
+	<!-- Div: FAQ -->
+	<div class="row" ng-if="block.type == 'faq'">
+		<div class="twelve columns">
+			<h2>{{block.title}}</h2>
+			<ul class="accordeon__list">
+				<li ng-class="{'list__item--expanded': q.active}" ng-click="q.active = !q.active" ng-repeat="q in block.data track by $index">
+					<h1 class="select--none">{{q.question}}</h1>
+					<label class="select--none">{{q.label}}</label>
+					<p>{{q.answer}}</p>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- Div: status -->
+
+	<!-- Div: html -->
+	<div class="row" ng-if="block.type == 'html'">
+		<div class="twelve columns" ng-bind-html="block.data"></div>
+	</div>
+</section>

@@ -1,3 +1,5 @@
+# Use .dockerignore to ignore files to copy
+
 FROM php:7.1-apache
 MAINTAINER Kliptonize <koen@ebro.me>
 

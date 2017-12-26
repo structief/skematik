@@ -36,3 +36,71 @@ ul.list__vertical{
 		}
 	}
 }
+
+ul.accordeon__list{
+	li{
+		list-style-type: none;
+		background: #ffffff;
+		border: 1px solid #eeeeee;
+		padding: 20px;
+		margin: 20px 0px;
+		cursor: pointer;
+		transition: all 0.4s;
+		position: relative;
+
+		h1{
+			font-size: 18pt;
+			margin-bottom: 5px;
+			margin-top: 5px;
+		}
+		label{
+			font-size: 1.2rem !important;
+			color: #666 !important;
+			margin: 0px;
+			text-transform: uppercase;
+			font-weight: 300;
+		}
+		p{
+			margin-top: 20px;
+			padding-top: 20px;
+			border-top: 1px solid #eeeeee;
+			width: 100%;
+			color: #333333 !important;
+			max-width: 100% !important;
+			display: none;
+		}
+
+		&:after{
+			content: "";
+			height: 20px;
+			width: 20px;
+			position: absolute;
+			right: 30px;
+			top: 40px;
+			background-image: url("https://icongr.am/feather/chevron-down.svg?color=999999&size=20");
+		}
+
+		&:hover{
+			border-color: #cccccc;
+
+			&:after{
+				background-image: url("https://icongr.am/feather/chevron-down.svg?color=333333&size=20");
+			}
+		}
+	}
+
+	li.list__item--expanded{
+		p{
+			display: block;
+		}
+
+		&:after{
+			background-image: url("https://icongr.am/feather/chevron-up.svg?color=999999&size=20");
+		}
+		&:hover{
+			&:after{
+				background-image: url("https://icongr.am/feather/chevron-up.svg?color=333333&size=20");
+			}
+		}
+	}
+}
