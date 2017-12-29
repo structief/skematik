@@ -99,6 +99,8 @@ class Schema {
             });
             result["headers"] = temp;
 
+            console.log(temp)
+
             result["created_at"] = r[0].created_at;
             result["created_at"] = r[0].created_at;
             result["updated_at"] = r[0].updated_at;
@@ -117,12 +119,30 @@ class Schema {
                   })
                 }
               }
+
+
+              const intermediary = [];
+
+              for(let i = 0; i < temp.length; i++) {
+                for(let j = 0; j < found.length; j++) {
+                  if(found[j].col === temp[i]) {
+                    intermediary.push(found[j])
+                  }
+                }
+              }
+
+
+
+
               rowstructure.push({
                 name: key,
-                cells: found
+                cells: intermediary
               });
             });
+
+
             result["rows"] = rowstructure;
+
             result["answers"] = answers;
             res.send(result);
           } else {
