@@ -33,7 +33,12 @@ class Auth {
     })
 
     app.get('/me', async (req, res, next) => {
+      res.send(400, { message: 'please include path'});
+    })
+
+    app.get('/me/:path', async (req, res, next) => {
       // return name, org, and image url
+      console.log(req.params.path.includes("admin"), req.params.path)
       if(req.headers.authorization) {
         checkToken(pg, req.headers.authorization, async (result) => {
           if(result.length > 0) {
@@ -47,15 +52,31 @@ class Auth {
                   organisation: data[0].organisation
                 })
               } else {
-                res.send(401, {message: "No user found"});
+                if(req.params.path.includes("admin")) {
+                  res.send(401, {message: "No user found with given token"}); 
+                }
+                else {
+                  res.send(200, {}); 
+                }
               }
             })
           } else {
-            res.send(401, {message: "Invalid token"});
+
+            if(req.params.path.includes("admin")) {
+              res.send(401, {message: "Please log in, invalid token"}); 
+            }
+            else {
+              res.send(200, {});
+            }
           }
         })
       } else {
-        res.send(401, {message: "no token found"})
+        if(req.params.path.includes("admin")) {
+          res.send(401, {message: "Please log in, no token found"}); 
+        }
+        else {
+          res.send(200, {}); 
+        }
       }
     })
 
