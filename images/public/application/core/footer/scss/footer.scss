@@ -1,0 +1,30 @@
+footer{
+    padding: 100px 0px 40px 0px;
+    background: white;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+
+    .logo{
+        h5{
+            line-height: 32px;
+            margin: 12px 0px;
+            display: inline-block;
+        }
+        img{
+            margin-left: -3px !important;
+        }
+    }
+    p{
+        margin: 10px 0px;
+        font-size: 10pt;
+        color: #999999;
+        max-width: 80%;
+    }
+
+    ul.list__social{
+        margin-top: 20px;
+    }
+}
