@@ -12,7 +12,7 @@ const Answers = require('./src/Answers.js');
 const Organisations = require('./src/Organisations.js');
 const Participants = require('./src/Participants.js');
 const Auth = require('./src/Auth.js');
-
+const Seeder = require('./src/helpers/seeder.js')
 
 
 const app = express();
@@ -74,6 +74,7 @@ class App {
     new Answers().assignFields(app, this.pg);
     new Organisations().assignFields(app, this.pg);
     new Participants().assignFields(app, this.pg);
+    new Seeder().assignFields(app, this.pg);
 
     server.listen(PORT, () => {
       console.log(`server up and listening on ${PORT}`)
@@ -93,9 +94,11 @@ class App {
       table.dateTime("closes");
       table.string("creator");
       table.timestamps();
+      table.boolean('published')
     }).then(function() {
       console.log("created tables")
     });
+
 
     await this.pg.schema.createTableIfNotExists('cells', function (table) {
       table.increments();
@@ -134,17 +137,17 @@ class App {
       console.log("created organisations")
     });
 
-    // await this.pg.schema.createTableIfNotExists('users', function (table) {
-    //   table.increments();
-    //   table.uuid("uuid");
-    //   table.uuid("organisation");
-    //   table.string('username').unique().notNullable();
-    //   table.string('password').notNullable();
-    //   table.string("usermail");
-    //   table.timestamps(true, true);
-    // }).then(function() {
-    //   console.log("created users")
-    // });
+    await this.pg.schema.createTableIfNotExists('users', function (table) {
+      table.increments();
+      table.uuid("uuid");
+      table.uuid("organisation");
+      table.string('username').unique().notNullable();
+      table.string('password').notNullable();
+      table.string("usermail");
+      table.timestamps(true, true);
+    }).then(function() {
+      console.log("created users")
+    });
 
 
     await this.pg.schema.createTableIfNotExists('participants', function (table) {

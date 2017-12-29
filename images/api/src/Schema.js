@@ -103,11 +103,34 @@ class Schema {
     app.get('/schema', async (req, res, next) => {
       var result = {};
 
-      await pg.select().table("schema").then(function(r) {
-        result = r;
-      })
+      // uuid
+      // title
+      // status (published or nah)
+      // amount of current participants
+      // max amount participants
 
-      res.send(result);
+      await pg.select(['uuid', 'title', 'published', 'id']).table("schema").then(async function(r) {
+        for(let i = 0; i< r.length; i++) {
+          const el = r[i];
+          let totalMax = 0;
+          let totalCur = 0;
+          await pg.select().table('cells').where({'tableID': el.id}).then(function(cellRes) {
+            for(let j = 0; j < cellRes.length; j++) {
+              totalMax += cellRes[j].max;
+              totalCur += cellRes[j].current
+            }
+          }).catch((error) => {
+            res.sendStatus(400)
+          })
+
+          r[i]['maxAmount'] = totalMax;
+          r[i]['currentParticipants'] = totalCur;
+
+        }
+        //all schemas
+        res.send(r);
+      })
+      console.log(result)
     })
   }
 
