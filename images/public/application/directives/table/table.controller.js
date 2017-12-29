@@ -59,13 +59,14 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 		});
 	});
 
-	SchemeFactory.get({uuid: $scope.scheme.uuid}, function(response){
+	SchemeFactory.getOne({uuid: $scope.scheme.uuid}, function(response){
 		if(response.status == 404){
 			//Scheme not found
 			$stateProvider.go('fe.entry');
 			$rootScope.$broadcast('alert.show', {'title': "Scheme not found", 'message': "This UUID is not know in the database", type: 'error'}); 
 		}else{
 			//All is fine
+			console.log(response);
 			$scope.scheme = response;
 		}
 	});

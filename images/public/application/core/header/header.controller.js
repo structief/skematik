@@ -3,9 +3,11 @@ skematikControllers.controller('HeaderController',["$scope", "$state", "$rootSco
 	$scope.isMenuActive = false;
 
 	//Check if account is logged in
-	AccountFactory.getAccount().then(function(account){
-		$scope.account = account;
-	});
+	if($rootScope.isAuthenticated){
+		AccountFactory.getAccount().then(function(account){
+			$scope.account = account;
+		});
+	}
 
 
 	$scope.$on("account.login", function(event, data){
