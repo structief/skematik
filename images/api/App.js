@@ -134,17 +134,17 @@ class App {
       console.log("created organisations")
     });
 
-    // await this.pg.schema.createTableIfNotExists('users', function (table) {
-    //   table.increments();
-    //   table.uuid("uuid");
-    //   table.uuid("organisation");
-    //   table.string('username').unique().notNullable();
-    //   table.string('password').notNullable();
-    //   table.string("usermail");
-    //   table.timestamps(true, true);
-    // }).then(function() {
-    //   console.log("created users")
-    // });
+    await this.pg.schema.createTableIfNotExists('users', function (table) {
+      table.increments();
+      table.uuid("uuid");
+      table.uuid("organisation");
+      table.string('username').unique().notNullable();
+      table.string('password').notNullable();
+      table.string("usermail");
+      table.timestamps(true, true);
+    }).then(function() {
+      console.log("created users")
+    });
 
 
     await this.pg.schema.createTableIfNotExists('participants', function (table) {
