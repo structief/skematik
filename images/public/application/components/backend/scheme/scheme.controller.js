@@ -1,41 +1,43 @@
-skematikControllers.controller('BeSchemeController',["$scope", "$state", "$stateParams", "$rootScope", function($scope, $stateProvider, $stateParams, $rootScope) {
+skematikControllers.controller('BeSchemeController',["$scope", "$state", "$stateParams", "$rootScope", "SchemeFactory", function($scope, $stateProvider, $stateParams, $rootScope, SchemeFactory) {
 	$scope.scheme = {
-		id: $stateParams.schemeId
+		uuid: $stateParams.schemeUuid
 	}
 
-	if($scope.scheme.id == 'new'){
+	if($scope.scheme.uuid == 'new'){
 		//Add some dummy content
 		$scope.scheme.title = "A new scheme";
-		$scope.scheme.cols = ['A string', 11, 'Click me!', '13:00', 14, 'Tomorrow'],
+		$scope.scheme.headers = ['A string', 11, 'Click me!', '13:00', 14, 'Tomorrow'],
 		$scope.scheme.rows = [
 			{
 				name: "First function",
-				cols: [0,0,3,5,1,0]
+				cells: [
+					{max: 0},
+					{max: 0},
+					{max: 3},
+					{max: 5},
+					{max: 1},
+					{max: 0}
+				]
 			},
 			{
 				name: "Edit me via clicking",
-				cols: [1,0,2,15,0,1]
+				cells: [
+					{max: 1},
+					{max: 0},
+					{max: 2},
+					{max: 15},
+					{max: 0},
+					{max: 1}
+				]
 			}
 		]; 
 	}else{
 		//Fetch scheme
-
-		//Dummy
-		$scope.scheme = {
-			id: $stateParams.schemeId,
-			title: "My beautiful first scheme",
-			rows: [
-				{
-					name: "First function",
-					cols: [0,0,1,1,1,0,1,0]
-				},
-				{
-					name: "Second function",
-					cols: [1,1,1,1,0,1,0,1]
-				}
-			],
-			cols: [10, 11, 12, 13, 14, 15, 16, 17]
-		}
+		SchemeFactory.getOne({uuid: $scope.scheme.uuid}, function(scheme){
+			$scope.scheme = scheme;
+		}, function(error){
+			console.error(error);
+		});
 	}
 
 	$scope.nav = {
@@ -44,8 +46,7 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 
 	// Functions
 	$scope.next = function(){
-		console.log($scope.nav.min);
-		if($scope.nav.min + 8 < $scope.scheme.cols.length){
+		if($scope.nav.min + 8 < $scope.scheme.headers.length){
 			$scope.nav.min++;
 		}
 	}
@@ -58,14 +59,18 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 	//Row functions
 	$scope.addSpace = function(rowId, cellId, isDelete){
 		if (!isDelete){
-			$scope.scheme.rows[rowId].cols[cellId] = 1;
+			$scope.scheme.rows[rowId].cells[cellId].max = 1;
 		}else{
-			$scope.scheme.rows[rowId].cols[cellId]= false;
+			$scope.scheme.rows[rowId].cells[cellId].max = false;
 		}
-		console.log($scope.scheme);
 	}
 	$scope.addRow = function(){
-		$scope.scheme.rows.push({name: null, cols: new Array($scope.scheme.cols.length)});
+		//Create empty cells in row
+		var cells = [];
+		for(var i=0;i<$scope.scheme.headers.length;i++){
+			cells.push({max: 0});
+		}
+		$scope.scheme.rows.push({name: null, cells: cells});
 	}
 	$scope.deleteRow = function(rowId){
 		//Delete row, but save it still for a few seconds until no undo is pressed
@@ -95,42 +100,42 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 				$scope.nav.min = 0;
 				break;
 			case "after":
-				pos = $scope.scheme.cols.length;
+				pos = $scope.scheme.headers.length;
 				//Navigate to the newly added column
 				$scope.nav.min = pos - 7;
 				break;
 		}
 		//Add a column
-		$scope.scheme.cols.splice(pos, 0, "A row");
+		$scope.scheme.headers.splice(pos, 0, "A row");
 		
 		//Make it empty for all rows
 		for(var i = 0;i < $scope.scheme.rows.length; i++){
-			$scope.scheme.rows[i].cols.splice(pos, 0, false);
+			$scope.scheme.rows[i].cells.splice(pos, 0, {max: 0});
 		}
 	}
 	$scope.deleteColumn = function(columnId){
 		//Delete column, but save it still for a few seconds until no undo is pressed
 		var deletedColumn = {
-			title: $scope.scheme.cols[columnId],
+			title: $scope.scheme.headers[columnId],
 			values: []
 		};
 		for(var i = 0;i < $scope.scheme.rows.length; i++){
-			deletedColumn.values.push($scope.scheme.rows[i].cols[columnId]);
+			deletedColumn.values.push($scope.scheme.rows[i].cells[columnId]);
 		}
 
 		//Remove column & values
-		$scope.scheme.cols.splice(columnId, 1);
+		$scope.scheme.headers.splice(columnId, 1);
 		for(var i = 0;i < $scope.scheme.rows.length; i++){
-			$scope.scheme.rows[i].cols.splice(columnId, 1);
+			$scope.scheme.rows[i].cells.splice(columnId, 1);
 		}
 
 		//Callback function for the alert
 		var undoDeletion = function(){
 			if(deletedColumn !== null){
-				$scope.scheme.cols.splice(columnId, 0, deletedColumn.title);
+				$scope.scheme.headers.splice(columnId, 0, deletedColumn.title);
 				//Re-add values
 				for(var i = 0;i < $scope.scheme.rows.length; i++){
-					$scope.scheme.rows[i].cols.splice(columnId, 0, deletedColumn.values[i]);
+					$scope.scheme.rows[i].cells.splice(columnId, 0, deletedColumn.values[i]);
 				}
 				deletedColumn = null;	
 				$rootScope.$broadcast('alert.show', {title: "Action has been undone", message: "Watch out next time, okay?", type: "success", hide: 4000}); 
