@@ -99,7 +99,6 @@ class App {
       console.log("created tables")
     });
 
-
     await this.pg.schema.createTableIfNotExists('cells', function (table) {
       table.increments();
       table.integer("tableID");

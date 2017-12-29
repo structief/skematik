@@ -123,7 +123,7 @@ class Schema {
             res.sendStatus(400)
           })
 
-          r[i]['maxAmount'] = totalMax;
+          r[i]['maxParticipants'] = totalMax;
           r[i]['currentParticipants'] = totalCur;
 
         }

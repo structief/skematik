@@ -15,7 +15,8 @@ class Auth {
   }
 
   comparePass(userPassword, databasePassword) {
-    return bcrypt.compareSync(userPassword, databasePassword);
+    //return bcrypt.compareSync(userPassword, databasePassword);
+    return (userPassword == databasePassword);
   }
 
   assignFields(app, pg) {
@@ -83,10 +84,10 @@ class Auth {
               }
             })
           } else {
-            res.send(401, { message: "username or password does not match or does not exist", status: 401});
+            res.send(401, { message: "Password incorrect, try again", status: 401});
           }
         } else {
-          res.send(401, { message: "username or password does not match or does not exist", status: 401});
+          res.send(401, { message: "Username not recognized in the system", status: 401});
         }
       })
 
