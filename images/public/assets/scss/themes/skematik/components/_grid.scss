@@ -5,8 +5,6 @@
 }
 
 
-
-
 // BOX COLORS
 .box--white{
 	border: 1px solid #eeeeee;
@@ -27,6 +25,9 @@
 .box--success{
 	border: 1px solid $success-color;
 	background-color: lighten($success-color, $lighten-factor);
+}
+.box--bg-white{
+	background-color: white !important;
 }
 
 // TEXT

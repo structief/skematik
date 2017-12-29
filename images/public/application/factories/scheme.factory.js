@@ -18,6 +18,10 @@ skematikFactories.factory('SchemeFactory',["$resource", "$location", function($r
         type: "answer"
       },
       skipAuthorization: true
+    },
+    update: {
+      method: 'PUT',
+      isArray: true
     }
   });
 }]);

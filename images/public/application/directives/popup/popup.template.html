@@ -1,10 +1,31 @@
-<section ng-show="show.popup" class="popup--overlay">
+<section ng-show="show.popup && role !== 'view'" class="popup--overlay">
 	<a href="#" ng-click="closePopup()" class="icon--close">x</a>
 	<h4>Participate in: {{row.name}}?</h4>
 
 	<label for="email">Enter your e-mailaddress:</label>
-	<input type="email" id="email" ng-model="email" placeholder="me@live.com" required>
+	<input type="email" id="email" ng-model="email" placeholder="me@live.com" required ng-model-options="{allowInvalid: true}">
 	<br/>
 	<input type="button" value="Jah bitte!" ng-click="participate()" />
+</section>
+<section ng-show="show.popup && role == 'view'" class="popup--overlay">
+	<a href="#" ng-click="closePopup()" class="icon--close">x</a>
+	<h4>Participants for {{row.name}}</h4>
+	<table class="u-full-width" ng-if="cell.current.length > 0">
+		<thead>
+			<tr>
+				<th>Email</th>
+				<th>Created</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="subscription in cell.current">
+				<td>{{subscription.usermail}}</td>
+				<td>{{subscription.created_at}}</td>
+				<td>-</td>
+			</tr>
+		</tbody>
+	</table>
+	<p ng-if="cell.current.length == 0">No subscriptions yet.</p>
 </section>
 <div class="overlay--dark" ng-show="show.popup"></div>

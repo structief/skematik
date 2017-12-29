@@ -45,6 +45,10 @@
 /* Smaller than Desktop HD */
 @media (max-width: 1200px) {}
 
+
+
+
+
 /* SELECTION */
 .select--none {
   -webkit-touch-callout: none; /* iOS Safari */
@@ -54,4 +58,15 @@
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
+}
+
+
+/* ANIMATION */
+@keyframes softSlideLeft {
+  0% {
+    transform: translateX(-10px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
 }

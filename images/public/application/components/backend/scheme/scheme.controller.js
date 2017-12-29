@@ -3,7 +3,10 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 		uuid: $stateParams.schemeUuid
 	}
 
+	$scope.isEditing = false;
+
 	if($scope.scheme.uuid == 'new'){
+		$scope.isEditing = true;
 		//Add some dummy content
 		$scope.scheme.title = "A new scheme";
 		$scope.scheme.headers = ['A string', 11, 'Click me!', '13:00', 14, 'Tomorrow'],
@@ -54,6 +57,9 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 		if($scope.nav.min > 0){
 			$scope.nav.min--;
 		}
+	}
+	$scope.toggleEditMode = function(){
+		$scope.isEditing = !$scope.isEditing;
 	}
 
 	//Row functions
@@ -148,6 +154,42 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 
 	//Scheme functions
 	$scope.saveScheme = function(){
-		console.log($scope.scheme);
+		console.log("Let's save!");
+
+		if($scope.scheme.uuid == 'new'){
+			//Do a post to save it, and store the response
+			SchemeFactory.post({scheme: $scope.scheme}, function(response){
+				$scope.scheme = response;
+
+				//Show alert
+				$rootScope.$broadcast('alert.show', {title: "Schema created", message: "Yas, we saved everything!", type: "success"}); 
+			}, function(error){
+				console.error(error);
+			});
+		}else{
+			//Save the existing scheme with a put
+			SchemeFactory.update({uuid: $scope.scheme.uuid, scheme: $scope.scheme}, function(response){
+				$scope.scheme = response;
+				console.log(response);
+
+				//Show alert
+				$rootScope.$broadcast('alert.show', {title: "Changes saved", message: "Yas, we saved everything!", type: "success"}); 
+			}, function(error){
+				console.error(error);
+			});
+		}
+	}
+
+	$scope.discardChanges = function(){
+		$scope.isEditing = false;
+		//Fetch scheme again, to discard the changes
+		SchemeFactory.getOne({uuid: $scope.scheme.uuid}, function(scheme){
+			$scope.scheme = scheme;
+
+			//Show alert
+			$rootScope.$broadcast('alert.show', {title: "Changes thrown away", message: "Changes were discarded, back to what you had!", type: "success"}); 
+		}, function(error){
+			console.error(error);
+		});
 	}
 }]);

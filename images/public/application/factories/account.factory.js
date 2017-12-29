@@ -8,6 +8,7 @@ skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", "$r
                 isArray: false,
                 params:{
                     type:"me",
+                    path: $location.path()
                 }
             },
             login: {

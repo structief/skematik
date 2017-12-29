@@ -5,7 +5,6 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 	$scope.nav = {
 		min: 0
 	}
-
 	
 	// Functions
 	$scope.next = function(){
@@ -21,8 +20,8 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 	}
 
 	$scope.showPopup = function(row, cell){
-		if(cell.current.length < cell.max){
-			$rootScope.$broadcast('popup.show', {'row': row, 'cell': cell});
+		if(cell.current.length < cell.max || $scope.role == 'view'){
+			$rootScope.$broadcast('popup.show', {'row': row, 'cell': cell, 'role': $scope.role});
 		}else{
 			$rootScope.$broadcast('alert.show', {'title': "Sorry :(", 'message': "No seats left for this spot", type: 'error'}); 
 		}
@@ -66,7 +65,6 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 			$rootScope.$broadcast('alert.show', {'title': "Scheme not found", 'message': "This UUID is not know in the database", type: 'error'}); 
 		}else{
 			//All is fine
-			console.log(response);
 			$scope.scheme = response;
 		}
 	});

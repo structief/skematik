@@ -137,7 +137,7 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 
 	//Push interceptors for HTTP calls
     $httpProvider.interceptors.push('resourceInterceptor');
-   // $httpProvider.interceptors.push('jwtInterceptor');
+    $httpProvider.interceptors.push('jwtInterceptor');
 }]);
 
 skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFactory", function($rootScope, $stateProvider, $stateParams, authManager, AccountFactory){	
@@ -159,7 +159,7 @@ skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFac
 
     //On logout, redirect automatically to homepage
     $rootScope.$on("account.logout", function(data){
-		$stateProvider.go('fe.entry');
+		$stateProvider.go('fe.landing');
     	console.log("User logged out");
     	console.info(data);
         $rootScope.isAuthenticated = false;

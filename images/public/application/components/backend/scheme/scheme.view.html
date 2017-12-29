@@ -1,16 +1,20 @@
 <div class="container">
 	<section class="row">
-		<div class="eight columns">
+		<div class="seven columns">
 			<h4>
 				<input type="text" ng-model="scheme.title" placeholder="a nice title" />
 			</h4>
 		</div>
-		<div class="four columns text--right">
-			<input type="submit" ng-click="saveScheme()" class="button-primary" value="Save scheme" />
+		<div class="five columns text--right padding--10">				
+			<a href="#" class="link--small link--no-underline link--disabled" style="margin-right: 20px" ng-if="!isEditing">Export</a>
+			<input type="submit" ng-click="toggleEditMode()" class="button-secondary" value="Edit scheme" ng-if="!isEditing" />
+
+			<a href="#" class="link--small link--no-underline link--active" style="margin-right: 20px" ng-if="isEditing" ng-click="discardChanges()">Discard changes</a>
+			<input type="submit" ng-click="saveScheme()" class="button-primary" value="Save scheme" ng-if="isEditing" />
 		</div>
 	</section>
 </div>
-<section class="u--full-width scheme__wide">
+<section class="u--full-width scheme__wide" ng-if="isEditing">
 	<div class="row box--white padding--15 scheme__title">
 		<div class="two columns">
 			Function name
@@ -54,7 +58,7 @@
 			{{nav.min == 0 ? '&nbsp;' : '...'}}
 		</div>
 		<div 
-			class="one column padding--15" 
+			class="one column padding--15 box--bg-white" 
 			ng-class="{'box--info': cell.max, 'text--center': !cell.max}"
 			ng-repeat="cell in row.cells track by $index" 
 			ng-if="$index >= nav.min && $index < (nav.min+8)" >
@@ -75,3 +79,6 @@
 		</div>
 	</div>
 </section>
+
+<!-- Dirty fix, please do this better -->
+<skematik-table uuid="scheme.uuid" ng-if="!isEditing" role="view"></skematik-table>
