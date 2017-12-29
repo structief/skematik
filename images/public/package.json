@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "v": {
     "app": "0.4.0",
-    "build": "0.4.1-compile.178"
+    "build": "0.4.1-compile.222"
   },
   "description": "Frontend for the Skematik application",
   "main": "index.html",

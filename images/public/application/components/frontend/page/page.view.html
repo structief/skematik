@@ -1,9 +1,13 @@
 <!-- Default: 404 page -->
-<section class="section__grid container" ng-if="page == 404">
-	<div class="row">
-		<div class="twelve columns">
-			<h4>404</h4>
-			<p>Well, you found a strange place.<br/>Let's just <a href="/" ui-sref="fe.landing">go back to home</a>, shall we?</p>
+<section class="section__grid container align--vertical" ng-if="page == 404">
+	<div class="row padding--top-100">
+		<div class="six columns">
+			<h1><b>404</b><br/><small>We sincerely apologize.</small></h1>
+			<p>The page you are looking for is no longer here. Maybe it was never here in the first place. In any case, we are sorry you were sent on this wild goose chase, and have already taken steps to fry the person responsible.</p>
+			<p><a href="/" ui-sref="fe.landing" style="color:black;text-decoration: none;">> <b>Let's just go home</b></a></p>
+		</div>
+		<div class="six columns text--center">
+			<img src="https://icongram.jgog.in/feather/heart.svg?color=33C3F0&size=100"></img>
 		</div>
 	</div>
 </section>

@@ -1,12 +1,15 @@
 <nav class="navbar" ng-controller="HeaderController">
 	<div class="row row--full-width" ng-if="!account">
-		<div class="eight columns">
+		<div class="six columns">
 			<a ui-sref="fe.landing" href="/">
 				<img src="https://icongram.jgog.in/feather/minus-square.svg?color=33C3F0" style="float:left;margin:12px"></img>
-				<h6>Yay, this is a working version of Skematik!</h6>
+				<h6><span class="hide--on-tablet">Yay, this is a working version of </span>Skematik<span class="hide--on-tablet">!</span></h6>
+			</a>
+			<a href="#" class="hide--after-mobile" style="float: right;padding: 16px 32px 12px 12px;margin-top: -4px;" ng-click="isMenuActive = !isMenuActive" ng-class="{'animate--right-70': isMenuActive}">
+				<img src="https://icongram.jgog.in/feather/menu.svg?color=dddddd"></img>
 			</a>
 		</div>
-		<div class="four columns text--right">
+		<div class="six columns menu--secondary" ng-class="{'hide--on-mobile': !isMenuActive, 'animate--left-0': isMenuActive, 'text--right': !isMenuActive, 'animate--opacity-1': isMenuActive}">
 			<ul class="list--no-border">
 				<li>
 					<a ui-sref="be.login" href="/admin/login">
@@ -19,6 +22,9 @@
 					</a>
 				</li>
 			</ul>
+			<a href="#" class="hide--after-mobile" style="float: right;padding: 16px 12px 12px 12px;margin-top: -65px;" ng-click="isMenuActive = !isMenuActive" ng-class="{'animate--left-60': isMenuActive}">
+				<img src="https://icongram.jgog.in/feather/x.svg?color=dddddd"></img>
+			</a>
 		</div>
 	</div>
 	<div class="row row--full-width" ng-if="account">

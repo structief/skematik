@@ -1,5 +1,6 @@
 skematikControllers.controller('HeaderController',["$scope", "$state", "$rootScope", "AccountFactory", function($scope, $stateProvider, $rootScope, AccountFactory) {
 	$scope.account = null;
+	$scope.isMenuActive = false;
 
 	//Check if account is logged in
 	AccountFactory.getAccount().then(function(account){
