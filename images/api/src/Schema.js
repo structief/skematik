@@ -26,14 +26,14 @@ class Schema {
             request["creator"] = result[0].user;
 
             request["headers"] = req.body.headers.reduce(function(result, item, index, array) {
-              result[index] = item; //a, b, c
+              result[item] = index; //a, b, c
               return result;
             }, {}) ;
 
             request['title'] = req.body.title;
 
             request['rows'] = req.body.rows.reduce(function(result, item, index, array) {
-              result[index] = item.name; //a, b, c
+              result[item.name] = index; //a, b, c
               return result;
             }, {}) 
 
@@ -95,7 +95,7 @@ class Schema {
             result["title"] = r[0].title;
             const temp = [];
             Object.keys(r[0].headers).map((key, index) => {
-              temp.push(r[0]['headers'][key]);
+              temp.push(key);
             });
             result["headers"] = temp;
 
@@ -107,7 +107,7 @@ class Schema {
             Object.keys(r[0].rows).map((key, index) => {
               const found = [];
               for (let i = 0; i < r.length; i++) {
-                if (r[i]["row"] === r[0].rows[key]) {
+                if (r[i]["row"] === key) {
                   const num = answers.filter(answer => answer.cellID === r[i].uuid);
                   found.push({
                     max: r[i].max,
