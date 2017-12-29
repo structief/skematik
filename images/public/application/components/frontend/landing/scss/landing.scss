@@ -1,0 +1,100 @@
+section{
+	display: block;
+}
+
+.section__hero{
+	padding: 100px 0px;
+
+	h1{
+		font-weight: 500;
+	}
+	p{
+		max-width: 400px;
+		margin: 20px auto;
+		display: block;
+	}
+	button{
+		margin: 20px auto;
+	}
+	img{
+		max-width: 70%;
+		margin: 0 auto;
+		display: block;
+	}
+	a{
+		color: #999999;
+	}
+}
+
+.section__grid{
+	.row{
+		margin: 100px 0px 150px 0px;
+	}
+	.columns{
+		vertical-align: middle;
+
+		img{
+			max-width: 100%;
+		}
+
+		p, h3{
+			max-width: 80%;
+		}
+		p{
+			font-size: 12pt;
+			color: #999999;
+		}
+		h3{
+			font-weight: 500;
+			color: #333333;
+		}
+	}
+}
+
+.section--with-background{
+	background-color: rgba(51, 195, 240, 0.8);
+	position: relative;
+
+	h4{
+		font-weight: 400;
+		color: white;
+	}
+	p{
+		font-size: 13pt;
+		color: white;
+	}
+	button{
+		border-color: white;
+		color: #86c6d2;
+		background-color: white;
+		float: left;
+		margin-top: 20px;
+	}
+	label{
+		color: white;
+		font-size: 8pt;
+		line-height: 38px;
+		margin: 0px 20px;
+		float: left;
+		margin-top: 20px;
+	}
+
+	.eight.columns{
+		padding: 100px 0px;
+	}
+
+	img{
+		max-height: 400px;
+		width: auto;
+		margin-bottom: -7px;
+	}
+	svg{
+		position: absolute;
+		top: 0px;
+		right:0px;
+	}
+	svg:not(:root){
+		width: auto;
+		height: 100%;
+	}
+}
