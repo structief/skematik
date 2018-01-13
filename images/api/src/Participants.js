@@ -27,29 +27,17 @@ class Participants {
 
     app.post('/participants', async (req, res, next) => {
 
-
+      const roles = pg.select("uuid").table("roles").where({organisationID: req.body.organisationID, type: "PARTICIPANT"});
       for(let i = 0; i < req.body.participants.length; i++) {
         const el = req.body.participants[i];
         const uuid1 = uuidV1();
-
-
-
-        const salt = bcrypt.genSaltSync();
-        const hash = bcrypt.hashSync(el.password, salt);
-        const toAdd = {
-          uuid: uuid1,
-          organisation: req.body.organisation,
-          username: el.username,
-          password: hash,
-          usermail: el.usermail
-        }
-        const added = await pg("users").insert(toAdd);
-
-        const uuid2 = uuidV1();
         await pg("participants").insert({
-          user: uuid1,
-          uuid: uuid2,
-          schema: req.body.schema
+          uuid: uuid1,
+          usermail: req.body.usermail,
+          roles: {roles: roles},
+          code: "",
+          status: "created",
+          organisationID: req.body.organisationID
         }).then(function() {
           res.send(200)
         })

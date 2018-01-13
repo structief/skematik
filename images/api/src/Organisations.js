@@ -63,7 +63,14 @@ class Organisations {
         organisationID: request["uuid"],
         type: "USER",
         short: "user of the organisation",
-        permissions: "666"
+        permissions: "300"
+      })
+      const insertRolesParticipant = await pg("roles").insert({
+        uuid: uuidV1(),
+        organisationID: request["uuid"],
+        type: "PARTICIPANT",
+        short: "participant of the organisation",
+        permissions: "300"
       })
       res.send(200, { uuid: request["uuid"]})
 

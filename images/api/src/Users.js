@@ -32,7 +32,6 @@ class Users {
       })
     })
 
-
     app.post('/users/list', async (req, res, next) => {
       const request = req.body;
 
