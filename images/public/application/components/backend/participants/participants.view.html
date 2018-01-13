@@ -1,0 +1,119 @@
+<div class="container">
+	<!-- Header -->
+	<section class="row">
+		<div class="eight columns">
+			<h4>
+				Deelnemers
+				<div class="u__dropdown">
+					<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
+						<img src="https://icongr.am/feather/plus-square.svg?color=999999">
+					</a>
+					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white">
+						<ul>
+							<li>Nieuwe deelnemer</li>
+							<li>Bulk import</li>
+						</ul>
+					</div>
+				</div>
+			</h4>
+		</div>
+		<div class="four colums">
+			<div class="text--right padding--10">
+				<div class="u__dropdown">
+					<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
+						<img src="https://icongr.am/feather/filter.svg?color=999999">
+					</a>
+					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px;text-align: left">
+						<ul>
+							<li class="u__dropdownmenu--header">Account</li>
+							<li ng-click="filter.inactive = !filter.inactive">
+								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.inactive">
+								Inactive
+							</li>
+							<li ng-click="filter.active = !filter.active">
+								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.active">
+								Active
+							</li>
+							<li class="u__dropdownmenu--header">Rollen</li>
+							<li ng-repeat="role in system.roles" ng-click="toggleRole(filter.roles, role)">
+								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="inRoles(filter.roles, role)">
+								{{role}}
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Actual participants -->
+	<section class="row table--light">
+		<div class="twelve columns row table__row table__row--header">
+			<div class="four columns">
+				Emailadres
+			</div>
+			<div class="two columns">
+				Status
+			</div>
+			<div class="four columns">
+				Rollen
+			</div>
+			<div class="two columns">
+				Acties
+			</div>
+		</div>
+		<div class="twelve columns row table__row" ng-repeat="participant in participants" ng-if="filterParticipants(participant)">
+			<div class="four columns">
+				{{participant.mail}}
+			</div>
+			<div class="two columns">
+				<span ng-if="participant.status">Actief</span>
+				<span ng-if="!participant.status">Inactief</span>
+			</div>
+			<div class="three columns">
+				<span ng-repeat="role in participant.roles">
+					{{role}}
+					<span ng-if="$index < participant.roles.length-1">, </span>
+				</span>
+				<span ng-if="participant.roles.length == 0">
+					<i>No roles</i>
+				</span>
+			</div>
+			<div class="three columns text--right">
+				<ul class="list__horizontal" style="margin: -7px">
+					<li class="u__no-margin">
+						<div class="u__dropdown">
+							<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
+								<img src="https://icongr.am/feather/users.svg?color=999999">
+							</a>
+							<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px;text-align: left;">
+								<ul>
+									<li class="u__dropdownmenu--header">Toggle role</li>
+									<li ng-repeat="role in system.roles" ng-click="toggleRole(participant.roles, role)">
+										<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="inRoles(participant.roles, role)">
+										{{role}}
+									</li>
+								</ul>
+							</div>
+						</div>
+					</li>
+					<li class="u__no-margin" ng-if="participant.status == 1">
+						<a ng-click="participant.status = !participant.status" title="Deelnemer deactiveren">
+							<img src="https://icongr.am/feather/pause-circle.svg?color=999999" alt="Deelnemer deactiveren">
+						</a>
+					</li>
+					<li class="u__no-margin" ng-if="participant.status == 0">
+						<a ng-click="participant.status = !participant.status" title="Deelnemer activeren">
+							<img src="https://icongr.am/feather/play-circle.svg?color=999999" alt="Deelnemer activeren">
+						</a>
+					</li>
+					<li class="u__no-margin" ng-if="participant.status == 0">
+						<a ng-click="deleteParticipant($index)" title="Deelnemer verwijderen">
+							<img src="https://icongr.am/feather/minus-circle.svg?color=999999" alt="Deelnemer verwijderen">
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+</div>

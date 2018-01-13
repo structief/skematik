@@ -1,0 +1,37 @@
+ul.tabs__list{
+	border-bottom: 1px solid #eeeeee;
+	padding-bottom: 13px;
+
+	li{
+		list-style-type: none;
+		display: inline;	
+		padding: 15px 5px;
+		text-align: center;
+		margin: 0px 15px;
+		cursor: pointer;
+
+		&:first-child{
+			margin-left: 0px;
+		}
+
+		a{
+			text-decoration: none;
+			color: #cccccc;
+			font-size: 1.6rem;
+			transition: 0.4s all;
+		}
+
+
+		&.active{
+			border-bottom: 2px solid #33C3F0;
+
+			a{
+				color: #222222;
+			}
+		}
+
+		&:hover a{
+			color: #333333;
+		}
+	}
+}

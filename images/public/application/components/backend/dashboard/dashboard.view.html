@@ -5,10 +5,24 @@
 		</div>
 		<div class="four colums">
 			<div class="text--right padding--10">
-				<i>Filter:</i>	
-				<a href="#" class="link--small link--no-underline" ng-class="{'link--active': filter.unpublished, 'link--inactive': !filter.unpublished}" ng-click="filter.unpublished = !filter.unpublished">Unpublished</a>
-				/
-				<a href="#" class="link--small link--no-underline" ng-class="{'link--active': filter.published, 'link--inactive': !filter.published}" ng-click="filter.published = !filter.published">Published</a>
+				<div class="u__dropdown">
+					<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
+						<img src="https://icongr.am/feather/filter.svg?color=999999">
+					</a>
+					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px;text-align: left">
+						<ul>
+							<li class="u__dropdownmenu--header">Filter</li>
+							<li ng-click="filter.unpublished = !filter.unpublished">
+								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.unpublished">
+								Unpublished
+							</li>
+							<li ng-click="filter.published = !filter.published">
+								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.published">
+								Published
+							</li>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>

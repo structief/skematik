@@ -2,7 +2,7 @@ skematikFactories.factory('resourceInterceptor', ["$rootScope", function ($rootS
   return {
     request: function (config) {
       //Intercept all calls to api
-      if(config.url.startsWith("http://localhost:3000/")){
+      if(config.url.indexOf(":3000") !== -1){
         console.log("Started loading: " + config.url);
       }
 
@@ -11,7 +11,7 @@ skematikFactories.factory('resourceInterceptor', ["$rootScope", function ($rootS
     },
     response: function (response) {
       //Intercept all calls to api
-      if(response.config.url.startsWith("http://localhost:3000/")){
+      if(response.config.url.indexOf(":3000") !== -1){
         console.log("Done loading: " + response.config.url + " with code: " + response.status + ":" + response.statusText);
         response.data.$status = response.status;
       }

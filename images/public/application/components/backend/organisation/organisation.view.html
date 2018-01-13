@@ -1,0 +1,39 @@
+<div class="container">
+	<!-- Header -->
+	<section class="row">
+		<div class="eight columns">
+			<ul class="tabs__list tabs__list--header">
+				<li ng-class="{'active': (tabList.active == tab)}" ng-repeat="(tab, name) in tabList.tabs" ng-click="tabList.active = tab">
+					<a>{{name}}</a>
+				</li>
+			</ul>
+		</div>
+		<div class="four colums">
+			<div class="text--right padding--10">
+				<div class="u__dropdown">
+					<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
+						<img src="https://icongr.am/feather/filter.svg?color=999999">
+					</a>
+					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px;text-align: left">
+						<ul>
+							<li class="u__dropdownmenu--header">Account</li>
+							<li ng-click="filter.inactive = !filter.inactive">
+								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.inactive">
+								Inactive
+							</li>
+							<li ng-click="filter.active = !filter.active">
+								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.active">
+								Active
+							</li>
+							<li class="u__dropdownmenu--header">Rollen</li>
+							<li ng-repeat="role in system.roles" ng-click="toggleRole(filter.roles, role)">
+								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="inRoles(filter.roles, role)">
+								{{role}}
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
