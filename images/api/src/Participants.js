@@ -24,7 +24,6 @@ class Participants {
       })
     })
 
-    app.delete
     app.post('/participants', async (req, res, next) => {
       const request = req.body;
       for(let i = 0; i < request.participants.length; i++) {

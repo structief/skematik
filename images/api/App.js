@@ -64,7 +64,7 @@ class App {
         result["answers"] = r;
       })
 
-      res.send(result)``
+      res.send(result)
     })
 
     new Schema().assignFields(app, this.pg);
@@ -111,17 +111,19 @@ class App {
       console.log("created cells")
     });
 
+    
+
     await this.pg.schema.createTableIfNotExists('answers', function (table) {
       table.increments();
       table.uuid("cellID");
-      table.uuid("userID");
+      table.uuid("participantID");
       table.uuid("tableID");
-      table.string("username");
-      table.string("usermail");
       table.timestamps();
     }).then(function() {
       console.log("created answers")
     });
+
+
 
     await this.pg.schema.createTableIfNotExists('organisations', function (table) {
       table.increments();
@@ -149,15 +151,6 @@ class App {
       console.log("created users")
     });
 
-    await this.pg.schema.createTableIfNotExists('roles', function(table) {
-      table.increments();
-      table.uuid("uuid");
-      table.string('user');
-      table.string('role');
-      table.timestamps(true, true);
-    }).then(function() {
-        console.log('created roles')
-    })
 
     await this.pg.schema.createTableIfNotExists('participants', function (table) {
       table.increments();
@@ -170,7 +163,6 @@ class App {
     }).then(function() {
       console.log("created participants")
     });
-
 
     await this.pg.schema.createTableIfNotExists('tokens', function (table) {
       table.increments();
