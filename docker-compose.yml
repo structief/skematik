@@ -32,7 +32,7 @@ services:
     ports:
       - "3000:3000"
     volumes: 
-      - './images/api/src:/api/src§'
+      - './images/api/src:/api/src'
 
   php:
     build:

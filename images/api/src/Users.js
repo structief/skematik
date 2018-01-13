@@ -16,6 +16,16 @@ class Users {
       console.log("tested")
     })
 
+
+    app.get('/users/all', async (req, res, next) => {
+      await pg.select().table("users").then(function(r) {
+        res.send(r)
+      })
+      console.log("tested")
+    })
+
+
+
     app.delete('/users', async (req, res, next) => {
       await pg("users").where({uuid: req.body.uuid}).del().then(function(r) {
         res.send(200)
@@ -26,8 +36,6 @@ class Users {
     app.post('/users/list', async (req, res, next) => {
       const request = req.body;
 
-
-
       console.log("request", request)
       request["uuid"] = uuidV1();
       await pg("users").insert(request).then(function() {
@@ -37,9 +45,9 @@ class Users {
 
     app.post('/users', async (req, res, next) => {
       const request = req.body;
-
-      console.log("request", request)
       request["uuid"] = uuidV1();
+      const userRole = await pg("roles").select("uuid").where({ type: "USER", organisationID: req.body.organisation});
+      request["roles"] = { roles: userRole }
       await pg("users").insert(request).then(function() {
         res.send({ uuid: request['uuid']})
       })
