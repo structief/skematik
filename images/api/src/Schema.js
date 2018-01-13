@@ -37,7 +37,7 @@ class Schema {
               return result;
             }, {}) 
 
-            request['published'] = false
+            request['published'] = 0
 
             const id = await pg("schema").insert(request).returning('id');
             for(let i = 0; i < req.body.rows.length; i++) {
@@ -120,7 +120,6 @@ class Schema {
                 }
               }
 
-
               const intermediary = [];
 
               for(let i = 0; i < temp.length; i++) {
@@ -130,9 +129,6 @@ class Schema {
                   }
                 }
               }
-
-
-
 
               rowstructure.push({
                 name: key,
@@ -157,13 +153,6 @@ class Schema {
 
     app.get('/schema', async (req, res, next) => {
       var result = {};
-
-      // uuid
-      // title
-      // status (published or nah)
-      // amount of current participants
-      // max amount participants
-
       await pg.select(['uuid', 'title', 'published', 'id']).table("schema").then(async function(r) {
         for(let i = 0; i< r.length; i++) {
           const el = r[i];

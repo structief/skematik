@@ -94,7 +94,7 @@ class App {
       table.dateTime("closes");
       table.string("creator");
       table.timestamps();
-      table.boolean('published')
+      table.integer('published')
     }).then(function() {
       console.log("created tables")
     });
@@ -136,11 +136,12 @@ class App {
       console.log("created organisations")
     });
 
+
     await this.pg.schema.createTableIfNotExists('users', function (table) {
       table.increments();
       table.uuid("uuid");
       table.uuid("organisation");
-      table.string('username').unique().notNullable();
+      table.string('username').notNullable();
       table.string('password').notNullable();
       table.string("usermail");
       table.timestamps(true, true);
@@ -148,6 +149,15 @@ class App {
       console.log("created users")
     });
 
+    await this.pg.schema.createTableIfNotExists('roles', function(table) {
+      table.increments();
+      table.uuid("uuid");
+      table.string('user');
+      table.string('role');
+      table.timestamps(true, true);
+    }).then(function() {
+        console.log('created roles')
+    })
 
     await this.pg.schema.createTableIfNotExists('participants', function (table) {
       table.increments();
