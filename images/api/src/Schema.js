@@ -112,6 +112,29 @@ class Schema {
 
             const id = await pg("schema").update(request).where({uuid: req.params.uuid}).returning('id');
 
+            if(req.body.rows) {
+              for(let i = 0; i < req.body.rows.length; i++) {
+                for(let j = 0; j < req.body.rows[i].cells.length; j++) {
+                  if(req.body.rows[i].cells[j].uuid) {
+                    const obj = {
+                      max: req.body.rows[i].cells[j].max
+                    }
+                    await pg("cells").update(obj).where({uuid: req.body.rows[i].cells[j].uuid});
+                  } else {
+                    const obj = {
+                      tableID: id[0],
+                      col: req.body.headers[j],
+                      row: req.body.rows[i].name,
+                      max: req.body.rows[i].cells[j].max,
+                      current: 0,
+                      uuid: uuidV1()
+                    }
+                    await pg("cells").insert(obj);
+                  }
+                }
+              }
+            }
+
             await pg('schema').select('*').where({uuid: req.params.uuid}).then((data) => {
               res.send(data)
             }).catch(() => {

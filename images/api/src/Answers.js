@@ -47,7 +47,7 @@ class Answers {
       await pg.select().table('answers').where({ cellID: insert['cellID']}).join('cells', 'cells.uuid', '=', 'answers.cellID').then(function(d) {
         if(d.length > 0 && d.length >= d[0].max) {
           //do not allow
-          res.send(401);
+          res.send(417, { message: 'no more place'});
         } else {
           go = true;
         }
