@@ -69,6 +69,73 @@ class Schema {
 
 
 
+    app.put('/schema/:uuid', async (req, res, next) => {
+
+
+      if(req.headers.authorization) {
+        // TODO: check if token exists
+        console.log(req.headers)
+        checkToken(pg, req.headers.authorization, async (result) => {
+          console.log(result)
+          if(result.length > 0) {
+            const request = {};
+
+            request["updated_at"] = new Date();
+            if(req.body.headers) {
+              request["headers"] = req.body.headers.reduce(function(result, item, index, array) {
+                result[item] = index; //a, b, c
+                return result;
+              }, {}) ;
+            }
+
+            if(req.body.title) {
+              request['title'] = req.body.title;
+            }
+
+            if(req.body.rows) {
+              request['rows'] = req.body.rows.reduce(function(result, item, index, array) {
+                result[item.name] = index; //a, b, c
+                return result;
+              }, {}) 
+            }
+
+            if(req.body.published) {
+              request['published'] = req.body.published
+            }
+            if(req.body.opens) {
+              request['opens'] = req.body.opens
+            }
+            if(req.body.closes) {
+              request['closes'] = req.body.closes
+            }
+
+
+            const id = await pg("schema").update(request).where({uuid: req.params.uuid}).returning('id');
+
+            await pg('schema').select('*').where({uuid: req.params.uuid}).then((data) => {
+              res.send(data)
+            }).catch(() => {
+              res.send('401', 'could not fetch')
+            })
+          } else {
+            res.send(401, {status: 401, message: "token not found"})
+          }
+        })
+
+      } else {
+        res.sendStatus(401);
+      }
+
+    })
+
+    
+
+
+
+
+
+
+
     app.get('/schema/:uuid', async (req, res, next) => {
       let result = {};
       const rowstructure = [];
