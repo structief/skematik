@@ -10,7 +10,9 @@
 					</a>
 					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white">
 						<ul>
-							<li>Nieuwe deelnemer</li>
+							<li>
+								<a ng-click="addParticipant($event)">Nieuwe deelnemer</a>
+							</li>
 							<li>Bulk import</li>
 						</ul>
 					</div>
@@ -55,20 +57,22 @@
 			<div class="two columns">
 				Status
 			</div>
-			<div class="four columns">
+			<div class="three columns">
 				Rollen
 			</div>
-			<div class="two columns">
+			<div class="three columns">
 				Acties
 			</div>
 		</div>
 		<div class="twelve columns row table__row" ng-repeat="participant in participants" ng-if="filterParticipants(participant)">
 			<div class="four columns">
-				{{participant.mail}}
+				<span ng-if="participant.status > -1">{{participant.mail}}</span>
+				<input type="text" ng-model="participant.mail" placeholder="participant@student.be" ng-if="participant.status == -1"/>
 			</div>
 			<div class="two columns">
-				<span ng-if="participant.status">Actief</span>
-				<span ng-if="!participant.status">Inactief</span>
+				<span ng-if="participant.status == 1">Actief</span>
+				<span ng-if="participant.status == 0">Inactief</span>
+				<span ng-if="participant.status == -1"><i>In bewerking</i></span>
 			</div>
 			<div class="three columns">
 				<span ng-repeat="role in participant.roles">
@@ -76,12 +80,12 @@
 					<span ng-if="$index < participant.roles.length-1">, </span>
 				</span>
 				<span ng-if="participant.roles.length == 0">
-					<i>No roles</i>
+					<i>Geen rollen</i>
 				</span>
 			</div>
 			<div class="three columns text--right">
 				<ul class="list__horizontal" style="margin: -7px">
-					<li class="u__no-margin">
+					<li class="u__no-margin" ng-if="participant.status > -1">
 						<div class="u__dropdown">
 							<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
 								<img src="https://icongr.am/feather/users.svg?color=999999">
@@ -102,6 +106,11 @@
 							<img src="https://icongr.am/feather/pause-circle.svg?color=999999" alt="Deelnemer deactiveren">
 						</a>
 					</li>
+					<li class="u__no-margin" ng-if="participant.status == 1">
+						<a ng-click="participant.status = -1" title="Deelnemer bewerken">
+							<img src="https://icongr.am/feather/edit-2.svg?color=999999" alt="Deelnemer bewerken">
+						</a>
+					</li>
 					<li class="u__no-margin" ng-if="participant.status == 0">
 						<a ng-click="participant.status = !participant.status" title="Deelnemer activeren">
 							<img src="https://icongr.am/feather/play-circle.svg?color=999999" alt="Deelnemer activeren">
@@ -110,6 +119,11 @@
 					<li class="u__no-margin" ng-if="participant.status == 0">
 						<a ng-click="deleteParticipant($index)" title="Deelnemer verwijderen">
 							<img src="https://icongr.am/feather/minus-circle.svg?color=999999" alt="Deelnemer verwijderen">
+						</a>
+					</li>
+					<li class="u__no-margin" ng-if="participant.status == -1">
+						<a ng-click="saveParticipant($index)" title="Deelnemer toevoegen">
+							<img src="https://icongr.am/feather/check.svg?color=999999" alt="Deelnemer toevoegen">
 						</a>
 					</li>
 				</ul>
