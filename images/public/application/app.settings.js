@@ -1,5 +1,8 @@
 //Initiate all config settings!
 var base_url = "application/components/";
+var system = {
+	logApi: false
+};
 
 skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$httpProvider", "jwtOptionsProvider", function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, jwtOptionsProvider) {
 	// Crazy prefixes

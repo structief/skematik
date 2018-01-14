@@ -40,7 +40,9 @@ skematikControllers.controller('BeParticipantsController',["$scope", "$state", "
 
 	$scope.system = {
 		roles: ["student", "docent", "admin"],
-		createParticipant: false
+		import: false,
+		editedParticipants: [],
+		editMode: false,
 	};
 
 	//Write something to fetch the participants dynamically.
@@ -113,6 +115,8 @@ skematikControllers.controller('BeParticipantsController',["$scope", "$state", "
 	}
 
 	$scope.addParticipant = function($event){
+		$scope.system.editMode = true;
+		
 		//Add new user
 		$scope.participants.push({"mail": null, "status": -1, "roles": []});
 
@@ -120,8 +124,36 @@ skematikControllers.controller('BeParticipantsController',["$scope", "$state", "
 		$scope.toggleDropdown($event);
 	}
 
+	$scope.editParticipant = function($index){
+		$scope.system.editMode = true;
+
+		//No biggy, store the current user, in case cancelling happens
+		$scope.system.editedParticipants.push({"index": $index, "user": angular.copy($scope.participants[$index])});
+
+		//Toggle state
+		$scope.participants[$index].status = -1;
+	}
+
 	$scope.saveParticipant = function($index){
 		//Change status to 1, that should do the trick
 		$scope.participants[$index]["status"] = 1;
+		$scope.system.editMode = false;
+	}
+
+	$scope.cancelEditParticipant = function($index){
+		$scope.system.editMode = false;
+
+		//Replace 'edited' particpant with the old one
+		for(var i = 0; i < $scope.system.editedParticipants.length; i++){
+			if($scope.system.editedParticipants[i].index == $index){
+				//It's this one
+				$scope.participants[$index] = $scope.system.editedParticipants[i].user;
+				//Remove it from the system array
+				$scope.system.editedParticipants.splice(i, 1);
+				return true;
+			}
+		}
+		//If we can't find one, it means that's a new user, so let's just delete it
+		$scope.participants.splice($index, 1);
 	}
 }]);

@@ -12,6 +12,21 @@
 			<div class="text--right padding--10">
 				<div class="u__dropdown">
 					<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
+						<img src="https://icongr.am/feather/plus-square.svg?color=999999">
+					</a>
+					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px; text-align: left">
+						<ul>
+							<li ng-click="addParticipant($event)">
+								<a>Nieuwe deelnemer</a>
+							</li>
+							<li ng-click="system.import = true;toggleDropdown($event)">
+								<a>Bulk import</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="u__dropdown">
+					<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
 						<img src="https://icongr.am/feather/filter.svg?color=999999">
 					</a>
 					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px;text-align: left">
@@ -40,14 +55,80 @@
 	<!-- Users -->
 	<section class="row" ng-if="tabList.active == 'users'">
 		<div class="twelve columns">
-			Gebruikers
+			<section class="row table--light">
+				<div class="twelve columns row table__row table__row--header">
+					<div class="three columns">
+						Naam
+					</div>
+					<div class="three columns">
+						Emailadres
+					</div>
+					<div class="three columns">
+						Rollen
+					</div>
+					<div class="three columns">
+						Acties
+					</div>
+				</div>
+				<div class="twelve columns row table__row" ng-repeat="user in users">
+					<div class="three columns">
+						{{user.name}}
+					</div>
+					<div class="three columns">
+						{{user.mail}}
+					</div>
+					<div class="three columns">
+						<span ng-repeat="role in user.roles">
+							{{role}}
+							<span ng-if="$index < user.roles.length-1">, </span>
+						</span>
+						<span ng-if="user.roles.length == 0">
+							<i>Geen rollen</i>
+						</span>
+					</div>
+					<div class="three columns">
+						<i>None</i>
+					</div>
+				</div>
+			</section>
 		</div>
 	</section>
 
 	<!-- Roles -->
 	<section class="row" ng-if="tabList.active == 'roles'">
 		<div class="twelve columns">
-			Rollen
+			<section class="row table--light">
+				<div class="twelve columns row table__row table__row--header">
+					<div class="three columns">
+						Naam
+					</div>
+					<div class="six columns">
+						Permissies
+					</div>
+					<div class="three columns">
+						Acties
+					</div>
+				</div>
+				<div class="twelve columns row table__row" ng-repeat="role in roles">
+					<div class="three columns">
+						{{role.name}}
+					</div>
+					<div class="six columns">
+						<span ng-repeat="(name, pers) in role.permissions">
+							<b>{{name}}: </b>
+							<span ng-repeat="per in pers">
+								{{per}}
+								<span ng-if="$index < pers.length-1">, </span>
+							</span>
+							<br/>
+						</span>
+					</div>
+					<div class="three columns">
+						<i>None</i>
+					</div>
+				</div>
+			</section>
+		</div>
 		</div>
 	</section>
 
