@@ -2,6 +2,10 @@ const faker = require('faker');
 const uuidV1 = require('uuid/v1');
 
 
+const config = require('./config.js') 
+const Cryptr = require('cryptr'),
+    cryptr = new Cryptr(config.auth.secret);
+
 class Schema {
 
   constructor() {
@@ -20,6 +24,8 @@ class Schema {
 
 
   async createSchema(pg) {
+
+    const standardPass = 'test'
 
     const cat1  = faker.random.word(),
       cat2 = faker.random.word(),
@@ -76,7 +82,7 @@ class Schema {
       roles: { roles: [ {"uuid": insertRolesOwner[0]},  {"uuid": insertRolesAdmin[0]}, ]},
       username: faker.internet.userName(),
       usermail: faker.internet.email(),
-      password: faker.internet.password(),
+      password: cryptr.encrypt(standardPass),
       given_name: faker.name.firstName(),
       family_name: faker.name.lastName()
     }).returning('uuid')
@@ -90,7 +96,7 @@ class Schema {
         roles: { roles: [  {"uuid": insertRolesUser[0]}, ]},
         username: faker.internet.userName(),
         usermail: faker.internet.email(),
-        password: faker.internet.password(),
+        password: cryptr.encrypt(standardPass),
         given_name: faker.name.firstName(),
         family_name: faker.name.lastName()
       }).returning('uuid')
@@ -105,7 +111,7 @@ class Schema {
         roles: { roles: [  {"uuid": insertRolesParticipant[0]}, ]},
         username: faker.internet.userName(),
         usermail: faker.internet.email(),
-        password: faker.internet.password(),
+        password: cryptr.encrypt(standardPass),
         given_name: faker.name.firstName(),
         family_name: faker.name.lastName()
       }).returning('uuid')
@@ -129,8 +135,10 @@ class Schema {
       "closes": faker.date.future(),
       "uuid": uuidV1(),
       "creator": adminUser[0],
+      organisationID: organisation["uuid"],
       published: 1
     }
+
     vals['rows'][cat1] = faker.lorem.sentence();
     vals['rows'][cat2] = faker.lorem.sentence();
     vals['rows'][cat3] = faker.lorem.sentence();

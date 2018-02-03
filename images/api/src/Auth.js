@@ -1,8 +1,10 @@
 const uuidV1 = require('uuid/v1');
-const bcrypt = require('bcryptjs');
 const jwt = require("jwt-simple");
 const Identicon = require("identicon.js");
 const { checkToken } = require("./helpers/auth")
+const config = require('./helpers/config.js') 
+const Cryptr = require('cryptr'),
+    cryptr = new Cryptr(config.auth.secret);
 
 
 class Auth {
@@ -15,8 +17,8 @@ class Auth {
   }
 
   comparePass(userPassword, databasePassword) {
-    //return bcrypt.compareSync(userPassword, databasePassword);
-    return (userPassword == databasePassword);
+    const decryptedString = cryptr.decrypt(databasePassword);
+    return (userPassword == decryptedString);
   }
 
   assignFields(app, pg) {
@@ -159,15 +161,18 @@ class Auth {
       resolve(result)
     })
   }
+
+
   createUser (req, pg) {
-    const salt = bcrypt.genSaltSync();
-    const hash = bcrypt.hashSync(req.body.password, salt);
+    console.log("body?", req.body)
+    const pswd = cryptr.encrypt(req.body.password);
+    console.log(req.body)
     const uuid = uuidV1();
     return pg('users')
       .insert({
         uuid: uuid,
         username: req.body.username,
-        password: hash,
+        password: req.body.password,
         usermail: req.body.usermail
       })
       .returning('*');
