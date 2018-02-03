@@ -34,12 +34,6 @@ services:
     volumes: 
       - './images/api/src:/api/src'
 
-  php:
-    build:
-      context: ./images/public/
-    ports:
-      - "80:80"
-
   front_server:
     build:
       context: ./images/static_server/
