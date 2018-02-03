@@ -96,6 +96,7 @@ class App {
       table.dateTime("closes");
       table.uuid("creator");
       table.timestamps();
+      table.uuid('organisationID');
       table.integer('published')
     }).then(function() {
       console.log("created tables")

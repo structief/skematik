@@ -33,7 +33,6 @@ class App {
     this.app.use('/assets',  express.static(path.join(__dirname, 'public', 'assets')));
 
     this.app.use('/*', (req, res) => {
-      console.log(__dirname)
         res.sendFile(path.join(__dirname, 'public', 'index.html'));
     });
     this.s.listen(3000, () => {

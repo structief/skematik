@@ -16,3 +16,5 @@ images/public/bower_components
 images/public/assets/css/minified
 images/public/assets/js/minified
 images/server/src
+
+images/api/src/helpers/config.js
