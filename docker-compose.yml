@@ -31,9 +31,24 @@ services:
       - db
     ports:
       - "3000:3000"
+    volumes: 
+      - './images/api/src:/api/src'
 
-  php:
-    build:
-      context: ./images/public/
-    ports:
-      - "80:80"
+  # php:
+  #   build:
+  #     context: ./images/public/
+  #   ports:
+  #     - "80:80"
+
+  # front_server:
+  #   build:
+  #     context: ./images/static_server/
+  #   networks:
+  #     - default
+  #   environment:
+  #     DOMAIN:
+  #   ports:
+  #     - "4000:3000"
+  #   volumes:
+  #     - ./images/static_server/src:/skematik/src
+  #     - ./images/public/:/skematik/src/public

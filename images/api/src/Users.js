@@ -1,4 +1,5 @@
 const uuidV1 = require('uuid/v1');
+const {checkToken} = require("./helpers/auth")
 
 class Users {
 
@@ -10,11 +11,28 @@ class Users {
 
 
     app.get('/users', async (req, res, next) => {
+
+      if(req.headers.authorization) {
+        checkToken('777', pg, req.headers.authorization, async (user) => {
+
+          const list = await pg.select().table('users').where({'organisation': user.organisation.uuid});
+          res.send(list)
+          console.log("tested")
+        }, res)
+      } else {
+        res.send(400)
+      }
+    })
+
+
+    app.get('/users/all', async (req, res, next) => {
       await pg.select().table("users").then(function(r) {
         res.send(r)
       })
       console.log("tested")
     })
+
+
 
     app.delete('/users', async (req, res, next) => {
       await pg("users").where({uuid: req.body.uuid}).del().then(function(r) {
@@ -22,11 +40,8 @@ class Users {
       })
     })
 
-
     app.post('/users/list', async (req, res, next) => {
       const request = req.body;
-
-
 
       console.log("request", request)
       request["uuid"] = uuidV1();
@@ -37,9 +52,9 @@ class Users {
 
     app.post('/users', async (req, res, next) => {
       const request = req.body;
-
-      console.log("request", request)
       request["uuid"] = uuidV1();
+      const userRole = await pg("roles").select("uuid").where({ type: "USER", organisationID: req.body.organisation});
+      request["roles"] = { roles: userRole }
       await pg("users").insert(request).then(function() {
         res.send({ uuid: request['uuid']})
       })

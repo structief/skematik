@@ -1,5 +1,4 @@
 const uuidV1 = require('uuid/v1');
-const faker = require('faker');
 
 
 class Answers {
@@ -28,11 +27,16 @@ class Answers {
 
 
     app.post('/schema/:uuid/answer', async (req, res, next) => {
+
+      //check for token 
+
+      
       const insert = {};
+
+
       insert["cellID"] = req.body["cellID"];
       insert["tableID"] = req.params.uuid;
       insert["userID"] = uuidV1();
-      insert["username"] = faker.name.firstName().toLowerCase() + "." + faker.name.lastName().toLowerCase();
       insert["usermail"] = req.body["participant"];
 
       insert["created_at"] = new Date();

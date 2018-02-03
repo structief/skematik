@@ -11,60 +11,43 @@ class Schema {
   assignFields(app, pg) {
 
     app.post('/schema', async (req, res, next) => {
+      checkToken('777', pg, req.headers.authorization, async (user) => {
+        const request = {};
 
+        request["created_at"] = new Date();
+        request["updated_at"] = new Date();
+        request["uuid"] = uuidV1();
+        request["creator"] = user.uuid;
 
-      if(req.headers.authorization) {
-        // TODO: check if token exists
-        console.log(req.headers)
-        checkToken(pg, req.headers.authorization, async (result) => {
-          if(result.length > 0) {
-            const request = {};
+        request["headers"] = req.body.headers.reduce(function(result, item, index, array) {
+          result[item] = index; //a, b, c
+          return result;
+        }, {}) ;
 
-            request["created_at"] = new Date();
-            request["updated_at"] = new Date();
-            request["uuid"] = uuidV1();
-            request["creator"] = result[0].user;
+        request['title'] = req.body.title;
 
-            request["headers"] = req.body.headers.reduce(function(result, item, index, array) {
-              result[item] = index; //a, b, c
-              return result;
-            }, {}) ;
+        request['rows'] = req.body.rows.reduce(function(result, item, index, array) {
+          result[item.name] = index; //a, b, c
+          return result;
+        }, {}) 
 
-            request['title'] = req.body.title;
+        request['published'] = 0
 
-            request['rows'] = req.body.rows.reduce(function(result, item, index, array) {
-              result[item.name] = index; //a, b, c
-              return result;
-            }, {}) 
-
-            request['published'] = 0
-
-            const id = await pg("schema").insert(request).returning('id');
-            for(let i = 0; i < req.body.rows.length; i++) {
-              for(let j = 0; j < req.body.rows[i].cells.length; j++) {
-                const obj = {
-                  tableID: id[0],
-                  col: req.body.headers[j],
-                  row: req.body.rows[i].name,
-                  max: req.body.rows[i].cells[j].max,
-                  current: 0,
-                  uuid: uuidV1()
-                }
-                await pg("cells").insert(obj);
-              }
+        const id = await pg("schema").insert(request).returning('id');
+        for(let i = 0; i < req.body.rows.length; i++) {
+          for(let j = 0; j < req.body.rows[i].cells.length; j++) {
+            const obj = {
+              tableID: id[0],
+              col: req.body.headers[j],
+              row: req.body.rows[i].name,
+              max: req.body.rows[i].cells[j].max,
+              current: 0,
+              uuid: uuidV1()
             }
-
-
-            res.send(request);
-          } else {
-            res.send(401, {status: 401, message: "token not found"})
+            await pg("cells").insert(obj);
           }
-        })
-
-      } else {
-        res.sendStatus(401);
-      }
-
+        }
+      }, res)
     })
 
 
