@@ -1,0 +1,31 @@
+.help-box{
+	background-color: rgba(255,255,255, 0.73);
+	border-left: 3px solid #eeeeee;
+	text-align: left;
+	padding: 20px 35px 20px 50px;
+	box-sizing: border-box;
+	border-radius: 3px;
+	font-size: 90%;
+
+	img{
+		height: 30px;
+		width: auto;
+	}
+	p{
+		font-weight: 300;
+		margin-bottom: 0px;
+	}
+
+	&.help-box--error{
+		border-color: $error-color;
+	}
+	&.help-box--warning{
+		border-color: $warning-color;
+	}
+	&.help-box--info{
+		border-color: $info-color;
+	}
+	&.help-box--success{
+		border-color: $success-color;
+	}
+}

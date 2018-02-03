@@ -60,6 +60,23 @@
                                   supported by Chrome and Opera */
 }
 
+/* FIXED TRANSFORMATION */
+.u__no-margin{
+  margin: 0 !important;
+}
+
+.u__top-bottom-padding--5{
+  padding: 5px 0px;
+}
+
+.text-overflow--ellipsis{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.text--lowercase{
+  text-transform: lowercase;
+}
 
 /* ANIMATION */
 @keyframes softSlideLeft {
