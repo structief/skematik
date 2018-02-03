@@ -24,7 +24,6 @@ class Auth {
   assignFields(app, pg) {
 
     app.get('/tokenCheck/:token', async(req, res, next) => {
-      console.log(req.params.token)
       await this.verifyToken(pg, req.params.token, (check) => {
         console.log(check)
         if(check) {
@@ -40,9 +39,7 @@ class Auth {
       if(req.query.path.includes("/admin/")) {
         checkToken('000', pg, req.headers.authorization, async (user) => {
 
-          console.log(user);
           pg.select().table('users').where({ uuid: user.uuid }).then((data) => {
-            console.log(data)
             if(data.length > 0) {
               res.send({
                 username: data[0].username,
@@ -75,7 +72,6 @@ class Auth {
     app.post('/login',  async (req, res, next) => {
       pg.select().table("users").where({"username": req.body.username}).then( async (result) =>{
         if(result.length > 0) {
-          console.log(result[0].uuid)
           await pg.table('tokens').where( "user", result[0].uuid ).del()
 
           if(this.comparePass(req.body.password, result[0].password)) {
@@ -90,7 +86,6 @@ class Auth {
               })
             }
             const expiresAt = JSON.stringify(new Date().getTime() + 259200000 );
-            console.log(expiresAt)
 
             const token = jwt.encode(
               { 

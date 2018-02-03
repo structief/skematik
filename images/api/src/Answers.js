@@ -14,7 +14,6 @@ class Answers {
       await pg.select().table("answers").then(function(r) {
         res.send(r)
       })
-      console.log("tested")
     })
 
     app.delete('/answers', async (req, res, next) => {
@@ -45,7 +44,6 @@ class Answers {
       // asses if can register
       let go = false;
       await pg.update({'current': pg.raw('current + 1')}).table('cells').where({uuid: insert['cellID']}).then(function(v) {
-        console.log("updated")
       })
 
       await pg.select().table('answers').where({ cellID: insert['cellID']}).join('cells', 'cells.uuid', '=', 'answers.cellID').then(function(d) {

@@ -13,7 +13,6 @@ class Participants {
       await pg.select().table("participants").then(function(r) {
         res.send(r)
       })
-      console.log("tested")
     })
 
     app.delete('/participants/:participantsID', async (req, res, next) => {

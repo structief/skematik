@@ -17,7 +17,6 @@ class Users {
 
           const list = await pg.select(['roles', 'status', 'mail', 'uuid', 'username']).table('users').where({'organisation': user.organisation.uuid});
           const roles = await pg.select().table('roles').where({'organisationID': user.organisation.uuid});
-          console.log(roles);
           const searchable = {}
           for(let i = 0; i < roles.length; i++) {
             searchable[roles[i].uuid] = roles[i].type;
@@ -29,13 +28,9 @@ class Users {
             for(let j = 0; j<cur.length; j++) {
               index['roles'].push(searchable[cur[j].uuid])
             }
-
-            console.log(index)
-
             return index
           })
           res.send(list)
-          console.log("tested")
         }, res)
       } else {
         res.send(400)
@@ -47,7 +42,6 @@ class Users {
       await pg.select().table("users").then(function(r) {
         res.send(r)
       })
-      console.log("tested")
     })
 
 
