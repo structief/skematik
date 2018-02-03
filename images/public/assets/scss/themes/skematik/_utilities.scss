@@ -69,6 +69,15 @@
   padding: 5px 0px;
 }
 
+.text-overflow--ellipsis{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.text--lowercase{
+  text-transform: lowercase;
+}
+
 /* ANIMATION */
 @keyframes softSlideLeft {
   0% {

@@ -1,51 +1,40 @@
-skematikControllers.controller('BeParticipantsController',["$scope", "$state", "$stateParams", "$rootScope", function($scope, $stateProvider, $stateParams, $rootScope) {
-	$scope.participants = [
-		{
-			"mail": "big.j@student.be",
-			"status": 1,
-			"roles": ["student"]
-		},
-		{
-			"mail": "francis.l@student.be",
-			"status": 1,
-			"roles": ["student"]
-		},
-		{
-			"mail": "olga.v@docent.be",
-			"status": 1,
-			"roles": ["student", "docent", "admin"]
-		},
-		{
-			"mail": "disabled.o@student.be",
-			"status": 0,
-			"roles": ["student"]
-		},
-		{
-			"mail": "joseph.m@student.be",
-			"status": 1,
-			"roles": ["student"]
-		},
-		{
-			"mail": "crazy.loe@student.be",
-			"status": 1,
-			"roles": ["student"]
-		},
-	];
+skematikControllers.controller('BeParticipantsController',["$scope", "$state", "$stateParams", "$rootScope", "ParticipantsFactory", function($scope, $stateProvider, $stateParams, $rootScope, ParticipantsFactory) {
+	$scope.participants = [];
 
 	$scope.filter = {
 		inactive: true,
 		active: true,
-		roles: ["student", "docent", "admin"]
+		roles: []
 	};
 
 	$scope.system = {
-		roles: ["student", "docent", "admin"],
+		roles: [],
 		import: false,
 		editedParticipants: [],
 		editMode: false,
 	};
 
-	//Write something to fetch the participants dynamically.
+	//Fetch participants
+	$scope.participants = [];
+	ParticipantsFactory.get({}, function(participants){
+		//Temp cleanup
+		for(var i=0;i<participants.length;i++){
+			$scope.participants.push({
+				"name": participants[i].username,
+				"mail": participants[i].usermail,
+				"roles": participants[i].roles,
+				"status": participants[i].status,
+				"uuid": participants[i].uuid
+			});
+			for(var j=0;j<participants[i].roles.length;j++){
+				if($scope.system.roles.indexOf(participants[i].roles[j]) === -1){
+					//Add to system & filter
+					$scope.system.roles.push(participants[i].roles[j]);
+					$scope.filter.roles.push(participants[i].roles[j]);
+				}
+			}
+		}
+	});
 
 
 	//View functions
@@ -118,7 +107,7 @@ skematikControllers.controller('BeParticipantsController',["$scope", "$state", "
 		$scope.system.editMode = true;
 		
 		//Add new user
-		$scope.participants.push({"mail": null, "status": -1, "roles": []});
+		$scope.participants.push({"mail": null, "status": -1, "roles": [], "uuid": null});
 
 		//Toggle dropdown
 		$scope.toggleDropdown($event);

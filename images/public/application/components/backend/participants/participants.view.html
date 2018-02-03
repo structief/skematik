@@ -67,8 +67,8 @@
 			</div>
 		</div>
 		<div class="twelve columns row table__row" ng-repeat="participant in participants" ng-if="filterParticipants(participant)" ng-class="{'table__row--focus': participant.status == -1}">
-			<div class="four columns">
-				<span ng-if="participant.status > -1">{{participant.mail}}</span>
+			<div class="four columns text-overflow--ellipsis">
+				<span ng-if="participant.status > -1">{{participant.name}} <i style="font-size: 80%">({{participant.mail}})</i></span>
 				<input type="text" ng-model="participant.mail" placeholder="participant@student.be" ng-if="participant.status == -1"/>
 			</div>
 			<div class="two columns" ng-class="{'u__top-bottom-padding--5': participant.status == -1}">
@@ -77,7 +77,7 @@
 				<span ng-if="participant.status == -1"><i>In bewerking</i></span>
 			</div>
 			<div class="three columns" ng-class="{'u__top-bottom-padding--5': participant.status == -1}">
-				<span ng-repeat="role in participant.roles">
+				<span ng-repeat="role in participant.roles" class="text--lowercase">
 					{{role}}
 					<span ng-if="$index < participant.roles.length-1">, </span>
 				</span>
