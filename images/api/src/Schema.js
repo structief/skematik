@@ -54,7 +54,6 @@ class Schema {
 
     app.put('/schema/:uuid', async (req, res, next) => {
 
-
       if(req.headers.authorization) {
         // TODO: check if token exists
         console.log(req.headers)
@@ -217,8 +216,7 @@ class Schema {
     });
 
     app.get('/schema', async (req, res, next) => {
-      //checkToken('777', pg, req.headers.authorization, async (user) => {
-        const user = { organisation: {}}
+      checkToken('000', pg, req.headers.authorization, async (user) => {
         var result = {};
         await pg.select(['uuid', 'title', 'published', 'id']).table("schema").where({organisationID: user.organisation.uuid}).then(async function(r) {
           for(let i = 0; i< r.length; i++) {
@@ -241,9 +239,9 @@ class Schema {
           //all schemas
           res.send(r);
         })
-        console.log(result)
+        console.log('result', result)
 
-      //}, res)
+      }, res)
       
     })
   }
