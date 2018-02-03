@@ -145,6 +145,7 @@ class App {
       table.string('password').notNullable();
       table.string("usermail").notNullable();
       table.string('given_name');
+      table.integer("status");
       table.string("family_name");
       table.timestamps(true, true);
     }).then(function() {
