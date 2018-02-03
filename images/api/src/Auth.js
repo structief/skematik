@@ -104,7 +104,8 @@ class Auth {
                 familyName: result[0][ 'family_name'],
                 roles: roles,
                 organisation: org[0],
-                expiresAt: expiresAt
+                expiresAt: expiresAt,
+                uuid: result[0].uuid
               }, "secret");
 
             // TODO: add expires_at to body

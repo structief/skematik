@@ -1,6 +1,4 @@
 const uuidV1 = require('uuid/v1');
-const jwt = require('jwt-simple');
-const bcrypt = require('bcryptjs');
 
 class Participants {
 

@@ -15,22 +15,20 @@ class Roles {
         // TODO: check if token exists
         console.log(req.headers)
         checkToken(pg, req.headers.authorization, async (result) => {
-          if(result.length > 0) {
+        
 
-            const request = {};
-            request["uuid"] = uuidV1();
-            request["organisationID"] = req.body.organisationID;
-            request["type"] = req.body.type;
-            request["permissions"] = req.body.permissions;
-            request["short"] = req.body.short;
+          const request = {};
+          request["uuid"] = uuidV1();
+          request["organisationID"] = req.body.organisationID;
+          request["type"] = req.body.type;
+          request["permissions"] = req.body.permissions;
+          request["short"] = req.body.short;
 
-            const id = await pg("roles").insert(request).returning('id');
+          const id = await pg("roles").insert(request).returning('id');
 
-            res.send(200, { uuid: request["uuid"]});
-          } else {
-            res.send(401, {status: 401, message: "token not found"})
-          }
-        })
+          res.send(200, { uuid: request["uuid"]});
+          
+        }, res)
 
       } else {
         res.sendStatus(400, { message: "no headers supplied"});
