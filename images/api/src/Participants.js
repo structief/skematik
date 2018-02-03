@@ -31,7 +31,7 @@ class Participants {
         const uuid1 = uuidV1();
         await pg("participants").insert({
           uuid: uuid1,
-          usermail: req.body.usermail,
+          mail: req.body.mail,
           roles: {roles: roles},
           code: "",
           status: "created",

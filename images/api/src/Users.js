@@ -15,7 +15,7 @@ class Users {
       if(req.headers.authorization) {
         checkToken('777', pg, req.headers.authorization, async (user) => {
 
-          const list = await pg.select(['roles', 'status', 'usermail', 'uuid', 'username']).table('users').where({'organisation': user.organisation.uuid});
+          const list = await pg.select(['roles', 'status', 'mail', 'uuid', 'username']).table('users').where({'organisation': user.organisation.uuid});
           const roles = await pg.select().table('roles').where({'organisationID': user.organisation.uuid});
           console.log(roles);
           const searchable = {}

@@ -37,7 +37,7 @@ class Answers {
       insert["cellID"] = req.body["cellID"];
       insert["tableID"] = req.params.uuid;
       insert["userID"] = uuidV1();
-      insert["usermail"] = req.body["participant"];
+      insert["mail"] = req.body["participant"];
 
       insert["created_at"] = new Date();
       insert["updated_at"] = new Date();

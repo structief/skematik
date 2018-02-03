@@ -46,7 +46,7 @@ class Auth {
             if(data.length > 0) {
               res.send({
                 username: data[0].username,
-                usermail: data[0].usermail,
+                mail: data[0].mail,
                 organisation: data[0].organisation
               })
             } else {
@@ -89,7 +89,8 @@ class Auth {
                 roles.push(r[0])
               })
             }
-            const expiresAt = JSON.stringify(new Date().getTime() + 604800 );
+            const expiresAt = JSON.stringify(new Date().getTime() + 259200000 );
+            console.log(expiresAt)
 
             const token = jwt.encode(
               { 
@@ -168,7 +169,7 @@ class Auth {
         uuid: uuid,
         username: req.body.username,
         password: req.body.password,
-        usermail: req.body.usermail
+        mail: req.body.mail
       })
       .returning('*');
   }
