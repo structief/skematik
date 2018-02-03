@@ -13,11 +13,14 @@ class Users {
     app.get('/users', async (req, res, next) => {
 
       if(req.headers.authorization) {
-        checkToken(pg, req.headers.authorization, async (user) => {
+        checkToken('777', pg, req.headers.authorization, async (user) => {
+
           const list = await pg.select().table('users').where({'organisation': user.organisation.uuid});
           res.send(list)
           console.log("tested")
         }, res)
+      } else {
+        res.send(400)
       }
     })
 

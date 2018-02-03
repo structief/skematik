@@ -88,11 +88,9 @@ class Auth {
             const org = await pg.select(['uuid', 'name']).table('organisations').where({uuid: result[0].organisation})
 
             const roles = []
-            console.log(result[0].roles)
             for(let i  = 0; i < result[0].roles.roles.length; i++) {
-              console.log(result[0].roles.roles[i])
-              await pg.select(["type", "permissions"]).table('roles').where({uuid: result[0].roles.roles[i].uuid}).then((r) => {
-                roles.push(r)
+              await pg.select(["type", "permissions", "organisationID"]).table('roles').where({uuid: result[0].roles.roles[i].uuid}).then((r) => {
+                roles.push(r[0])
               })
             }
             const expiresAt = JSON.stringify(new Date().getTime() + 604800 );
