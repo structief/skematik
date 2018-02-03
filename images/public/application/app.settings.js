@@ -1,8 +1,5 @@
 //Initiate all config settings!
 var base_url = "application/components/";
-var system = {
-	logApi: false
-};
 
 skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$httpProvider", "jwtOptionsProvider", function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, jwtOptionsProvider) {
 	// Crazy prefixes
@@ -96,21 +93,12 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 			}
 		}
 	})
-	.state('be.participants', {
-		url: "/participants",
+	.state('be.users', {
+		url: "/users",
 		views: {
 			"pageContent@": {
-				templateUrl: base_url + "backend/participants/participants.view.html",
-				controller: "BeParticipantsController",
-			}
-		}
-	})
-	.state('be.organisation', {
-		url: "/organisation",
-		views: {
-			"pageContent@": {
-				templateUrl: base_url + "backend/organisation/organisation.view.html",
-				controller: "BeOrganisationController",
+				templateUrl: base_url + "backend/users/users.view.html",
+				controller: "BeUsersController",
 			}
 		}
 	})
@@ -142,7 +130,7 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 	        }
 	        return localStorage.getItem('jwt-token');
 		}],
-		whiteListedDomains: ['api.skematik.io', 'localhost', 'skematik.localhost'],
+		whiteListedDomains: ['api.skematik.io', 'localhost'],
 		unauthenticatedRedirectPath: '/admin/login'
     });
 

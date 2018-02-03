@@ -1,37 +1,14 @@
 <div class="container">
-	<section class="row help-box help-box--info">
-		<div class="one column">
-			<img src="https://icongram.jgog.in/feather/plus-square.svg?color=33C3F0" alt="icon">
-		</div>
-		<div class="eleven columns">
-			<b>Here's a tip!</b>
-			<p>You can create new scheme's on the fly, by clicking 'Add a new scheme' below or <a ui-sref="be.scheme({ schemeUuid: 'new' })" href="backend/scheme/new">click here</a>. Good luck!</p>
-		</div>	
-	</section>
 	<section class="row">
 		<div class="eight columns">
 			<h4>My schemes</h4>
 		</div>
 		<div class="four colums">
 			<div class="text--right padding--10">
-				<div class="u__dropdown">
-					<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
-						<img src="https://icongr.am/feather/filter.svg?color=999999">
-					</a>
-					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px;text-align: left">
-						<ul>
-							<li class="u__dropdownmenu--header">Filter</li>
-							<li ng-click="filter.unpublished = !filter.unpublished">
-								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.unpublished">
-								Unpublished
-							</li>
-							<li ng-click="filter.published = !filter.published">
-								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.published">
-								Published
-							</li>
-						</ul>
-					</div>
-				</div>
+				<i>Filter:</i>	
+				<a href="#" class="link--small link--no-underline" ng-class="{'link--active': filter.unpublished, 'link--inactive': !filter.unpublished}" ng-click="filter.unpublished = !filter.unpublished">Unpublished</a>
+				/
+				<a href="#" class="link--small link--no-underline" ng-class="{'link--active': filter.published, 'link--inactive': !filter.published}" ng-click="filter.published = !filter.published">Published</a>
 			</div>
 		</div>
 	</section>

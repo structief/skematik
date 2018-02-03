@@ -1,6 +1,6 @@
 <nav class="navbar" ng-controller="HeaderController">
 	<div class="row row--full-width" ng-if="!account">
-		<div class="six columns logo">
+		<div class="six columns">
 			<a ui-sref="fe.landing" href="/">
 				<img src="https://icongram.jgog.in/feather/minus-square.svg?color=33C3F0" style="float:left;margin:12px"></img>
 				<h6><span class="hide--on-tablet">Yay, this is a working version of </span>Skematik<span class="hide--on-tablet">!</span></h6>
@@ -28,7 +28,7 @@
 		</div>
 	</div>
 	<div class="row row--full-width" ng-if="account">
-		<div class="two columns logo">
+		<div class="two columns">
 			<img src="https://icongram.jgog.in/feather/minus-square.svg?color=33C3F0" style="float:left;margin:12px"></img>
 			<h6>Skematik</h6>
 		</div>
@@ -41,15 +41,9 @@
 					</a>
 				</li>
 				<li>
-					<a ui-sref="be.participants" href="/admin/participants">
+					<a ui-sref="be.users" href="/admin/users">
 						<img src="https://icongram.jgog.in/feather/users.svg?color=dddddd"></img>
-						Deelnemers
-					</a>
-				</li>
-				<li>
-					<a ui-sref="be.organisation" href="/admin/organisation">
-						<img src="https://icongram.jgog.in/feather/briefcase.svg?color=dddddd"></img>
-						Organisatie
+						Gebruikers
 					</a>
 				</li>
 			</ul>

@@ -2,21 +2,17 @@ skematikFactories.factory('resourceInterceptor', ["$rootScope", function ($rootS
   return {
     request: function (config) {
       //Intercept all calls to api
-      if(system.logApi){
-        if(config.url.indexOf(":3000") !== -1){
-          console.log("Started loading: " + config.url);
-        }
+      if(config.url.startsWith("http://localhost:3000/")){
+        console.log("Started loading: " + config.url);
       }
-      
+
       //Return config
       return config;
     },
     response: function (response) {
       //Intercept all calls to api
-      if(response.config.url.indexOf(":3000") !== -1){
-        if(system.logApi){
-          console.log("Done loading: " + response.config.url + " with code: " + response.status + ":" + response.statusText);
-        }
+      if(response.config.url.startsWith("http://localhost:3000/")){
+        console.log("Done loading: " + response.config.url + " with code: " + response.status + ":" + response.statusText);
         response.data.$status = response.status;
       }
 
