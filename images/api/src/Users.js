@@ -1,4 +1,5 @@
 const uuidV1 = require('uuid/v1');
+const {checkToken} = require("./helpers/auth")
 
 class Users {
 
@@ -10,10 +11,14 @@ class Users {
 
 
     app.get('/users', async (req, res, next) => {
-      await pg.select().table("users").then(function(r) {
-        res.send(r)
-      })
-      console.log("tested")
+
+      if(req.headers.authorization) {
+        checkToken(pg, req.headers.authorization, async (user) => {
+          const list = await pg.select().table('users').where({'organisation': user.organisation.uuid});
+          res.send(list)
+          console.log("tested")
+        }, res)
+      }
     })
 
 

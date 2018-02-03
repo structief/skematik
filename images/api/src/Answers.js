@@ -1,5 +1,4 @@
 const uuidV1 = require('uuid/v1');
-const faker = require('faker');
 
 
 class Answers {

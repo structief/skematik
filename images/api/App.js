@@ -143,10 +143,13 @@ class App {
       table.string('username').notNullable();
       table.string('password').notNullable();
       table.string("usermail").notNullable();
+      table.string('given_name');
+      table.string("family_name");
       table.timestamps(true, true);
     }).then(function() {
       console.log("created users")
     });
+
 
     await this.pg.schema.createTableIfNotExists('participants', function (table) {
       table.increments();
@@ -165,11 +168,13 @@ class App {
       table.increments();
       table.timestamps(true, true);
       table.uuid("user");
-      table.string("token");
+      table.text("token", "longtext");
       table.dateTime("expires_on");
     }).then(function() {
       console.log("created tokens")
     });
+
+    
 
     await this.pg.schema.createTableIfNotExists('roles', function (table) {
       table.increments();

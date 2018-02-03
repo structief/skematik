@@ -2,7 +2,7 @@ const uuidV1 = require('uuid/v1');
 const bcrypt = require('bcryptjs');
 const jwt = require("jwt-simple");
 const Identicon = require("identicon.js");
-const {checkToken} = require("./helpers/auth")
+const { checkToken } = require("./helpers/auth")
 
 
 class Auth {
@@ -77,13 +77,40 @@ class Auth {
     })
 
     app.post('/login',  async (req, res, next) => {
-      pg.select().table("users").where({"username": req.body.username}).then((result) =>{
+      pg.select().table("users").where({"username": req.body.username}).then( async (result) =>{
         if(result.length > 0) {
+          console.log(result[0].uuid)
+          await pg.table('tokens').where( "user", result[0].uuid ).del()
 
           if(this.comparePass(req.body.password, result[0].password)) {
 
-            const token = jwt.encode(req.body.username, "xxx");
-            console.log(result[0])
+
+            const org = await pg.select(['uuid', 'name']).table('organisations').where({uuid: result[0].organisation})
+
+            const roles = []
+            console.log(result[0].roles)
+            for(let i  = 0; i < result[0].roles.roles.length; i++) {
+              console.log(result[0].roles.roles[i])
+              await pg.select(["type", "permissions"]).table('roles').where({uuid: result[0].roles.roles[i].uuid}).then((r) => {
+                roles.push(r)
+              })
+            }
+            const expiresAt = JSON.stringify(new Date().getTime() + 604800 );
+
+            const token = jwt.encode(
+              { 
+                username: req.body.username,
+                givenName: result[0][ 'given_name'],
+                familyName: result[0][ 'family_name'],
+                roles: roles,
+                organisation: org[0],
+                expiresAt: expiresAt
+              }, "secret");
+
+            // TODO: add expires_at to body
+            // 
+
+
             pg.select().table("tokens").where({"token": token}).then((result2) => {
               if (!result2.length  > 0) {
                 pg("tokens").insert({
