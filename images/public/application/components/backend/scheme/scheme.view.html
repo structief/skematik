@@ -21,11 +21,11 @@
 		</div>
 		<div class="one column text--center">
 			<div class="button__group">
-				<a ng-click="previous()" ng-disabled="nav.min==0">
+				<a ng-click="previous()" ng-disabled="nav.min==0" class="button--condensed">
 					<img src="https://icongram.jgog.in/feather/chevron-left.svg?color=555555&size=14" alt="earlier"></img>
 				</a>
 				<a ng-click="addColumn('before')">
-					Add column
+					Add
 				</a>
 			</div>
 		</div>
@@ -39,9 +39,9 @@
 		<div class="one column text--center">
 			<div class="button__group">
 				<a ng-click="addColumn('after')">
-					Add column
+					Add
 				</a>
-				<a ng-click="next()" ng-disabled="nav.min >= (scheme.headers.length-8)">
+				<a ng-click="next()" ng-disabled="nav.min >= (scheme.headers.length-8)" class="button--condensed">
 					<img src="https://icongram.jgog.in/feather/chevron-right.svg?color=555555&size=14"></img>
 				</a>
 			</div>

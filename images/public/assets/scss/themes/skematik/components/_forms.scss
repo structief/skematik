@@ -60,4 +60,12 @@ $lighten-factor: 40;
 		    z-index: 10;
 		}
 	}
+
+	.button--condensed{
+		padding: 0px;
+
+		img{
+			margin: 8px 12px;
+		}
+	}
 }

@@ -1,6 +1,7 @@
 skematikControllers.controller('FeedbackBoxController',["$scope", "$rootScope", "$timeout", "$sce", "$location", function($scope, $rootScope, $timeout, $sce, $location) {
 	//Just get the reacted pages already
 	$scope.reactedTo = JSON.parse(localStorage.getItem('feedback'));
+	$scope.feedbackAvailableForThisPage = true;
 
 	$scope.reactions = {
 		'joy': {
@@ -54,13 +55,12 @@ skematikControllers.controller('FeedbackBoxController',["$scope", "$rootScope", 
 		$scope.feedbackAvailableForThisPage = true;
 	}
 
-
 	//Fetch localStorage, and find if there's any feedback available for this page
 	var validatePage = function(){
 		if($scope.reactedTo !== null && $scope.reactedTo.urls.indexOf($location.url()) !== -1){
 			$scope.feedbackAvailableForThisPage = true;
 		}else{
-			$scope.feedbackAvailableForThisPage = false;
+			$scope.feedbackAvailableForThisPage = false;	
 		}
 	}
 
