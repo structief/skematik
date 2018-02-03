@@ -185,6 +185,7 @@ class App {
       table.string("type");
       table.string("short");
       table.string("permissions");
+      table.uuid('organisationID')
     }).then(function() {
       console.log("created roles")
     });
