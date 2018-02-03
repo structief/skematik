@@ -146,6 +146,7 @@ class App {
       table.string("usermail").notNullable();
       table.string('given_name');
       table.string("family_name");
+      table.integer('status');
       table.timestamps(true, true);
     }).then(function() {
       console.log("created users")

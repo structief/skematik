@@ -10,4 +10,9 @@ skematikControllers.controller('BeDashboardController',["$scope", "$state", "$st
 	SchemeFactory.get({}, function(response){
 		$scope.schemes = response;
 	})
+
+	//View functions
+	$scope.toggleDropdown = function($event){
+		angular.element($event.target).parent().parent().toggleClass("u__dropdown--show");
+	};
 }]);

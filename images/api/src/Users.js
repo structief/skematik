@@ -15,7 +15,25 @@ class Users {
       if(req.headers.authorization) {
         checkToken('777', pg, req.headers.authorization, async (user) => {
 
-          const list = await pg.select().table('users').where({'organisation': user.organisation.uuid});
+          const list = await pg.select(['roles', 'status', 'usermail', 'uuid', 'username']).table('users').where({'organisation': user.organisation.uuid});
+          const roles = await pg.select().table('roles').where({'organisationID': user.organisation.uuid});
+          console.log(roles);
+          const searchable = {}
+          for(let i = 0; i < roles.length; i++) {
+            searchable[roles[i].uuid] = roles[i].type;
+          }
+          list.map((index, key) => {
+
+            const cur = index["roles"]["roles"]
+            index['roles'] = [];
+            for(let j = 0; j<cur.length; j++) {
+              index['roles'].push(searchable[cur[j].uuid])
+            }
+
+            console.log(index)
+
+            return index
+          })
           res.send(list)
           console.log("tested")
         }, res)
