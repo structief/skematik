@@ -24,7 +24,6 @@ class Auth {
   assignFields(app, pg) {
 
     app.get('/tokenCheck/:token', async(req, res, next) => {
-      console.log(req.params.token)
       await this.verifyToken(pg, req.params.token, (check) => {
         console.log(check)
         if(check) {
@@ -37,39 +36,46 @@ class Auth {
 
     app.get('/me', async (req, res, next) => {
       // return name, org, and image url
-      if(req.query.path.includes("/admin/")) {
-        checkToken('000', pg, req.headers.authorization, async (user) => {
+      console.log(req.query.path.includes("/admin/"), req.query.path)
+      if(req.headers.authorization) {
+        checkToken(pg, req.headers.authorization, async (result) => {
+          if(result.length > 0) {
+            console.log(result);
+            pg.select().table('users').where({ uuid: result[0].user }).then((data) => {
+              console.log(data)
+              if(data.length > 0) {
+                res.send({
+                  username: data[0].username,
+                  usermail: data[0].usermail,
+                  organisation: data[0].organisation
+                })
+              } else {
+                if(req.query.path.includes("/admin/")) {
+                  res.send(401, {message: "No user found with given token"}); 
+                }
+                else {
+                  res.send(200, {}); 
+                }
+              }
+            })
+          } else {
 
-          console.log(user);
-          pg.select().table('users').where({ uuid: user.uuid }).then((data) => {
-            console.log(data)
-            if(data.length > 0) {
-              res.send({
-                username: data[0].username,
-                usermail: data[0].usermail,
-                organisation: data[0].organisation
-              })
-            } else {
-              if(req.query.path.includes("/admin/")) {
-                res.send(401, {message: "No user found with given token"}); 
-              }
-              else {
-                res.send(200, {}); 
-              }
+            if(req.query.path.includes("/admin/")) {
+              res.send(401, {message: "Please log in, invalid token"}); 
             }
-          })
-        }, res)
-      } else{
-        res.send(200)
+            else {
+              res.send(200, {});
+            }
+          }
+        })
+      } else {
+        if(req.query.path.includes("/admin/")) {
+          res.send(401, {message: "Please log in, no token found"}); 
+        }
+        else {
+          res.send(200, {}); 
+        }
       }
-      // } else {
-      //   
-      //     res.send(401, {message: "Please log in, no token found"}); 
-      //   }
-      //   else {
-      //     res.send(200, {}); 
-      //   }
-      // }
     })
 
     app.post('/login',  async (req, res, next) => {
@@ -100,7 +106,7 @@ class Auth {
                 organisation: org[0],
                 expiresAt: expiresAt,
                 uuid: result[0].uuid
-              }, config.auth.secret);
+              }, "secret");
 
             // TODO: add expires_at to body
             // 
@@ -150,7 +156,6 @@ class Auth {
       })
     })
   }
-
   async verifyToken(pg, token, resolve) {
     await pg.select().table("tokens").where({token: token}).then((result) => {
       resolve(result)
