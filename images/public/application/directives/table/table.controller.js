@@ -5,6 +5,30 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 	$scope.nav = {
 		min: 0
 	}
+	$scope.translation = {
+		1: 'one',
+		2: 'two',
+		3: 'three',
+		4: 'four',
+		5: 'five',
+		6: 'six',
+		7: 'seven',
+		8: 'eight'
+	};
+	$scope.classes = {
+		1: 'twelve',
+		2: 'six',
+		3: 'four',
+		4: 'three',
+		5: 'two',
+		6: 'two',
+		7: 'one',
+		8: 'one'
+	};
+	$scope.active = {
+		"row": null,
+		"cell": null
+	}
 	
 	// Functions
 	$scope.next = function(){
@@ -19,19 +43,25 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 		}
 	}
 
-	$scope.showPopup = function(row, cell){
-		if(cell.current.length < cell.max || $scope.role == 'view'){
-			$rootScope.$broadcast('popup.show', {'row': row, 'cell': cell, 'role': $scope.role});
+	$scope.participate = function(row, cell){
+		//Depending on login-state, show different information
+		if($rootScope.isAuthenticated){
+			$rootScope.$broadcast("sidebar.open", {uuid: "participants-overview"});
 		}else{
-			$rootScope.$broadcast('alert.show', {'title': "Sorry :(", 'message': "No seats left for this spot", type: 'error'}); 
+			$rootScope.$broadcast("sidebar.open", {uuid: "schedule-participate"});
 		}
+		$scope.active = {
+			"row": row,
+			"cell": cell,
+			"data": null
+		};
 	};
 
-	$rootScope.$on('cell.participate', function(event, data){
-		SchemeFactory.participate({uuid: $scope.scheme.uuid}, {cellID: data.cell.uuid, participant: data.participant}, function(response){
-			//You're added, show a message & close popup!
+	$scope.saveParticipation = function(){
+		SchemeFactory.participate({uuid: $scope.scheme.uuid}, {cellID: $scope.active.cell.uuid, participant: $scope.active.data.email}, function(response){
+			//You're added, show a message & close sidebar!
 			$rootScope.$broadcast('alert.show', {'title': "Yay", 'message': "You reserved a spot, congrats!", type: 'success'}); 
-			$rootScope.$broadcast('popup.hide', {wipe: true});
+			$rootScope.$broadcast('sidebar.close', {uuid: "schedule-participate"});
 
 			//Update scheme
 			if(response.scheme !== undefined){
@@ -41,8 +71,8 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 				//Do this manually
 				for(var i = 0; i < $scope.scheme.rows.length; i++){
 					for(var j = 0; j < $scope.scheme.rows[i].cells.length; j++){
-						if($scope.scheme.rows[i].cells[j].uuid == data.cell.uuid){
-							$scope.scheme.rows[i].cells[j].current.push(data.participant);
+						if($scope.scheme.rows[i].cells[j].uuid == $scope.active.cell.uuid){
+							$scope.scheme.rows[i].cells[j].current.push($scope.active.data.email);
 						}
 					}
 				}
@@ -56,7 +86,7 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 				$rootScope.$broadcast('alert.show', {'title': "Though luck", 'message': "Something went wrong, try again later", type: 'warning'}); 
 			}
 		});
-	});
+	};
 
 	SchemeFactory.getOne({uuid: $scope.scheme.uuid}, function(response){
 		if(response.status == 404){

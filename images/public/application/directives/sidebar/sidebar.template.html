@@ -1,0 +1,17 @@
+<section class="sidebar sidebar--{{position}} sidebar--secondary" ng-if="open">
+	<!-- Toggle button -->
+	<section class="sidebar__header">
+		<div class="container">
+			<div class="row">
+				<div class="twelve columns">
+					<a ng-click="toggleSidebar()" ng-class="{'float--left': position == 'right', 'float--right': position == 'left'}" title="Close sidebar">
+						<img ng-src="https://icongr.am/feather/arrow-{{position}}.svg?color=ffffff" alt="Deelnemer activeren">
+					</a>
+					<h5>{{title}}</h5>			
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="container u__padding--20" ng-transclude>
+	</section>
+</section>

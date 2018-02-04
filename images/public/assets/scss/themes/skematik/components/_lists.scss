@@ -53,6 +53,21 @@ ul.list__horizontal{
 	}
 }
 
+ul.list__image-links{
+	li{
+		margin: 0px;
+
+		a{
+			opacity: 0.4;
+			transition: 0.4s all;
+
+			&:hover{
+				opacity: 1;
+			}
+		}
+	}
+}
+
 ul.accordeon__list{
 	li{
 		list-style-type: none;

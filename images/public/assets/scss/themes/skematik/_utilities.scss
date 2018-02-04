@@ -68,6 +68,12 @@
 .u__top-bottom-padding--5{
   padding: 5px 0px;
 }
+.u__padding--20{
+  padding: 20px;
+}
+.u__opacity--40{
+  opacity: 0.4;
+}
 
 .text-overflow--ellipsis{
   white-space: nowrap;
@@ -82,6 +88,30 @@
 @keyframes softSlideLeft {
   0% {
     transform: translateX(-10px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+@keyframes wideSlideLeft {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+@keyframes softSlideRight {
+  0% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+@keyframes wideSlideRight {
+  0% {
+    transform: translateX(120%);
   }
   100% {
     transform: translateX(0px);
