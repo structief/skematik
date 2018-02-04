@@ -44,7 +44,12 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 	}
 
 	$scope.participate = function(row, cell){
-		$rootScope.$broadcast("sidebar.open");
+		//Depending on login-state, show different information
+		if($rootScope.isAuthenticated){
+			$rootScope.$broadcast("sidebar.open", {uuid: "participants-overview"});
+		}else{
+			$rootScope.$broadcast("sidebar.open", {uuid: "schedule-participate"});
+		}
 		$scope.active = {
 			"row": row,
 			"cell": cell,
@@ -54,9 +59,9 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 
 	$scope.saveParticipation = function(){
 		SchemeFactory.participate({uuid: $scope.scheme.uuid}, {cellID: $scope.active.cell.uuid, participant: $scope.active.data.email}, function(response){
-			//You're added, show a message & close popup!
+			//You're added, show a message & close sidebar!
 			$rootScope.$broadcast('alert.show', {'title': "Yay", 'message': "You reserved a spot, congrats!", type: 'success'}); 
-			$rootScope.$broadcast('sidebar.close',);
+			$rootScope.$broadcast('sidebar.close', {uuid: "schedule-participate"});
 
 			//Update scheme
 			if(response.scheme !== undefined){

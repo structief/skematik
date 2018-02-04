@@ -6,7 +6,8 @@ skematikDirectives.directive('skematikSidebar', ["$rootScope", function($rootSco
 		transclude: true,
 		scope: {
 			position: '@',
-			title: '@'
+			title: '@',
+			uuid: '@'
 		},
 		templateUrl: 'application/directives/sidebar/sidebar.template.html',
 		controller: 'SidebarController'

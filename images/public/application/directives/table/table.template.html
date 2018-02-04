@@ -67,7 +67,7 @@
 	</div>
 </section>
 
-<skematik-sidebar position="right" title="Deelnemen">
+<skematik-sidebar position="right" title="Deelnemen" uuid="schedule-participate">
 	<div class="row">
 		<div class="twelve columns">
 			<p>Schrijf je hieronder in voor <strong>{{active.row.name}}</strong>?<br/>Je ontvangt na inschrijven een mail waarin je je deelname kan bevestigen.</p>
@@ -81,4 +81,39 @@
 		<div class="twelve columns input__group">
 			<button class="button button-white" ng-click="saveParticipation()">Deelnemen</button>
 		</div>
+	</div>
+</skematik-sidebar>
+
+<skematik-sidebar position="right" title="Overzicht" uuid="participants-overview">
+	<div class="row">
+		<div class="twelve columns">
+			<p>Deelnemers voor {{active.row.name}}</p>
+		</div>
+	</div>
+	<section ng-if="active.cell.current.length > 0">
+		<div class="row">
+			<div class="five columns">
+				<b>Email</b>
+			</div>
+			<div class="three columns">
+				<b>Status</b>
+			</div>
+			<div class="four columns">
+				<b>Actions</b>
+			</div>
+		</div>
+		<div class="row" ng-repeat="subscription in active.cell.current">
+			<div class="five columns">
+				{{subscription.usermail}}
+			</div>
+			<div class="three columns">
+				???
+			</div>
+			<div class="four columns">
+				Some actions
+			</div>
+		</div>
+	</section>
+	<p ng-if="active.cell.current.length == 0">Geen actieve deelnemers.</p>
+</section>
 </skematik-sidebar>

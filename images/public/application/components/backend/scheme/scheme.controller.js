@@ -82,7 +82,7 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 	}
 
 	$scope.editSchemeMeta = function(){
-		$rootScope.$broadcast("sidebar.open");
+		$rootScope.$broadcast("sidebar.open", {uuid: "scheme-sidebar-backend"});
 		$scope.system.edit = {
 			"title": angular.copy($scope.scheme.title),
 			"status": 0,
@@ -100,7 +100,7 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 		$scope.scheme.status = angular.copy($scope.system.edit.status);
 		$scope.scheme.publication = angular.copy($scope.system.edit.publication);
 
-		$rootScope.$broadcast("sidebar.close");
+		$rootScope.$broadcast("sidebar.close", "scheme-sidebar-backend");
 	}
 
 	//Row functions

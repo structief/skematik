@@ -111,7 +111,7 @@ skematikControllers.controller('BeParticipantsController',["$scope", "$state", "
 
 	$scope.addParticipant = function($event){
 		$scope.system.edit = {"index": -1, "user": {"mail": null, "status": 1, "roles": [], "uuid": null}};
-		$rootScope.$broadcast("sidebar.open");
+		$rootScope.$broadcast("sidebar.open", {uuid: "edit-participant"});
 
 		//Toggle dropdown
 		$scope.toggleDropdown($event);
@@ -121,7 +121,7 @@ skematikControllers.controller('BeParticipantsController',["$scope", "$state", "
 		$scope.system.edit = {"index": $index, "user": angular.copy($scope.participants[$index])};
 
 		//Toggle sidebar
-		$rootScope.$broadcast("sidebar.open");
+		$rootScope.$broadcast("sidebar.open", {uuid: "edit-participant"});
 	}
 
 	$scope.saveParticipant = function(){
@@ -134,6 +134,6 @@ skematikControllers.controller('BeParticipantsController',["$scope", "$state", "
 		}
 
 		//Toggle sidebar
-		$rootScope.$broadcast("sidebar.close");
+		$rootScope.$broadcast("sidebar.close", {uuid: "edit-participant"});
 	}
 }]);
