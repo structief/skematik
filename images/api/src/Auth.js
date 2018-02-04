@@ -89,7 +89,7 @@ class Auth {
                 roles.push(r[0])
               })
             }
-            const expiresAt = JSON.stringify(new Date().getTime() + 604800 );
+            const expiresAt = JSON.stringify(new Date().getTime() + 3*24*60*60*1000);
 
             const token = jwt.encode(
               { 

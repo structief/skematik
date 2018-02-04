@@ -4,6 +4,11 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 	}
 
 	$scope.isEditing = false;
+	$scope.system = {
+		"isEditing": false,
+		"edit": null,
+		"roles": ["owner", "admin", "user", "participant"]
+	};
 
 	if($scope.scheme.uuid == 'new'){
 		$scope.isEditing = true;
@@ -60,6 +65,42 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 	}
 	$scope.toggleEditMode = function(){
 		$scope.isEditing = !$scope.isEditing;
+	}
+	$scope.inRoles = function(roles, role){
+		if(roles !== undefined){
+			return roles.indexOf(role) !== -1;
+		}else{
+			return false;
+		}
+	}
+	$scope.toggleRole = function(roles, role){
+		if($scope.inRoles(roles, role)){
+			roles.splice(roles.indexOf(role), 1);
+		}else{
+			roles.push(role);
+		}
+	}
+
+	$scope.editSchemeMeta = function(){
+		$rootScope.$broadcast("sidebar.open");
+		$scope.system.edit = {
+			"title": angular.copy($scope.scheme.title),
+			"status": 0,
+			"publication": {
+				"from": null,
+				"to": null
+			},
+			"roles": []
+		};
+	}
+
+	$scope.saveSchemeMeta = function(){
+		$scope.scheme.title = angular.copy($scope.system.edit.title);
+		$scope.scheme.roles = angular.copy($scope.system.edit.roles);
+		$scope.scheme.status = angular.copy($scope.system.edit.status);
+		$scope.scheme.publication = angular.copy($scope.system.edit.publication);
+
+		$rootScope.$broadcast("sidebar.close");
 	}
 
 	//Row functions

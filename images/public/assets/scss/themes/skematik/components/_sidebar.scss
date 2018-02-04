@@ -1,0 +1,20 @@
+.sidebar{
+	position: fixed;
+	top: 0px;
+	overflow-x: hidden;
+	overflow-y:scroll;
+	height: 100vh;
+	width: 550px;
+	z-index: 10;
+	background-color: #33C3F0;
+	box-shadow: -2px 0px 5px rgba(0,0,0,0.2);
+	display: block;
+	padding: 20px;
+
+	&.sidebar--right{
+		right: 0px;
+	}
+	&.sidebar--left{
+		left: 0px;
+	}
+}
