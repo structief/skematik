@@ -1,4 +1,4 @@
-<nav class="navbar" ng-controller="HeaderController">
+<nav class="navbar" ng-controller="HeaderController" ng-if="!hide">
 	<div class="row row--full-width" ng-if="!account">
 		<div class="six columns logo">
 			<a ui-sref="fe.landing" href="/">
@@ -12,7 +12,7 @@
 		<div class="six columns menu--secondary" ng-class="{'hide--on-mobile': !isMenuActive, 'animate--left-0': isMenuActive, 'text--right': !isMenuActive, 'animate--opacity-1': isMenuActive}">
 			<ul class="list--no-border">
 				<li>
-					<a ui-sref="be.login" href="/admin/login">
+					<a ui-sref="fe.login" href="/login">
 						Login
 					</a>
 				</li>

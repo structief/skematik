@@ -3,7 +3,7 @@
 }
 
 .navbar{
-	position: fixed;
+	position: relative;
     top: 0;
     left: 0;
     display: block;
@@ -13,6 +13,7 @@
     z-index: 3;
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
+    margin-bottom: 40px;
 
     h6{
     	margin: O;

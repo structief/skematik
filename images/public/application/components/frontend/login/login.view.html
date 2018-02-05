@@ -1,0 +1,61 @@
+<section class="u-full-width u-max-full-width">
+	<div class="sidebar sidebar--left sidebar--secondary sidebar--no-animation">
+		<section class="sidebar__header">
+			<div class="container">
+				<div class="row">
+					<div class="twelve columns">
+						<a class="float--left" title="Back to home" ui-sref="fe.landing" href="/">
+							<img src="https://icongr.am/feather/arrow-left.svg?color=ffffff" alt="Terugkeren">
+						</a>
+						<h5>Aanmelden</h5>			
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="u__align-center">
+			<div class="container">
+				<div class="row">
+					<div class="twelve columns">
+						<h5>Welkom terug!</h5>
+						<label for="username">Gebruikersnaam</label>
+						<input 
+							class="u-full-width" 
+							type="text" 
+							placeholder="Gebruikersnaam" 
+							id="username"
+							ng-model="user.username"
+							ng-class="{'input--error' : input.error}"
+							required>
+						<label for="password">Wachtwoord</label>
+						<input 
+							class="u-full-width" 
+							type="password" 
+							placeholder="Wachtwoord" 
+							id="password"
+							ng-model="user.password"
+							ng-class="{'input--error' : input.error}"
+							required>
+						<p>{{error}}</p>
+						<button class="button-white button" ng-click="login()">Aanmelden</button>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="u__align-bottom">
+			<div class="container">
+				<div class="row">
+					<div class="twelve columns">
+						<i>Nog geen account? <a ui-sref="fe.register" href="/register">Registreer dan nu</a></i>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<div class="three columns">&nbsp;</div>
+	<div class="eight columns">
+		<figure>
+			<img src="assets/images/directions.png">
+			<figcaption>Yay, a signpost!</figcaption>
+		</figure>
+	</div>
+</section>

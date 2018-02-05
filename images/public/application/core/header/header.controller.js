@@ -1,4 +1,5 @@
-skematikControllers.controller('HeaderController',["$scope", "$state", "$rootScope", "AccountFactory", function($scope, $stateProvider, $rootScope, AccountFactory) {
+skematikControllers.controller('HeaderController',["$scope", "$state", "$rootScope", "AccountFactory", "$location", function($scope, $stateProvider, $rootScope, AccountFactory, $location) {
+	$scope.hide = false;
 	$scope.account = null;
 	$scope.isMenuActive = false;
 
@@ -17,6 +18,14 @@ skematikControllers.controller('HeaderController',["$scope", "$state", "$rootSco
 
 	$scope.$on("account.logout", function(event, data){
 		$scope.account = null;
+	});
+
+	//Hide menu and footer on login & register page
+	$rootScope.$on("menu.hide", function(event, data){
+		$scope.hide = true;
+	});
+	$rootScope.$on("menu.show", function(event, data){
+		$scope.hide = false;
 	});
 
 	$rootScope.$on('tokenHasExpired', function() {

@@ -1,4 +1,4 @@
-skematikControllers.controller('BeLoginController',["$scope", "$state", "$stateParams", "AccountFactory", function($scope, $stateProvider, $stateParams, AccountFactory) {
+skematikControllers.controller('LoginController',["$scope", "$state", "$stateParams", "AccountFactory", function($scope, $stateProvider, $stateParams, AccountFactory) {
 	$scope.user = {
 		username: null,
 		password: null

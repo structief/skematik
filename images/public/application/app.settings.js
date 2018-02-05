@@ -62,12 +62,21 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 			}
 		}
 	})
-	.state('be.login', {
+	.state('fe.login', {
 		url: "/login",
 		views: {
 			"pageContent@": {
-				templateUrl: base_url + "backend/login/login.view.html",
-				controller: "BeLoginController",
+				templateUrl: base_url + "frontend/login/login.view.html",
+				controller: "LoginController",
+			}
+		}
+	})
+	.state('fe.register', {
+		url: "/register",
+		views: {
+			"pageContent@": {
+				templateUrl: base_url + "frontend/register/register.view.html",
+				controller: "RegisterController",
 			}
 		}
 	})
@@ -143,7 +152,7 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 	        return localStorage.getItem('jwt-token');
 		}],
 		whiteListedDomains: ['api.skematik.io', 'localhost', 'skematik.localhost'],
-		unauthenticatedRedirectPath: '/admin/login'
+		unauthenticatedRedirectPath: '/login'
     });
 
 
@@ -152,7 +161,7 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
     $httpProvider.interceptors.push('jwtInterceptor');
 }]);
 
-skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFactory", function($rootScope, $stateProvider, $stateParams, authManager, AccountFactory){	
+skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFactory", "$transitions", function($rootScope, $stateProvider, $stateParams, authManager, AccountFactory, $transitions){	
 	//Account check
 	AccountFactory.isLoggedIn();
 	
@@ -176,4 +185,14 @@ skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFac
     	console.info(data);
         $rootScope.isAuthenticated = false;
     });
+
+	$transitions.onSuccess({ to: 'fe.**' }, function(trans) {
+		//Fire event to hide/show navigation
+		var hideMenuOnPages = ["fe.login", "fe.register"];
+		if(hideMenuOnPages.indexOf(trans.to().name) !== -1){
+			$rootScope.$broadcast("menu.hide", {});
+		}else{
+			$rootScope.$broadcast("menu.show", {});
+		}
+	});
 }]);
