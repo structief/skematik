@@ -6,6 +6,46 @@
 	.wizard__next{
 		float: right;
 	}
+
+	.wizard__step{
+		//Default
+		animation: 0.4s softSlideRight;
+
+		.input--has-error{
+			border-color: darken($error-color, 20);
+		}
+		span.feedback{
+			display: none;
+		    position: absolute;
+		    margin-top: -70px;
+		    margin-left: 10px;
+		    color: $error-color;
+		    font-style: italic;
+
+		    &:before{
+		    	content: " ";
+			    width: 5px;
+			    height: 5px;
+			    background-color: $error-color;
+			    border-radius: 50%;
+			    display: inline-block;
+			    margin-right: 5px;
+			    margin-bottom: 2px;
+		    }
+		}
+		input{
+			transition: 0.2s all;
+
+			&:active, &:focus, &.ng-invalid{
+		    	padding: 30px 10px 6px 10px;
+    			height: 60px;
+
+    			& + span.feedback{
+    				display: block;
+    			}
+    		}
+		}
+	}
 }
 
 .wizard__step-counter{
