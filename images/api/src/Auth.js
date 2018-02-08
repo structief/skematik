@@ -101,23 +101,9 @@ class Auth {
             // TODO: add expires_at to body
             // 
 
+            res.send(200, token)
 
-            pg.select().table("tokens").where({"token": token}).then((result2) => {
-              if (!result2.length  > 0) {
-                pg("tokens").insert({
-                  token: token,
-                  user: result[0].uuid
-                }).returning("id").then(() => {
-                  res.send({
-                    token: token
-                  })
-                })
-              } else {
-                res.send({
-                  token: result2[0].token
-                })
-              }
-            })
+
           } else {
             res.send(401, { message: "Password incorrect, try again", status: 401});
           }

@@ -157,6 +157,7 @@ class App {
       table.increments();
       table.uuid("uuid");
       table.string("usermail").notNullable();
+      table.string("name");
       table.json("roles");
       table.string("code");
       table.integer("status")
