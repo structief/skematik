@@ -1,5 +1,10 @@
 const uuidV1 = require('uuid/v1');
 const {checkToken} = require("./helpers/auth")
+const config = require('./helpers/config.js') 
+
+const Cryptr = require('cryptr'),
+    cryptr = new Cryptr(config.auth.secret);
+
 
 class Users {
 
@@ -67,6 +72,9 @@ class Users {
       request["uuid"] = uuidV1();
       const userRole = await pg("roles").select("uuid").where({ type: "USER", organisationID: req.body.organisation});
       request["roles"] = { roles: userRole }
+
+      request["password"] = cryptr.encrypt(req.body.password);
+
       await pg("users").insert(request).then(function() {
         res.send({ uuid: request['uuid']})
       })
