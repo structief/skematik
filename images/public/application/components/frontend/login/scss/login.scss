@@ -10,13 +10,22 @@ section.u-full-width{
 
 	a{
 		text-decoration: none;
-		font-weight: 700;
 		color: white;
 		opacity: 1;
 		transition: 0.4s all;
 
 		&:hover{
 			opacity: 0.7;
+		}
+
+		&.float--right{
+			float: right;
+		    line-height: 38px;
+		    margin-right: 10px;
+		}
+
+		code{
+			color: #333;
 		}
 	}
 

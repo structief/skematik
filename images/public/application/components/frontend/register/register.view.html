@@ -23,14 +23,15 @@
 						<p>Some help for the people</p>
 					</div>
 					<div class="twelve columns">
-						<label for="organisation" ng-class="{'input--has-error': wizard.step.showErrors && new.organisation.name == null}">Naam organisatie</label>
-						<input class="u-full-width" type="text" ng-model="new.organisation.name" placeholder="Naam organisatie" id="organisation">
-						<span class="feedback">You're doing great!</span>
+						<label for="organisation">Naam organisatie</label>
+						<input class="u-full-width input--with-feedback" type="text" ng-model="new.organisation.name" pattern=".{3,}" required placeholder="Naam organisatie" id="organisation">
+						<span class="input__feedback" data-text-invalid="Minimum 3 characters" data-text-empty="Pick a good name!" data-text-valid="Great, looks perfect!"></span>
 						<label for="contactinfo">Emailadres contactpersoon</label>
-						<input class="u-full-width" type="email" ng-model="new.account.mail" placeholder="Emailadres contactpersoon" id="contactinfo">
+						<input class="u-full-width input--with-feedback" required type="email" ng-model="new.account.mail" placeholder="Emailadres contactpersoon" id="contactinfo">
+						<span class="input__feedback" data-text-invalid="That's not a valid email" data-text-empty="What's the primary mailaddress?" data-text-valid="Solid pick!"></span>
 					</div>
 					<div class="twelve columns">
-						<button class="button-white button wizard__next" ng-click="nextStep([new.organisation.name, new.account.mail])">Next!</button>
+						<button class="button-white button wizard__next" ng-click="nextStep()">Next!</button>
 					</div>
 				</div>
 			</div>
@@ -44,7 +45,8 @@
 					</div>
 					<div class="twelve columns">
 						<label for="password">Wachtwoord</label>
-						<input class="u-full-width" type="password" ng-model="new.account.password" placeholder="Mijn veilig wachtwoord" id="password">
+						<input class="u-full-width input--with-feedback" type="password" ng-model="new.account.password" placeholder="Mijn veilig wachtwoord" id="password" pattern=".{5,}" required>
+						<span class="input__feedback" data-text-invalid="You call this a password?" data-text-empty="Type your strongest password" data-text-valid="That'll do!"></span>
 					</div>
 					<div class="twelve columns">
 						<a class="float--left" title="Back" ng-click="prevStep()">
@@ -69,17 +71,18 @@
 			<div class="container">
 				<div class="row">
 					<div class="twelve columns">
-						<i>Al ingeschreven? <a ui-sref="fe.login" href="/login">Meld je aan</a></i>
+						<i>Al ingeschreven? <a ui-sref="fe.login" href="/login"><b>Meld je aan</b></a></i>
 					</div>
 				</div>
 			</div>
 		</section>
 	</div>
 	<div class="three columns">&nbsp;</div>
-	<div class="eight columns">
-		<figure>
-			<img src="assets/images/directions.png">
-			<figcaption>Yay, a signpost!</figcaption>
+	<div class="eight columns register__container">
+		<figure class="register__image">
+			<img src="https://cdn.dribbble.com/users/879147/screenshots/3624550/signup.jpg" alt="Some text">
 		</figure>
+		<h3>Create an account</h3>
+		<p>It's the best start to use Skematik. Swear to God, because without one, there's no way to create or maintain schedules, actually.. Who would've thought?</p>
 	</div>
 </section>

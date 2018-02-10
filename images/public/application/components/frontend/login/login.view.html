@@ -12,31 +12,32 @@
 				</div>
 			</div>
 		</section>
-		<section class="u__align-center">
-			<div class="container">
+		<section class="u__align-center wizard">
+			<div class="container wizard__step" ng-show="wizard.step.active == 1">
 				<div class="row">
 					<div class="twelve columns">
 						<h5>Welkom terug!</h5>
 						<label for="username">Gebruikersnaam</label>
-						<input 
-							class="u-full-width" 
-							type="text" 
-							placeholder="Gebruikersnaam" 
-							id="username"
-							ng-model="user.username"
-							ng-class="{'input--error' : input.error}"
-							required>
+						<input class="u-full-width input--with-feedback" type="text" ng-model="user.username" placeholder="Gebruikersnaam" id="username" pattern=".{5,}" required>
+						<span class="input__feedback" data-text-invalid="Impossible, your username is waaaaaay longer" data-text-empty="What's your name again?" data-text-valid="Check." data-text-wrong="Err. We don't recognize this username.."></span>
 						<label for="password">Wachtwoord</label>
-						<input 
-							class="u-full-width" 
-							type="password" 
-							placeholder="Wachtwoord" 
-							id="password"
-							ng-model="user.password"
-							ng-class="{'input--error' : input.error}"
-							required>
-						<p>{{error}}</p>
+						<input class="u-full-width input--with-feedback" type="password" ng-model="user.password" placeholder="Wachtwoord" id="password" pattern=".{4,}" required>
+						<span class="input__feedback" data-text-invalid="That's not a great password, is it?" data-text-empty="Enter your passphrase" data-text-valid="Goodie, this might be it!" data-text-wrong="Wrong wrong wrong. This isn't your password."></span>
 						<button class="button-white button" ng-click="login()">Aanmelden</button>
+						<a href="#" ng-click="toStep(2)" class="float--right"><i>Wachtwoord vergeten?</i></a>
+					</div>
+				</div>
+			</div>
+			<div class="container wizard__step" ng-show="wizard.step.active == 2">
+				<div class="row">
+					<div class="twelve columns">
+						<h5>Lap ze.</h5>
+						<p>Enfin, kan gebeuren. Geef je e-mailadres van registratie op, dan sturen we je een nieuw wachtwoord op met de post!</p>
+						<label for="mail">E-mailadres</label>
+						<input class="u-full-width input--with-feedback" type="email" ng-model="request.email" placeholder="E-mailadres" id="mail" required>
+						<span class="input__feedback" data-text-invalid="That's not a valid email" data-text-empty="What's the primary mailaddress?" data-text-valid="Solid pick!" data-text-wrong="We herkennen het mailadres precies niet."></span>
+						<button class="button-white button" ng-click="login()">Nieuw wachtwoord aanvragen</button><br/>
+						<a href="#" ng-click="toStep(1)"><i>Ik weet het toch nog!</i></a>
 					</div>
 				</div>
 			</div>
@@ -45,17 +46,25 @@
 			<div class="container">
 				<div class="row">
 					<div class="twelve columns">
-						<i>Nog geen account? <a ui-sref="fe.register" href="/register">Registreer dan nu</a></i>
+						<i>Nog geen account? <a ui-sref="fe.register" href="/register"><b>Registreer dan nu</b></a></i>
 					</div>
 				</div>
 			</div>
 		</section>
 	</div>
 	<div class="three columns">&nbsp;</div>
-	<div class="eight columns">
-		<figure>
-			<img src="assets/images/directions.png">
-			<figcaption>Yay, a signpost!</figcaption>
+	<div class="eight columns register__container" ng-if="wizard.step.active == 1">
+		<figure class="register__image">
+			<img src="https://cdn.dribbble.com/users/879147/screenshots/3669079/welcome.jpg" alt="Welcome back!">
 		</figure>
+		<h3>Welcome back!</h3>
+		<p>We're sure you still remember your password, but in case you forgot, call us at <a href="#" ng-click="toStep(2)"><code>1-800-NO-FORGET</code></a></p>
+	</div>
+	<div class="eight columns register__container" ng-if="wizard.step.active == 2">
+		<figure class="register__image">
+			<img src="https://cdn.dribbble.com/users/879147/screenshots/3630290/forgot_password.jpg" alt="Forgot password">
+		</figure>
+		<h3>You.. forgot your password..</h3>
+		<p>We knew this was going to happen some day, so don't feel bad about it. In fact: no reason to, it could be worse! Imagine you forgot that emailaddress you registered with? Would that be a disaster? ;)</p>
 	</div>
 </section>

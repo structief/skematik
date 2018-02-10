@@ -2,8 +2,7 @@ skematikControllers.controller('RegisterController',["$scope", "$state", "$state
 	$scope.wizard = {
 		"step": {
 			"max": 3,
-			"active": 1,
-			"showErrors": false,
+			"active": 1
 		}
 	};
 
@@ -17,14 +16,16 @@ skematikControllers.controller('RegisterController',["$scope", "$state", "$state
 		}
 	};
 
-	$scope.nextStep = function(required_elements){
-		for(var i=0;i<required_elements.length;i++){
-			if(required_elements[i] == null){
-				$scope.wizard.step.showErrors = true;
+	$scope.nextStep = function(){
+		//Read required elements
+		var req_elements = $(".wizard__step:not(.ng-hide) input[required]");
+		for(var i=0;i<req_elements.length;i++){
+			var el = req_elements[i];
+			//Check classes for validity, not the best way, but it works in an MVP
+			if($(el).hasClass("ng-invalid") || $(el).hasClass("ng-empty")){
 				return;
 			}
 		}
-		$scope.wizard.step.showErrors = false;
 		$scope.wizard.step.active++;
 	}
 	$scope.prevStep = function(){

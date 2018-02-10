@@ -11,36 +11,75 @@
 		//Default
 		animation: 0.4s softSlideRight;
 
-		.input--has-error{
-			border-color: darken($error-color, 20);
-		}
-		span.feedback{
+		.input--with-feedback + span.input__feedback{
 			display: none;
 		    position: absolute;
 		    margin-top: -70px;
 		    margin-left: 10px;
-		    color: $error-color;
+		    color: white;
 		    font-style: italic;
 
 		    &:before{
 		    	content: " ";
 			    width: 5px;
 			    height: 5px;
-			    background-color: $error-color;
+			    background-color: $info-color;
 			    border-radius: 50%;
 			    display: inline-block;
 			    margin-right: 5px;
 			    margin-bottom: 2px;
+		    	transition: 0.4s all;
 		    }
+		    &:after{
+		    	content: "";
+		    	color: white;
+		    	transition: 0.4s all;
+		    }
+		}
+		.input--with-feedback.ng-valid + span.input__feedback{
+			&:before{
+				background-color: $success-color;
+			}	
+			&:after{
+				color: lighten($success-color, $lighten-factor);
+				content: attr(data-text-valid);
+			}
+		}
+		.input--with-feedback.ng-invalid + span.input__feedback{
+			&:before{
+				background-color: $error-color;
+			}	
+			&:after{
+				color: lighten($error-color, $lighten-factor);
+				content: attr(data-text-invalid);
+			}
+		}
+		.input--with-feedback.ng-wrong + span.input__feedback{
+			&:before{
+				background-color: $error-color;
+			}	
+			&:after{
+				color: lighten($error-color, $lighten-factor);
+				content: attr(data-text-wrong);
+			}
+		}
+		.input--with-feedback.ng-empty + span.input__feedback{
+			&:before{
+				background-color: $info-color;
+			}	
+			&:after{
+				color: lighten($info-color, $lighten-factor/1.2);
+				content: attr(data-text-empty);
+			}	
 		}
 		input{
 			transition: 0.2s all;
 
-			&:active, &:focus, &.ng-invalid{
+			&.input--with-feedback:active, &.input--with-feedback:focus, &.input--with-feedback.ng-invalid:not(.ng-empty){
 		    	padding: 30px 10px 6px 10px;
     			height: 60px;
 
-    			& + span.feedback{
+    			&.input--with-feedback + span.input__feedback{
     				display: block;
     			}
     		}

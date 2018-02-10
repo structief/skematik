@@ -5,3 +5,25 @@ img{
     vertical-align: middle;
 }
 
+.register__container{
+    margin-top: 10%;
+
+	.register__image{
+		width: 100%;
+		text-align: center;
+
+		img{
+			width: 400px;
+			text-align: center;
+		}
+	}
+	h3{
+		color: #333 !important;
+		text-align: center;
+		width: 100%;
+	}
+	p{
+		padding: 10px 20%;
+		text-align: center;
+	}
+}

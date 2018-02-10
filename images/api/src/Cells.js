@@ -23,7 +23,6 @@ class Cells {
 
     app.post('/cells', async (req, res, next) => {
       const request = req.body;
-      console.log("request", request)
       for(let i = 0; i < request.cells.length; i++) {
         request.cells[i]["uuid"] = uuidV1();
         await pg("cells").insert(request.cells[i]);

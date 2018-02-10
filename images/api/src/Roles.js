@@ -10,29 +10,32 @@ class Roles {
 
   assignFields(app, pg) {
 
+
+
+
+    app.get('/roles', async (req, res, next) => {
+      checkToken('333', pg, req.headers.authorization, async (user) => {
+        const list = await pg.select().table('roles').where({organisationID: user.organisation.uuid});
+        res.send(200, list);
+      }, res)
+
+    })
+
     app.post('/roles', async (req, res, next) => {
-      if(req.headers.authorization) {
-        // TODO: check if token exists
-        console.log(req.headers)
-        checkToken(pg, req.headers.authorization, async (result) => {
+      checkToken('777', pg, req.headers.authorization, async (user) => {
+      
+        const request = {};
+        request["uuid"] = uuidV1();
+        request["organisationID"] = req.body.organisationID;
+        request["type"] = req.body.type;
+        request["permissions"] = req.body.permissions;
+        request["short"] = req.body.short;
+
+        const id = await pg("roles").insert(request).returning('id');
+
+        res.send(200, { uuid: request["uuid"]});
         
-
-          const request = {};
-          request["uuid"] = uuidV1();
-          request["organisationID"] = req.body.organisationID;
-          request["type"] = req.body.type;
-          request["permissions"] = req.body.permissions;
-          request["short"] = req.body.short;
-
-          const id = await pg("roles").insert(request).returning('id');
-
-          res.send(200, { uuid: request["uuid"]});
-          
-        }, res)
-
-      } else {
-        res.sendStatus(400, { message: "no headers supplied"});
-      }
+      }, res)
 
     })
   }
