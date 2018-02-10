@@ -102,14 +102,14 @@ class Auth {
             // TODO: add expires_at to body
             // 
 
-            res.send(200, token)
+            res.send(200, {token: token});
 
 
           } else {
-            res.send(401, { message: "Password incorrect, try again", status: 401});
+            res.send(401, { message: "Password incorrect, try again", status: 401, field: "password"});
           }
         } else {
-          res.send(401, { message: "Username not recognized in the system", status: 401});
+          res.send(401, { message: "Username not recognized in the system", status: 401, field: "username"});
         }
       })
 
