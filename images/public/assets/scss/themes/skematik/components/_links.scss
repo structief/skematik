@@ -144,3 +144,25 @@
 		}
 	}
 }
+
+/* TOOLTIPS */
+.link--w-tooltip{
+	&::before{
+		content: attr(data-tooltip);
+		position: absolute;
+		background-color: rgba(0,0,0,0.6);
+		color: white;
+		padding: 5px 10px;
+		display: inline-table;
+	    margin-top: -60px;
+	    text-align: center;
+	    font-size: 90%;
+	    opacity: 0;
+	    transition: all 0.4s;
+	    left: 50%;
+    	transform: translateX(-50%);
+	}
+	&:hover::before{
+		opacity: 1;
+	}
+}

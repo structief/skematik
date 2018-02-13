@@ -134,4 +134,12 @@ button{
 			}
 		}
 	}
+
+	.button--condensed{
+		padding: 0px;
+
+		img{
+			margin: 8px 12px;
+		}
+	}
 }
