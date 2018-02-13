@@ -40,7 +40,7 @@ skematikControllers.controller('FeedbackBoxController',["$scope", "$rootScope", 
 		};
 
 		//Send $scope.success to certain endpoint
-		FeedbackFactory.post({"feeling": $scope.success.name, "url": $scope.success.url}, function(response){
+		FeedbackFactory.sendFeedback({"feeling": $scope.success.name, "url": $scope.success.url}, function(response){
 			//Add this page to the localStorage
 			if($scope.reactedTo == null){
 				$scope.reactedTo = {'urls': []};
