@@ -35,8 +35,7 @@ class Answers {
 
       insert["cellID"] = req.body["cellID"];
       insert["tableID"] = req.params.uuid;
-      insert["userID"] = uuidV1();
-      insert["mail"] = req.body["participant"];
+      insert["participant"] = req.body["participant"];
 
       insert["created_at"] = new Date();
       insert["updated_at"] = new Date();
@@ -57,8 +56,8 @@ class Answers {
 
       // add to answers
       if( go ) {
-        await pg("answers").insert(insert).returning("id").then(function(id) {
-          res.send(200, id)
+        await pg("answers").insert(insert).then(function(id) {
+          res.send(200)
         }).catch(function(error) {
           res.send("error" + error)
         })
