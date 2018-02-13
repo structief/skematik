@@ -119,7 +119,7 @@ class App {
     await this.pg.schema.createTableIfNotExists('answers', function (table) {
       table.increments();
       table.uuid("cellID");
-      table.uuid("participantID");
+      table.string("participant");
       table.uuid("tableID");
       table.timestamps();
     }).then(function() {
