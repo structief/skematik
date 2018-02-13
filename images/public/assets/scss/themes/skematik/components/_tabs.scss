@@ -1,0 +1,50 @@
+ul.tabs__list{
+	border-bottom: 1px solid #eeeeee;
+	margin-bottom: 0px;
+
+	li{
+		list-style-type: none;
+		display: inline-block;	
+		padding: 15px 5px 0px 0px;
+		text-align: center;
+		margin: 0px 15px;
+		cursor: pointer;
+		box-sizing: content-box;
+
+		&:first-child{
+			margin-left: 0px;
+		}
+
+		a{
+			text-decoration: none;
+			color: #aaaaaa;
+			font-size: 1.6rem;
+			transition: 0.4s all;
+		    margin-bottom: -5px;
+    		display: block;
+		}
+
+		&::after {
+		    content: '';
+		    display: inline-block;
+		    width: 0;
+		    height: 2px;
+		    background: #33C3F0;
+		    transition: width .3s;
+		    margin-bottom: -7px;
+		    top: -10px;
+		}
+		&.active{
+			&::after {
+			    width: 100%;
+			}
+			a{
+				color: #222222;
+			}
+		}
+
+		&:hover a{
+			color: #333333;
+		}
+	}
+}

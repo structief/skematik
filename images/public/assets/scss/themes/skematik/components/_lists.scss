@@ -1,3 +1,9 @@
+ul{
+	li{
+		list-style-type: none;
+	}
+}
+
 ul.list__social{
 	li{
 		display: inline-block;
@@ -44,6 +50,21 @@ ul.list__horizontal{
 		font-size: 10pt;
 		display: inline-block;
 		margin: 10px;
+	}
+}
+
+ul.list__image-links{
+	li{
+		margin: 0px;
+
+		a{
+			opacity: 0.4;
+			transition: 0.4s all;
+
+			&:hover{
+				opacity: 1;
+			}
+		}
 	}
 }
 

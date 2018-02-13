@@ -20,6 +20,7 @@ section{
 		max-width: 70%;
 		margin: 0 auto;
 		display: block;
+		width: auto;
 	}
 	a{
 		color: #999999;
@@ -48,6 +49,10 @@ section{
 			font-weight: 500;
 			color: #333333;
 		}
+	}
+
+	img{
+		width: auto;
 	}
 }
 
