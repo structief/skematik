@@ -134,7 +134,7 @@ class Auth {
     const request = {};
 
     request["uuid"] = uuidV1();
-    request["name"] = req.body.organisation;
+    request["name"] = req.body.organisation.name;
     request["created_at"] = new Date()
     request["updated_at"] = new Date()
 

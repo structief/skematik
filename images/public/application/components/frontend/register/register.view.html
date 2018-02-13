@@ -45,10 +45,10 @@
 					</div>
 					<div class="twelve columns">
 						<label for="givenName">Voornaam</label>
-						<input class="u-full-width input--with-feedback" type="text" ng-model="new.name.givenName" pattern=".{2,}" required placeholder="Voornaam" id="givenName">
+						<input class="u-full-width input--with-feedback" type="text" ng-model="new.account.givenName" pattern=".{2,}" required placeholder="Voornaam" id="givenName">
 						<span class="input__feedback" data-text-invalid="Dat lijkt wat kort voor een naam" data-text-empty="Hoe wordt je graag genoemd?" data-text-valid="Klink goed"></span>
 						<label for="familyName">Familienaam</label>
-						<input class="u-full-width input--with-feedback" required type="text" patten=".{2,}" ng-model="new.name.familyName" placeholder="Familienaam" id="familyName">
+						<input class="u-full-width input--with-feedback" required type="text" patten=".{2,}" ng-model="new.account.familyName" placeholder="Familienaam" id="familyName">
 						<span class="input__feedback" data-text-invalid="Te kort!" data-text-empty="Hoe luidt je familienaam?" data-text-valid="Perfect!"></span>
 					</div>
 					<div class="twelve columns">
@@ -69,7 +69,7 @@
 					</div>
 					<div class="twelve columns">
 						<label for="password">Wachtwoord</label>
-						<input class="u-full-width input--with-feedback" type="password" ng-model="new.account.password" placeholder="Mijn veilig wachtwoord" id="password" pattern=".{5,}" required>
+						<input class="u-full-width input--with-feedback" type="password" ng-model="new.account.password" placeholder="Mijn veilig wachtwoord" id="password" pattern=".{4,}" required>
 						<span class="input__feedback" data-text-invalid="Noem jij dit een veilig wachtwoord?" data-text-empty="Mijn veilig wachtwoord" data-text-valid="Hier gaan we mee door!"></span>
 					</div>
 					<div class="twelve columns">

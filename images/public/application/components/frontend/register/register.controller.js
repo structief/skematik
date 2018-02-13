@@ -1,4 +1,4 @@
-skematikControllers.controller('RegisterController',["$scope", "$state", "$stateParams", "$rootScope", function($scope, $stateProvider, $stateParams, $rootScope) {
+skematikControllers.controller('RegisterController',["$scope", "$state", "$stateParams", "$rootScope", "AccountFactory", function($scope, $stateProvider, $stateParams, $rootScope, AccountFactory) {
 	$scope.wizard = {
 		"step": {
 			"max": $(".wizard__step").size(),
@@ -38,9 +38,15 @@ skematikControllers.controller('RegisterController',["$scope", "$state", "$state
 
 	$scope.register = function(){
 		if($scope.nextStep()){
-			console.log($scope.new);
+			AccountFactory.api.register($scope.new, function(response){
+				//Okay, this worked.
+			}, function(error){
+				$scope.prevStep();
+				console.log(error);
+			});
 		}else{
 			//Error zeg ik
+			console.log(error);
 		}
 	}
 }]);

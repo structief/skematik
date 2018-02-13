@@ -23,6 +23,12 @@ skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", "$r
                 params: {
                     type: "logout"
                 }
+            },
+            register: {
+                method: "POST",
+                params: {
+                    type: "register"
+                }
             }
         }),
         setAccount : function(theAccount){
