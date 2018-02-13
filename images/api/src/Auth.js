@@ -32,7 +32,8 @@ class Auth {
             if(data.length > 0) {
               res.send({
                 mail: data[0].mail,
-                mail: data[0].mail,
+                givenName: data[0].given_name,
+                familyName: data[0].family_name,
                 organisation: data[0].organisation
               })
             } else {
