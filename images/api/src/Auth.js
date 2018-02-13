@@ -113,10 +113,9 @@ class Auth {
 
     app.post('/register',  async (req, res, next) => {
       await this.createUser(req, pg).then((result) => {
-        console.log(req.body, result, "init")
-        res.send(result)
+        res.send(200)
       }).catch((error) => {
-        res.send(error)
+        res.send(400, error)
       })
     })
   }
@@ -147,7 +146,7 @@ class Auth {
       type: "OWNER",
       short: "owner of the organisation",
       permissions: "777"
-     })
+     }).returning("uuid");
     const insertRolesAdmin = await pg("roles").insert({
       uuid: uuidV1(),
       organisationID: request["uuid"],
@@ -171,19 +170,16 @@ class Auth {
     })
     console.log('insert 1', insert1, insertRolesOwner)
 
-    const user = await pg('users')
+    return await pg('users')
       .insert({
         uuid: uuid,
-        password: cryptr.encrypt(req.body.password),
+        password: cryptr.encrypt(req.body.account.password),
         mail: req.body.account.mail,
-        organisation: request["uuid"],
-        roles: insertRolesOwner
-      })
-      .returning('*').then((user) => {
-
-        console.log("user:", user);
-        return user[0]
-      })
+        organisation: insert1[0],
+        given_name: req.body.account.givenName,
+        family_name: req.body.account.familyName,
+        roles: { roles: [{uuid: insertRolesOwner[0]}]}
+      }).returning('uuid')
     
   }
 }
