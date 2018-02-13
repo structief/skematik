@@ -75,6 +75,7 @@ class Auth {
                 roles.push(r[0])
               })
             }
+            
             const expiresAt = JSON.stringify(new Date().getTime() + 3*24*60*60*1000);
 
             const token = jwt.encode(
@@ -90,15 +91,13 @@ class Auth {
 
             // TODO: add expires_at to body
             // 
-
-            res.send(200, {"token": token})
-
+            res.send(200, {token: token})
 
           } else {
-            res.send(401, { message: "Password incorrect, try again", status: 401});
+            res.send(401, { message: "Password incorrect, try again", status: 401, field: "password"});
           }
         } else {
-          res.send(401, { message: "mail not recognized in the system", status: 401});
+          res.send(401, { message: "Mail not recognized in the system", status: 401, field: "mail"});
         }
       })
 
@@ -135,7 +134,7 @@ class Auth {
     const request = {};
 
     request["uuid"] = uuidV1();
-    request["name"] = req.body.organisation;
+    request["name"] = req.body.organisation.name;
     request["created_at"] = new Date()
     request["updated_at"] = new Date()
 

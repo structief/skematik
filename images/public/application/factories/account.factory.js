@@ -23,6 +23,12 @@ skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", "$r
                 params: {
                     type: "logout"
                 }
+            },
+            register: {
+                method: "POST",
+                params: {
+                    type: "register"
+                }
             }
         }),
         setAccount : function(theAccount){
@@ -37,8 +43,8 @@ skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", "$r
                 wrapper = this;
 
                 this.api.me(function(data){
-                    if(typeof data.username == "undefined"){
-                        //No clue what came true (either nothing or a weird set), but the account has no username, so he can't be logged in.
+                    if(typeof data.mail == "undefined"){
+                        //No clue what came true (either nothing or a weird set), but the account has no mail, so he can't be logged in.
                         deferred.resolve(false);
                         $rootScope.isAuthenticated = false;
                     }else{

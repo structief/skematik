@@ -1,0 +1,70 @@
+<section class="u-full-width u-max-full-width">
+	<div class="sidebar sidebar--left sidebar--secondary sidebar--no-animation">
+		<section class="sidebar__header">
+			<div class="container">
+				<div class="row">
+					<div class="twelve columns">
+						<a class="float--left" title="Back to home" ui-sref="fe.landing" href="/">
+							<img src="https://icongr.am/feather/arrow-left.svg?color=ffffff" alt="Terugkeren">
+						</a>
+						<h5>Aanmelden</h5>			
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="u__align-center wizard">
+			<div class="container wizard__step" ng-show="wizard.step.active == 1">
+				<div class="row">
+					<div class="twelve columns">
+						<h5>Welkom terug!</h5>
+						<label for="mail">E-mailadres</label>
+						<input class="u-full-width input--with-feedback" type="email" ng-model="user.mail" placeholder="E-mailadres" id="mail" required>
+						<span class="input__feedback" data-text-invalid="Da's geen geldig e-mailadres hoor" data-text-empty="Wat is je e-mailadres?" data-text-valid="Check." data-text-wrong="Err. Heb je hiermee geregistreerd?"></span>
+						<label for="password">Wachtwoord</label>
+						<input class="u-full-width input--with-feedback" type="password" ng-model="user.password" placeholder="Wachtwoord" id="password" pattern=".{4,}" required>
+						<span class="input__feedback" data-text-invalid="Nogal kort voor een wachtwoord, niet?" data-text-empty="Geef je superveilige wachtwoord in!" data-text-valid="Goodie, dit kan het zijn!" data-text-wrong="Nee, 't is toch mis."></span>
+						<button class="button-white button" ng-click="login()">Aanmelden</button>
+						<!--<a href="#" ng-click="toStep(2)" class="float--right"><i>Wachtwoord vergeten?</i></a>-->
+					</div>
+				</div>
+			</div>
+			<div class="container wizard__step" ng-show="wizard.step.active == 2">
+				<div class="row">
+					<div class="twelve columns">
+						<h5>Lap ze.</h5>
+						<p>Enfin, kan gebeuren. Geef je e-mailadres van registratie op, dan sturen we je een nieuw wachtwoord op met de post!</p>
+						<label for="email">E-mailadres</label>
+						<input class="u-full-width input--with-feedback" type="email" ng-model="request.email" placeholder="E-mailadres" id="email" required>
+						<span class="input__feedback" data-text-invalid="That's not a valid email" data-text-empty="What's the primary mailaddress?" data-text-valid="Solid pick!" data-text-wrong="We herkennen het mailadres precies niet."></span>
+						<button class="button-white button" ng-click="login()">Nieuw wachtwoord aanvragen</button><br/>
+						<a href="#" ng-click="toStep(1)"><i>Ik weet het toch nog!</i></a>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="u__align-bottom">
+			<div class="container">
+				<div class="row">
+					<div class="twelve columns">
+						<i>Nog geen account? <a ui-sref="fe.register" href="/register"><b>Registreer dan nu</b></a></i>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<div class="three columns">&nbsp;</div>
+	<div class="eight columns register__container" ng-if="wizard.step.active == 1">
+		<figure class="register__image">
+			<img src="https://cdn.dribbble.com/users/879147/screenshots/3669079/welcome.jpg" alt="Welkom terug!">
+		</figure>
+		<h3>Welkom terug!</h3>
+		<p>Je kent vast en zeker je wachtwoord nog wel, maar mocht je het vergeten zijn, bel ons op <!--<a href="#" ng-click="toStep(2)"><code>1-800-NO-FORGET</code></a>--><code>1-800-NO-FORGET</code></p>
+	</div>
+	<div class="eight columns register__container" ng-if="wizard.step.active == 2">
+		<figure class="register__image">
+			<img src="https://cdn.dribbble.com/users/879147/screenshots/3630290/forgot_password.jpg" alt="Forgot password">
+		</figure>
+		<h3>Je.. bent je wachtwoord toch vergeten..</h3>
+		<p>Enfin, we dachten al wel dat dit eens ging gebeuren, dus niet te slecht over voelen. Sterker nog; het had erger kunnen zijn! Wat als je ook je emailadres vergeten was? Zou dat geen ramp zijn? ;)</p>
+	</div>
+</section>

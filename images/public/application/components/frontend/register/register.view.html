@@ -1,0 +1,115 @@
+<section class="u-full-width u-max-full-width">
+	<div class="sidebar sidebar--left sidebar--secondary sidebar--no-animation">
+		<section class="sidebar__header">
+			<div class="container">
+				<div class="row">
+					<div class="twelve columns">
+						<a class="float--left" title="Back to home" ui-sref="fe.landing" href="/">
+							<img src="https://icongr.am/feather/arrow-left.svg?color=ffffff" alt="Terugkeren">
+						</a>
+						<h5>Registreren</h5>	
+						<span class="wizard__step-counter" style="margin-top: -30px;margin-right: -30px">Step {{wizard.step.active}}/{{wizard.step.max}}</span>		
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="u__align-center wizard">
+			<div class="container wizard__step" ng-show="wizard.step.active == 1">
+				<div class="row">
+					<div class="twelve columns">
+						<h5 class="wizard__step-title">Gegevens organisatie</h5>
+					</div>
+					<div class="twelve columns">
+						<p>Vertel ons eerst wat meer over jouw organisatie</p>
+					</div>
+					<div class="twelve columns">
+						<label for="organisation">Naam organisatie</label>
+						<input class="u-full-width input--with-feedback" type="text" ng-model="new.organisation.name" pattern=".{3,}" required placeholder="Naam organisatie" id="organisation">
+						<span class="input__feedback" data-text-invalid="Minimum 3 karakters graag" data-text-empty="Kies een goede naam" data-text-valid="Ziet er goed uit!"></span>
+						<label for="contactinfo">Emailadres contactpersoon</label>
+						<input class="u-full-width input--with-feedback" required type="email" ng-model="new.account.mail" placeholder="Emailadres contactpersoon" id="contactinfo">
+						<span class="input__feedback" data-text-invalid="Da's geen geldig emailadres!" data-text-empty="Wat is jullie primair emailadres?" data-text-valid="Okay, perfect"></span>
+					</div>
+					<div class="twelve columns">
+						<button class="button-white button wizard__next" ng-click="nextStep()">Volgende stap</button>
+					</div>
+				</div>
+			</div>
+			<div class="container wizard__step" ng-show="wizard.step.active == 2">
+				<div class="row">
+					<div class="twelve columns">
+						<h5 class="wizard__step-title">Jouw gegevens</h5>
+					</div>
+					<div class="twelve columns">
+						<p>We weten graag wie je bent, dan kunnen we nader kennismaken!</p>
+					</div>
+					<div class="twelve columns">
+						<label for="givenName">Voornaam</label>
+						<input class="u-full-width input--with-feedback" type="text" ng-model="new.account.givenName" pattern=".{2,}" required placeholder="Voornaam" id="givenName">
+						<span class="input__feedback" data-text-invalid="Dat lijkt wat kort voor een naam" data-text-empty="Hoe wordt je graag genoemd?" data-text-valid="Klink goed"></span>
+						<label for="familyName">Familienaam</label>
+						<input class="u-full-width input--with-feedback" required type="text" patten=".{2,}" ng-model="new.account.familyName" placeholder="Familienaam" id="familyName">
+						<span class="input__feedback" data-text-invalid="Te kort!" data-text-empty="Hoe luidt je familienaam?" data-text-valid="Perfect!"></span>
+					</div>
+					<div class="twelve columns">
+						<a class="float--left" title="Back" ng-click="prevStep()">
+							<img src="https://icongr.am/feather/arrow-left.svg?color=ffffff" alt="Terugkeren">
+						</a>
+						<button class="button-white button wizard__next" ng-click="nextStep()">Volgende</button>
+					</div>
+				</div>
+			</div>
+			<div class="container wizard__step" ng-show="wizard.step.active == 3">
+				<div class="row">
+					<div class="twelve columns">
+						<h5 class="wizard__step-title">Beveilig jouw account</h5>
+					</div>
+					<div class="twelve columns">
+						<p>Kies een sterk wachtwoord (minimum 5 karakters) om je account te beveiligen</p>
+					</div>
+					<div class="twelve columns">
+						<label for="password">Wachtwoord</label>
+						<input class="u-full-width input--with-feedback" type="password" ng-model="new.account.password" placeholder="Mijn veilig wachtwoord" id="password" pattern=".{4,}" required>
+						<span class="input__feedback" data-text-invalid="Noem jij dit een veilig wachtwoord?" data-text-empty="Mijn veilig wachtwoord" data-text-valid="Hier gaan we mee door!"></span>
+					</div>
+					<div class="twelve columns">
+						<a class="float--left" title="Back" ng-click="prevStep()">
+							<img src="https://icongr.am/feather/arrow-left.svg?color=ffffff" alt="Terugkeren">
+						</a>
+						<button class="button-white button wizard__next" ng-click="register()">Registreren</button>
+					</div>
+				</div>
+			</div>
+			<div class="container wizard__step" ng-show="wizard.step.active == 4">
+				<div class="row">
+					<div class="twelve columns">
+						<h5 class="wizard__step-title">Organisatie aangemaakt</h5>
+					</div>
+					<div class="twelve columns">
+						<p>
+							Hoera! Je account, en daarbij horende organisatie, is aangemaakt. Check meteen je mail voor de bevestigingslink, waarmee je voor een eerste keer kan aanmelden.<br/><br/>
+							<b>Welkom bij de club!</b>
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="u__align-bottom">
+			<div class="container">
+				<div class="row">
+					<div class="twelve columns">
+						<i>Al ingeschreven? <a ui-sref="fe.login" href="/login"><b>Meld je aan</b></a></i>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<div class="three columns">&nbsp;</div>
+	<div class="eight columns register__container">
+		<figure class="register__image">
+			<img src="https://cdn.dribbble.com/users/879147/screenshots/3624550/signup.jpg" alt="Signup image, by Dribbble user 879147">
+		</figure>
+		<h3>Blij dat je erbij wil zijn!</h3>
+		<p>Registeren is echt de beste manier om Skematik te gebruiken. Zonder zwans, zolang je geen account hebt, kan je geen schema's aanmaken, dus...waarom twijfelen?</p>
+	</div>
+</section>
