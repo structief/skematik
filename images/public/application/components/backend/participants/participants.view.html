@@ -1,0 +1,167 @@
+<div class="container">
+	<!-- Header -->
+	<section class="row">
+		<div class="eight columns">
+			<h4>
+				Deelnemers
+			</h4>
+		</div>
+		<div class="four colums">
+			<div class="text--right padding--10">
+				<div class="u__dropdown">
+					<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
+						<img src="https://icongr.am/feather/plus-square.svg?color=999999">
+					</a>
+					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px; text-align: left">
+						<ul>
+							<li ng-click="addParticipant($event)">
+								<a>Nieuwe deelnemer</a>
+							</li>
+							<li ng-click="system.import = true;toggleDropdown($event)">
+								<a>Bulk import</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="u__dropdown">
+					<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
+						<img src="https://icongr.am/feather/filter.svg?color=999999">
+					</a>
+					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px;text-align: left">
+						<ul>
+							<li class="u__dropdownmenu--header">Account</li>
+							<li ng-click="filter.inactive = !filter.inactive">
+								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.inactive">
+								Inactive
+							</li>
+							<li ng-click="filter.active = !filter.active">
+								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.active">
+								Active
+							</li>
+							<li class="u__dropdownmenu--header">Rollen</li>
+							<li ng-repeat="role in system.roles" ng-click="toggleRole(filter.roles, role)">
+								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="inRoles(filter.roles, role)">
+								{{role}}
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Actual participants -->
+	<section class="row table--light" ng-if="!system.import" ng-class="{'table--light-focus': system.editMode}">
+		<div class="twelve columns row table__row table__row--header">
+			<div class="four columns">
+				Emailadres
+			</div>
+			<div class="two columns">
+				Status
+			</div>
+			<div class="three columns">
+				Rollen
+			</div>
+			<div class="three columns">
+				Acties
+			</div>
+		</div>
+		<div class="twelve columns row table__row" ng-repeat="participant in participants" ng-if="filterParticipants(participant)">
+			<div class="four columns text-overflow--ellipsis">
+				<span ng-if="participant.status > -1">{{participant.name}} <i style="font-size: 80%">({{participant.mail}})</i></span>
+			</div>
+			<div class="two columns">
+				<span ng-if="participant.status == 1">Actief</span>
+				<span ng-if="participant.status == 0">Inactief</span>
+			</div>
+			<div class="three columns">
+				<span ng-repeat="role in participant.roles" class="text--lowercase">
+					{{role}}
+					<span ng-if="$index < participant.roles.length-1">, </span>
+				</span>
+				<span ng-if="participant.roles.length == 0">
+					<i>Geen rollen</i>
+				</span>
+			</div>
+			<div class="three columns text--right">
+				<ul class="list__horizontal" style="margin: -7px">
+					<li class="u__no-margin">
+						<div class="u__dropdown">
+							<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
+								<img src="https://icongr.am/feather/users.svg?color=999999">
+							</a>
+							<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px;text-align: left;">
+								<ul>
+									<li class="u__dropdownmenu--header">Toggle role</li>
+									<li ng-repeat="role in system.roles" ng-click="toggleRole(participant.roles, role)">
+										<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="inRoles(participant.roles, role)">
+										{{role}}
+									</li>
+								</ul>
+							</div>
+						</div>
+					</li>
+					<!-- Participant is active, deactivate it -->
+					<li class="u__no-margin" ng-if="participant.status == 1">
+						<a ng-click="participant.status = !participant.status" title="Deelnemer deactiveren">
+							<img src="https://icongr.am/feather/pause-circle.svg?color=999999" alt="Deelnemer deactiveren">
+						</a>
+					</li>
+					<!-- Participant is active, edit it -->
+					<li class="u__no-margin" ng-if="participant.status == 1">
+						<a ng-click="editParticipant($index)" title="Deelnemer bewerken">
+							<img src="https://icongr.am/feather/edit-2.svg?color=999999" alt="Deelnemer bewerken">
+						</a>
+					</li>
+					<!-- Participant is inactive, activate it -->
+					<li class="u__no-margin" ng-if="participant.status == 0">
+						<a ng-click="participant.status = !participant.status" title="Deelnemer activeren">
+							<img src="https://icongr.am/feather/play-circle.svg?color=999999" alt="Deelnemer activeren">
+						</a>
+					</li>
+					<!-- Participant is inactive, remove it -->
+					<li class="u__no-margin" ng-if="participant.status == 0">
+						<a ng-click="deleteParticipant($index)" title="Deelnemer verwijderen">
+							<img src="https://icongr.am/feather/minus-circle.svg?color=999999" alt="Deelnemer verwijderen">
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<!-- Import view -->
+	<section class="row" ng-if="system.import">
+		This is the import view.
+
+		To switch back to the list, click <a ng-click="system.import = false">here</a>.
+	</section>
+</div>
+<skematik-sidebar position="right" title="{{system.edit.index > -1 ? 'Deelnemer wijzigen' : 'Nieuwe deelnemer'}}" uuid="edit-participant">
+	<div class="row">
+		<div class="twelve columns">
+			<div class="input__group">
+				<label for="mail">Mail</label>
+				<input type="email" id="mail" ng-model="system.edit.user.mail" placeholder="mail@live.com" />
+			</div>
+			<div class="input__group">
+				<label for="status">Status</label>
+				<select ng-model="system.edit.user.status">
+					<option value="1">Actief</option>
+					<option value="0">Inactief</option>
+				</select>
+			</div>
+			<div class="input__group">
+				<label>Roles</label>
+				<div class="button__group button__group--white">
+					<a href="#" ng-repeat="role in system.roles" ng-click="toggleRole(system.edit.user.roles, role)" ng-class="{'button--active': inRoles(system.edit.user.roles, role)}">
+						{{role}}
+					</a>
+				</div>
+			</div>
+			<div class="input__group">
+				<button class="button button-white" ng-click="saveParticipant()">{{system.edit.index > -1 ? 'Wijziging opslaan' : 'Deelnemer bewaren'}}</button>
+			</div>
+		</div>
+	</div>
+</skematik-sidebar>

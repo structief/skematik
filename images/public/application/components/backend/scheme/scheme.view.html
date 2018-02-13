@@ -1,0 +1,142 @@
+<div class="container">
+	<section class="row">
+		<div class="eight columns">
+			<h4>
+				{{scheme.title}}
+			</h4>
+		</div>
+		<div class="four columns">
+			<div class="text--right padding--10">
+				<ul class="list__horizontal list__image-links" ng-if="!isEditing">
+					<li>
+						<a href="#" ng-click="editSchemeMeta()" title="Edit scheme meta">
+							<img src="https://icongr.am/feather/info.svg?color=999999">
+						</a>
+					</li>
+					<li>
+						<a href="#" ng-click="toggleEditMode()" title="Edit scheme">
+							<img src="https://icongr.am/feather/edit-2.svg?color=999999">
+						</a>
+					</li>
+					<li>
+						<a href="#" ng-click="" title="Export results">
+							<img src="https://icongr.am/feather/share.svg?color=999999">
+						</a>
+					</li>
+				</ul>
+				<div class="button__group button__group--header" ng-if="isEditing">
+					<a href="#" class="button button-secondary" ng-click="discardChanges()">
+						Discard changes
+					</a>
+					<a href="#" class="button button-primary" ng-click="saveScheme()">
+						Save changes
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+<section class="u--full-width scheme__wide" ng-if="isEditing">
+	<div class="row box--white padding--15 scheme__title">
+		<div class="two columns">
+			Function name
+		</div>
+		<div class="one column text--center">
+			<div class="button__group">
+				<a ng-click="previous()" ng-disabled="nav.min==0" style="padding: 0px">
+					<img src="https://icongram.jgog.in/feather/chevron-left.svg?color=555555&size=14" alt="earlier" style="margin-top: 6px;"></img>
+				</a>
+				<a ng-click="addColumn('before')">
+					+ column
+				</a>
+			</div>
+		</div>
+		<!-- MAX EIGHT -->
+		<div class="one column text--center" ng-repeat="header in scheme.headers track by $index" ng-if="$index >= nav.min && $index < (nav.min+8)">
+			<input type="text" placeholder="Function name" ng-model="scheme.headers[$index]" class="text--center" />
+			<a href="#" ng-click="deleteColumn($index)" class="icon__action" tabindex="-1">
+				<img src="https://icongram.jgog.in/feather/minus-circle.svg?color=666666&size=20"></img>
+			</a>
+		</div>
+		<div class="one column text--center">
+			<div class="button__group">
+				<a ng-click="addColumn('after')">
+					+ column
+				</a>
+				<a ng-click="next()" ng-disabled="nav.min >= (scheme.headers.length-8)" style="padding: 0px">
+					<img src="https://icongram.jgog.in/feather/chevron-right.svg?color=555555&size=14" style="margin-top: 6px"></img>
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="row scheme__body" ng-repeat="row in scheme.rows">
+		<div class="two columns box--white padding--15">
+			<input type="text" placeholder="Function name" ng-model="row.name" />
+			<a href="#" ng-click="deleteRow($index)" class="icon__action" tabindex="-1">
+				<img src="https://icongram.jgog.in/feather/minus-circle.svg?color=666666&size=20"></img>
+			</a>
+		</div>
+		<div class="one column text--center">
+			{{nav.min == 0 ? '&nbsp;' : '...'}}
+		</div>
+		<div 
+			class="one column padding--15 box--bg-white" 
+			ng-class="{'box--info': cell.max, 'text--center': !cell.max}"
+			ng-repeat="cell in row.cells track by $index" 
+			ng-if="$index >= nav.min && $index < (nav.min+8)" >
+			<img src="https://icongram.jgog.in/feather/plus-circle.svg?color=dddddd&size=20" ng-click="addSpace($parent.$parent.$parent.$index, $index, false)" ng-if="!cell.max" style="margin-top: 10px;cursor:pointer"></img>
+
+			<input type="number" ng-model="row.cells[$index].max" ng-if="cell.max" placeholder="Free spaces">
+			<a href="#" ng-click="addSpace($parent.$parent.$parent.$index, $index, true)" class="icon__action" ng-if="cell.max" tabindex="-1">
+				<img src="https://icongram.jgog.in/feather/minus-circle.svg?color=666666&size=20"></img>
+			</a>
+		</div>
+		<div class="one column text--center">
+			{{nav.min >= (scheme.headers.length-8) ? '&nbsp;' : '...'}}
+		</div>
+	</div>
+	<div class="row">
+		<div class="two columns padding--15">
+			<button ng-click="addRow()">Add row</button>
+		</div>
+	</div>
+</section>
+
+<!-- Dirty fix, please do this better -->
+<skematik-table uuid="scheme.uuid" ng-if="!isEditing" role="view"></skematik-table>
+<skematik-sidebar position="right" title="Schema aanpassen" uuid="scheme-sidebar-backend">
+	<div class="row">
+		<div class="twelve columns">
+			<div class="input__group">
+				<label for="title">Titel</label>
+				<input type="text" id="title" ng-model="system.edit.title" placeholder="Titel van het schema" />
+			</div>
+			<div class="input__group">
+				<label for="status" ng-model="system.edit.status" >Status</label>
+				<select>
+					<option value="1">Actief</option>
+					<option value="0">Inactief</option>
+				</select>
+			</div>
+			<div class="input__group">
+				<label for="status">Gepubliceerd:</label>
+				<div class="row">
+					<input type="text" ng-model="system.edit.publication.from" placeholder="Van" class="five columns" onfocus="(this.type='date')" onblur="(this.type='text')" />
+					<span class="two columns" style="line-height: 38px;text-align: center;">tot</span>
+					<input type="text" ng-model="system.edit.publication.to" placeholder="Tot" class="five columns" onfocus="(this.type='date')" onblur="(this.type='text')" />
+				</div>
+			</div>
+			<div class="input__group">
+				<label>Roles</label>
+				<div class="button__group button__group--white">
+					<a href="#" ng-repeat="role in system.roles" ng-click="toggleRole(system.edit.roles, role)" ng-class="{'button--active': inRoles(system.edit.roles, role)}">
+						{{role}}
+					</a>
+				</div>
+			</div>
+			<div class="input__group">
+				<button class="button button-white" ng-click="saveSchemeMeta()">Wijzigingen bewaren</button>
+			</div>
+		</div>
+	</div>
+</skematik-sidebar>

@@ -1,0 +1,99 @@
+<section class="container" ng-if="!hide">
+	<div class="row">
+		<div class="six columns">
+			<!-- Logo -->
+			<div class="logo">
+				<img src="https://icongram.jgog.in/feather/minus-square.svg?color=33C3F0" style="float:left;margin:12px"></img>
+				<h5>Skematik</h5>
+			</div>
+			<!-- Baseline -->
+			<p>Skematik is build as a Minimum-Lovable-Product, so there's two things. Firstly, it still contains some bugs, and secondly, it was made with and to love. Peace out.</p>
+			<!-- Social icons -->
+			<ul class="list__social">
+				<li>
+					<a href="#">
+						<img src="https://icongram.jgog.in/feather/twitter.svg?color=999999&size=20"></img>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<img src="https://icongram.jgog.in/feather/instagram.svg?color=999999&size=20"></img>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<img src="https://icongram.jgog.in/feather/facebook.svg?color=999999&size=20"></img>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="six columns">
+			<!-- Linkset one -->
+			<div class="row">
+				<ul class="list__vertical four columns">
+					<li class="list__header">
+						Skematik
+					</li>
+					<li>
+						<a href="/" ui-sref="fe.landing">
+							Home
+						</a>
+					</li>
+					<li>
+						<a href="/features" ui-sref="fe.page({slug:'features'})">
+							Features
+						</a>
+					</li>
+					<li>
+						<a href="/pricing" ui-sref="fe.page({slug:'pricing'})">
+							Pricing
+						</a>
+					</li>
+					<li>
+						<a href="/get-started" ui-sref="fe.page({slug:'get-started'})">
+							Get started
+						</a>
+					</li>
+				</ul>
+				<!-- Linkset two -->
+				<ul class="list__vertical four columns">
+					<li>
+						<a href="/help" ui-sref="fe.page({slug:'help'})">
+							Help
+						</a>
+					</li>
+					<li>
+						<a href="/faq" ui-sref="fe.page({slug:'faq'})">
+							FAQ
+						</a>
+					</li>
+					<li>
+						<a href="/status" ui-sref="fe.page({slug:'status'})">
+							System Status
+						</a>
+					</li>
+				</ul>
+				<!-- Linkset three -->
+				<ul class="list__vertical four columns">
+					<li class="list__header">
+						That fine print
+					</li>
+					<li>
+						<a href="/terms-of-service" ui-sref="fe.page({slug:'terms-of-service'})">
+							Terms of Service
+						</a>
+					</li>
+					<li>
+						<a href="/privacy-policy" ui-sref="fe.page({slug:'privacy-policy'})">
+							Privacy Policy
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!--
+	<p ng-if="rootScope.isAuthenticated">Authenticated</p>
+	<p ng-if="!rootScope.isAuthenticated">Not authenticated</p>
+	-->
+</section>

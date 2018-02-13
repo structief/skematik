@@ -1,17 +1,61 @@
 //This is probably not needed, but the compiler is flippin'
 $error-color: #dd342f;
 $warning-color: #ff5819;
-$info-color: #349bff;
+$info-color: #33C3F0;
 $success-color: #19b319;
 $lighten-factor: 40;
 
-.popup__form{
-	border: 1px solid #eeeeee;
-	padding: 40px;
-	text-align: center;
-	background-color: white;
+label{
+	text-transform: uppercase;
+	color: #B8BDC1;
+	font-size: 12px;
+	font-weight: 600;
+	margin-bottom: 1rem;
+}
+input, select{
+	width: 100%;
+	padding: 20px;
+
+	&::-webkit-input-placeholder, &::-moz-placeholder, &:-ms-input-placeholder, &:-moz-placeholder {
+		color: #777777;
+	}
+}
+input[type='date']{
+	height: 38px;
+    padding: 6px 10px;
+    background-color: #fff;
+    border: 1px solid #d1d1d1;
+    border-radius: 4px;
+    box-shadow: none;
+    box-sizing: border-box;
 }
 
+.input__group{
+	margin-bottom: 15px;
+
+	.button__group{
+		margin-bottom: 15px;
+		display: inline-block;
+	}
+}
+
+button{
+	margin: 15px 0px;
+}
+
+.button-white{
+	color: white !important;
+	border-color: white !important;
+
+	&:hover{
+		background-color: rgba(255,255,255,0.1);
+	}
+}
+
+
+
+
+/* INPUT ERRORS */
 .input--error{
 	border-color: $error-color !important;
 }
@@ -26,4 +70,76 @@ $lighten-factor: 40;
 
 .input--success{
 	border-color: $success-color !important;
+}
+
+// BUTTONS
+.button__group{
+    padding: 0px;
+
+	a, button{
+	    display: inline-block;
+	    height: 38px;
+	    padding: 0 1rem;
+	    color: #555;
+	    text-align: center;
+	    font-size: 1.1rem;
+	    font-weight: 600;
+	    line-height: 38px;
+	    letter-spacing: .1rem;
+	    text-transform: uppercase;
+	    text-decoration: none;
+	    white-space: nowrap;
+	    background-color: transparent;
+	    border-radius: 0px;
+	    border: 1px solid #bbb;
+	    cursor: pointer;
+	    box-sizing: border-box;
+	    margin-left: -1px;
+
+		&:first-child{
+			border-radius: 4px 0px 0px 4px;
+		}
+		&:last-child{
+			border-radius: 0px 4px 4px 0px;
+		}
+
+		&:hover{
+			color: #333;
+		    border-color: #888;
+		    outline: 0;
+		    z-index: 10;
+		}
+
+
+		&.button--active{
+			background-color: #333333;
+			color:white;
+		}
+	}
+
+	&.button__group--header a, &.button__group--header button{
+		margin-left: -7px;
+		margin-right: 2px;
+	}
+
+	&.button__group--white{
+		a, button{
+			color: white;
+			border: none;
+			background-color: #2bb7e2;
+
+			&.button--active{
+				background-color: white;
+				color:#33C3F0;
+			}
+		}
+	}
+
+	.button--condensed{
+		padding: 0px;
+
+		img{
+			margin: 8px 12px;
+		}
+	}
 }

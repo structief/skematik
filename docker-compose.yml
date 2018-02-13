@@ -24,15 +24,25 @@ services:
       PG_CONNECTION_STRING: postgres://admin:admin@db:5432/skematik
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
+      MODE: start
     links:
       - db
     depends_on:
       - db
     ports:
       - "3000:3000"
+    volumes: 
+      - './images/api/src:/api/src'
 
-  php:
+  front_server:
     build:
-      context: ./images/public/
+      context: ./images/static_server/
+    networks:
+      - default
+    environment:
+      DOMAIN:
     ports:
-      - "80:80"
+      - "4000:3000"
+    volumes:
+      - ./images/static_server/src:/skematik/src
+      - ./images/public/:/skematik/src/public

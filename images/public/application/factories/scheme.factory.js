@@ -4,28 +4,24 @@ skematikFactories.factory('SchemeFactory',["$resource", "$location", function($r
   return $resource('http://' + host + ':3000/schema/:uuid/:type', {uuid: "@uuid"}, {
     get: {
       method: 'GET',
+      isArray: true
+    },
+    getOne: {
+      method: 'GET',
       isArray: false,
-      interceptor: {
-          response: function(response) {      
-              var result = response.resource;        
-              result.$status = response.status;
-              return result;
-          }
-      }
+      skipAuthorization: true
     },
     participate: {
       method: 'POST',
-      isArray: true,
+      isArray: false,
       params: {
         type: "answer"
       },
-      interceptor: {
-          response: function(response) {      
-              var result = response.resource;        
-              result.$status = response.status;
-              return result;
-          }
-      }
+      skipAuthorization: true
+    },
+    update: {
+      method: 'PUT',
+      isArray: true
     }
   });
 }]);

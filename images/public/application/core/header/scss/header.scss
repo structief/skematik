@@ -1,5 +1,9 @@
+.logo img{
+    width: auto;
+}
+
 .navbar{
-	position: fixed;
+	position: relative;
     top: 0;
     left: 0;
     display: block;
@@ -9,9 +13,95 @@
     z-index: 3;
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
+    margin-bottom: 40px;
 
     h6{
     	margin: O;
         line-height: 60px;
+        display: inline-block;
+        width: auto;
+    }
+    a{
+        transition: all 0.4s;
+    }
+
+    ul{
+        height: 100%;
+        margin: 0px;
+        max-height: 6.5rem;
+        padding: 0px;
+
+        li{
+            display: inline-block;
+            list-style-type: none;
+            border-right: 1px solid #eee;
+            height: 100%;
+            vertical-align: middle;
+
+            a{
+                padding: 10px 40px;
+                line-height: 60px;
+                text-decoration: none;
+                color: #666666;
+                transition: color 0.4s;
+
+                img{
+                    width: 20px;
+                    height: auto;
+                    margin: 12px;
+                    vertical-align: middle;
+                    margin-top: 6px;
+                }
+                &:hover{
+                    color: #000000;
+                }
+            }
+
+            &:first-of-type{
+                border-left: 1px solid #eee;
+            }
+        }
+
+        &.list--no-border{
+            li{
+                border: none !important;
+            }
+        }
+    }
+
+    a{
+        text-decoration: none;
+
+        &.button{
+            margin: 5px 30px 5px -20px;
+            line-height: 20px;
+            padding: 10px 20px;
+        }
+    }
+}
+
+
+/* ANIMATIONS */
+.animate--right-70{
+    margin-right: -70px;
+}
+.animate--left-0{
+    margin-left: 0px !important;
+}
+.animate--opacity-1{
+    opacity: 1 !important;
+}
+
+/* RESPONSIVE BEHAVIOUR */
+@media (max-width: 550px) {
+    .menu--secondary{
+        position: fixed;
+        display: inline-block;
+        left: 0px;
+        top: 0px;
+        background: #ffffff;
+        opacity: 0;
+        margin-left: -70px;
+        transition: all 0.2s;
     }
 }

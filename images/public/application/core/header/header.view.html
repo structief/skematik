@@ -1,6 +1,68 @@
-<nav class="navbar" ng-controller="HeaderController">
-	<div class="container">
-		<img src="https://icongram.jgog.in/feather/minus-square.svg?color=dddddd" style="float:left;margin:12px"></img>
-		<h6>Yay, this is a working version of Skematik!</h6>
+<nav class="navbar" ng-controller="HeaderController" ng-if="!hide">
+	<div class="row row--full-width" ng-if="!account">
+		<div class="six columns logo">
+			<a ui-sref="fe.landing" href="/">
+				<img src="https://icongram.jgog.in/feather/minus-square.svg?color=33C3F0" style="float:left;margin:12px"></img>
+				<h6><span class="hide--on-tablet">Yay, this is a working version of </span>Skematik<span class="hide--on-tablet">!</span></h6>
+			</a>
+			<a href="#" class="hide--after-mobile" style="float: right;padding: 16px 32px 12px 12px;margin-top: -4px;" ng-click="isMenuActive = !isMenuActive" ng-class="{'animate--right-70': isMenuActive}">
+				<img src="https://icongram.jgog.in/feather/menu.svg?color=dddddd"></img>
+			</a>
+		</div>
+		<div class="six columns menu--secondary" ng-class="{'hide--on-mobile': !isMenuActive, 'animate--left-0': isMenuActive, 'text--right': !isMenuActive, 'animate--opacity-1': isMenuActive}">
+			<ul class="list--no-border">
+				<li>
+					<a ui-sref="fe.login" href="/login">
+						Login
+					</a>
+				</li>
+				<li>
+					<a ui-sref="fe.register" href="/register" class="button">
+						Try for free
+					</a>
+				</li>
+			</ul>
+			<a href="#" class="hide--after-mobile" style="float: right;padding: 16px 12px 12px 12px;margin-top: -65px;" ng-click="isMenuActive = !isMenuActive" ng-class="{'animate--left-60': isMenuActive}">
+				<img src="https://icongram.jgog.in/feather/x.svg?color=dddddd"></img>
+			</a>
+		</div>
+	</div>
+	<div class="row row--full-width" ng-if="account">
+		<div class="two columns logo">
+			<img src="https://icongram.jgog.in/feather/minus-square.svg?color=33C3F0" style="float:left;margin:12px"></img>
+			<h6>Skematik</h6>
+		</div>
+		<div class="six columns">
+			<ul>
+				<li>
+					<a ui-sref="be.dashboard" href="/admin/dashboard">
+						<img src="https://icongram.jgog.in/feather/sidebar.svg?color=dddddd"></img>
+						Dashboard
+					</a>
+				</li>
+				<li>
+					<a ui-sref="be.participants" href="/admin/participants">
+						<img src="https://icongram.jgog.in/feather/users.svg?color=dddddd"></img>
+						Deelnemers
+					</a>
+				</li>
+				<li>
+					<a ui-sref="be.organisation" href="/admin/organisation">
+						<img src="https://icongram.jgog.in/feather/briefcase.svg?color=dddddd"></img>
+						Organisatie
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="four columns text--right">
+			<ul>
+				<li>
+					<a ui-sref="be.account" href="/admin/account" style="text-transform: capitalize;">
+						<img ng-src="https://ui-avatars.com/api/?background=33C3F0&color=fff&name={{account.givenName}}&size=80" alt="{{account.givenName}}" class="image--rounded"></img>
+						{{account.givenName}}
+					</a>
+				</li>
+			</ul>
+		</div>
 	</div>
 </nav>
