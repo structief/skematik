@@ -1,0 +1,37 @@
+<!-- Default: 404 page -->
+<section class="section__grid container align--vertical" ng-if="page == 404">
+	<div class="row padding--top-100">
+		<div class="six columns">
+			<h1><b>404</b><br/><small>We sincerely apologize.</small></h1>
+			<p>The page you are looking for is no longer here. Maybe it was never here in the first place. In any case, we are sorry you were sent on this wild goose chase, and have already taken steps to fry the person responsible.</p>
+			<p><a href="/" ui-sref="fe.landing" style="color:black;text-decoration: none;">> <b>Let's just go home</b></a></p>
+		</div>
+		<div class="six columns text--center">
+			<img src="https://icongram.jgog.in/feather/heart.svg?color=33C3F0&size=100"></img>
+		</div>
+	</div>
+</section>
+
+<section class="section__grid container" ng-repeat="block in page.blocks" ng-if="page !== 404">
+
+	<!-- Div: FAQ -->
+	<div class="row" ng-if="block.type == 'faq'">
+		<div class="twelve columns">
+			<h2>{{block.title}}</h2>
+			<ul class="accordeon__list">
+				<li ng-class="{'list__item--expanded': q.active}" ng-click="q.active = !q.active" ng-repeat="q in block.data track by $index">
+					<h1 class="select--none">{{q.question}}</h1>
+					<label class="select--none">{{q.label}}</label>
+					<p>{{q.answer}}</p>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- Div: status -->
+
+	<!-- Div: html -->
+	<div class="row" ng-if="block.type == 'html'">
+		<div class="twelve columns" ng-bind-html="block.data"></div>
+	</div>
+</section>

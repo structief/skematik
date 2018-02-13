@@ -1,22 +1,53 @@
-<h4>{{scheme.title}}</h4>
-<table class="u-full-width">
-	<thead>
-		<tr>
-			<td><i>Shiftnaam</i></td>
-			<td ng-repeat="header in scheme.headers">{{header}}</td>
-		</tr>
-	</thead>
-	<tbody>
-		<tr ng-repeat="row in scheme.rows" row="row" ng-show="scheme.rows">
-			<td>
-				{{row.name}}
-			</td>
-			<td ng-repeat="cell in row.cells" ng-click="showPopup(row, cell)" ng-class="{'cell--disabled': cell.current.length >= cell.max}">
-				{{cell.current.length}} / {{cell.max}} 
-			</td>
-
-		</tr>
-	</tbody>
-</table>
+<div class="container" ng-if="role !== 'view'">
+	<section class="row">
+		<div class="eight columns">
+			<h4>
+				{{scheme.title}}
+			</h4>
+		</div>
+	</section>
+</div>
+<section class="u--full-width scheme__wide scheme__public">
+	<div class="row padding--15 scheme__title">
+		<div class="two columns">
+			&nbsp;
+		</div>
+		<div class="one column text--center">
+			<a ng-click="previous()" ng-disabled="nav.min==0">
+				<img src="https://icongram.jgog.in/feather/chevron-left.svg?color=555555&size=14" alt="earlier"></img>
+			</a>
+		</div>
+		<!-- MAX EIGHT -->
+		<div class="one column text--center" ng-repeat="header in scheme.headers track by $index" ng-if="$index >= nav.min && $index < (nav.min+8)">
+			<span>{{header}}</span>
+		</div>
+		<div class="one column text--center">
+			<a ng-click="next()" ng-disabled="nav.min >= (scheme.cols.length-8)">
+				<img src="https://icongram.jgog.in/feather/chevron-right.svg?color=555555&size=14"></img>
+			</a>
+		</div>
+	</div>
+	<div class="row scheme__body" ng-repeat="row in scheme.rows" ng-show="scheme.rows">
+		<div class="two columns padding--15">
+			<span>
+				<b>{{row.name}}</b>
+			</span>
+		</div>
+		<div class="one column text--center">
+			{{nav.min == 0 ? '&nbsp;' : '...'}}
+		</div>
+		<div 
+			class="one column padding--15 text--center"
+			ng-class="{'cell--disabled': cell.current.length >= cell.max}"
+			ng-repeat="cell in row.cells track by $index" 
+			ng-click="showPopup(row, cell)"
+			ng-if="$index >= nav.min && $index < (nav.min+8)" >
+			{{cell.current.length}} / {{cell.max}} 
+		</div>
+		<div class="one column text--center">
+			{{nav.min >= (scheme.cols.length-8) ? '&nbsp;' : '...'}}
+		</div>
+	</div>
+</section>
 
 <skematik-popup></skematik-popup>

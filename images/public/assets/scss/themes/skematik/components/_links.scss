@@ -1,0 +1,17 @@
+.link--small{
+	font-size: 10pt;
+}
+.link--no-underline{
+	text-decoration: none;
+}
+
+.link--inactive{
+	color: #dddddd !important;
+}
+.link--active{
+	color: #333333 !important;
+}
+.link--disabled{
+	color: #dddddd !important;
+	cursor: not-allowed;
+}

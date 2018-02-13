@@ -5,6 +5,9 @@ _Easy task sheduling for events_
 Skematik is a tool to have participants take action in a certain event or thing, where you need them divided in groups. These can be shifts, games, positions, whatever you like. 
 
 ### How do I set this up?
+
+copy the config.template file to images/api/src/helpers/config.js
+
 If you're familiar with Docker (and we suggest you do, cause everything else might be some setup), it's as easy as following these steps:
 1) Run `npm install`, `bower install` & `gulp prod` in /public to make sure you have the right front-end files
 2) Run `docker-compose up --build` in root-folder

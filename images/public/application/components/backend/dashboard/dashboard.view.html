@@ -1,0 +1,45 @@
+<div class="container">
+	<section class="row">
+		<div class="eight columns">
+			<h4>My schemes</h4>
+		</div>
+		<div class="four colums">
+			<div class="text--right padding--10">
+				<i>Filter:</i>	
+				<a href="#" class="link--small link--no-underline" ng-class="{'link--active': filter.unpublished, 'link--inactive': !filter.unpublished}" ng-click="filter.unpublished = !filter.unpublished">Unpublished</a>
+				/
+				<a href="#" class="link--small link--no-underline" ng-class="{'link--active': filter.published, 'link--inactive': !filter.published}" ng-click="filter.published = !filter.published">Published</a>
+			</div>
+		</div>
+	</section>
+	<section class="row">
+		<div ng-repeat="scheme in schemes" ng-if="(scheme.published && filter.published) || (!scheme.published && filter.unpublished)">
+	        <div class="clearfix" ng-if="$index % 3 == 0"></div>
+			<div class="four columns box--white text--center scheme__box">
+				<a ui-sref="be.scheme({ schemeUuid: scheme.uuid })" href="backend/scheme/{{scheme.uuid}}" class="padding--40">
+					<img src="https://icongram.jgog.in/feather/grid.svg?color=82CC00" ng-if="scheme.currentParticipants <= scheme.maxParticipants*0.5"></img>
+					<img src="https://icongram.jgog.in/feather/grid.svg?color=FFA401" ng-if="scheme.currentParticipants > scheme.maxParticipants*0.5 && scheme.currentParticipants <= scheme.maxParticipants*0.75"></img>
+					<img src="https://icongram.jgog.in/feather/grid.svg?color=CC4635" ng-if="scheme.currentParticipants > scheme.maxParticipants*0.75 && scheme.currentParticipants <= scheme.maxParticipants*0.95"></img>
+					<img src="https://icongram.jgog.in/feather/grid.svg?color=dddddd" ng-if="scheme.currentParticipants >= scheme.maxParticipants"></img>
+					<h6>{{scheme.title}}</h6>
+					<div class="row row--close">
+						<div class="eight columns text--left">Participants:</div>
+						<div class="four columns text--right"><b>{{scheme.currentParticipants}}</b>/<i>{{scheme.maxParticipants}}</i></div>
+					</div>
+					<div class="row row--close">
+						<div class="eight columns text--left">Published:</div>
+						<div class="four columns text--right"><i>{{scheme.published}}</i></div>
+					</div>
+				</a>
+			</div>
+		</div>
+
+		<!-- Add a new scheme -->
+		<div class="four columns box--white text--center scheme__box">
+			<a ui-sref="be.scheme({ schemeUuid: 'new' })" href="backend/scheme/new" class="padding--40">
+				<img src="https://icongram.jgog.in/feather/plus-square.svg?color=dddddd"></img>
+				<h6>Add a new scheme</h6>
+			</a>
+		</div>
+	</section>
+</div>

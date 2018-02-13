@@ -1,0 +1,72 @@
+/* Larger than mobile */
+@media (min-width: 400px) {}
+
+/* Larger than phablet */
+@media (min-width: 550px) {
+	.hide--after-mobile{
+		display: none;
+	}
+}
+
+/* Larger than tablet */
+@media (min-width: 750px) {}
+
+/* Larger than desktop */
+@media (min-width: 1000px) {
+	.hide--after-tablet{
+		display: none;
+	}
+}
+
+/* Larger than Desktop HD */
+@media (min-width: 1200px) {}
+
+
+/* Smaller than mobile */
+@media (max-width: 400px) {}
+
+/* Smaller than phablet */
+@media (max-width: 550px) {
+	.hide--on-mobile{
+		display: none;
+	}
+}
+
+/* Smaller than tablet */
+@media (max-width: 750px) {}
+
+/* Smaller than desktop */
+@media (max-width: 1000px) {
+	.hide--on-tablet{
+		display: none;
+	}
+}
+
+/* Smaller than Desktop HD */
+@media (max-width: 1200px) {}
+
+
+
+
+
+/* SELECTION */
+.select--none {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+
+/* ANIMATION */
+@keyframes softSlideLeft {
+  0% {
+    transform: translateX(-10px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}

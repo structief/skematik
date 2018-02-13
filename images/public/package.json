@@ -2,8 +2,8 @@
   "name": "skematik-frontend",
   "version": "0.1.0",
   "v": {
-    "app": "0.1.0",
-    "build": "0.1.1-compile.8"
+    "app": "0.6.0",
+    "build": "0.6.1-compile.0"
   },
   "description": "Frontend for the Skematik application",
   "main": "index.html",

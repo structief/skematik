@@ -1,4 +1,17 @@
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
 body{
 	margin-top: 100px !important;
-	background-color: #f9f9f9 !important;
+	padding-bottom: 352px !important;
+	background-color: #f9f9f9 !important;  
+	position: relative;
+	min-height: 100%;
 }

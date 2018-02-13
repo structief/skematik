@@ -1,8 +1,14 @@
-<div class="alert alert--{{alert.type}} row" ng-class="{'alert--show': alert.show}">
-	<a href="#" ng-click="closeAlert()" class="icon--close">x</a>
-	<img ng-src="{{alert.icon}}" class="four columns">
-	<div class="eight columns">
-		<b>{{alert.title}}</b>
-		<p>{{alert.message}}</p>
+<div class="alert__group">
+	<div 
+		class="alert alert--{{alert.type}} row" 
+		ng-class="{'alert--show': alert.show}" 
+		ng-click="triggerClickCallback(alertId)"
+		ng-repeat="(alertId, alert) in alerts track by $index">
+		<a href="#" ng-click="closeAlert(alertId)" class="icon--close">x</a>
+		<img ng-src="{{alert.icon}}" class="four columns">
+		<div class="eight columns">
+			<b ng-bind-html="alert.title"></b>
+			<p ng-bind-html="alert.message"></p>
+		</div>
 	</div>
 </div>

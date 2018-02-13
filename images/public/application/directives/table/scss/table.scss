@@ -1,24 +1,26 @@
-table{
-	thead tr{
+.scheme__public{
+	.scheme__title{
 		background-color: #ffffff;
 
-		td{
+		.column, .columns{
 			font-weight: 600;
 		}
 	}
+	.scheme__body{
+		.column{
+			cursor: default;
 
-	td{
-		cursor: default;
-		
-		&.cell--disabled{
-			color: #cccccc;
-		}
 
-		&:first-of-type{
-			padding-left: 10px;
-		}
-		&:not(:first-of-type):not(.cell--disabled){
-			cursor: pointer;
+			&.cell--disabled{
+				color: #cccccc;
+			}
+
+			&:first-of-type{
+				padding-left: 10px;
+			}
+			&:not(:first-of-type):not(.cell--disabled){
+				cursor: pointer;
+			}
 		}
 	}
 }

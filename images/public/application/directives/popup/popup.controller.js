@@ -7,6 +7,7 @@ skematikControllers.controller('PopupController',["$scope", "$rootScope", "Schem
 		$scope.show.popup = true;
 		$scope.cell = data.cell;
 		$scope.row = data.row;
+		$scope.role = data.role;
 	});
 
 	$rootScope.$on('popup.hide', function(event, data) {

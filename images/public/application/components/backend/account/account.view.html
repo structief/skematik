@@ -1,0 +1,13 @@
+<section class="container">
+	<fieldset>
+		<legend>Personal information</legend>
+		<p>Your name: {{account.username}}</p>
+		<p>Your email: {{account.usermail}}</p>
+		<p>Your organisation: {{account.organisation}}</p>
+		<input 
+			class="button-secundary" 
+			type="button" 
+			value="Log out"
+			ng-click="logout()">
+	</fieldset>
+</section>

@@ -2,10 +2,26 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 	$scope.scheme = {
 		uuid: $scope.uuid
 	};
+	$scope.nav = {
+		min: 0
+	}
+	
+	// Functions
+	$scope.next = function(){
+		console.log($scope.nav.min);
+		if($scope.nav.min + 8 < $scope.scheme.cols.length){
+			$scope.nav.min++;
+		}
+	}
+	$scope.previous = function(){
+		if($scope.nav.min > 0){
+			$scope.nav.min--;
+		}
+	}
 
 	$scope.showPopup = function(row, cell){
-		if(cell.current.length < cell.max){
-			$rootScope.$broadcast('popup.show', {'row': row, 'cell': cell});
+		if(cell.current.length < cell.max || $scope.role == 'view'){
+			$rootScope.$broadcast('popup.show', {'row': row, 'cell': cell, 'role': $scope.role});
 		}else{
 			$rootScope.$broadcast('alert.show', {'title': "Sorry :(", 'message': "No seats left for this spot", type: 'error'}); 
 		}
@@ -42,8 +58,7 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 		});
 	});
 
-	//Fake data
-	SchemeFactory.get({uuid: $scope.scheme.uuid}, function(response){
+	SchemeFactory.getOne({uuid: $scope.scheme.uuid}, function(response){
 		if(response.status == 404){
 			//Scheme not found
 			$stateProvider.go('fe.entry');
@@ -53,4 +68,6 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 			$scope.scheme = response;
 		}
 	});
+
+
 }]);

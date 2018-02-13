@@ -4,7 +4,8 @@ skematikDirectives.directive('skematikTable', ["$rootScope", "SchemeFactory", fu
 		},
 		restrict: 'AEC',
 		scope: {
-			uuid: '='
+			uuid: '=',
+			role: '@'
 		},
 		templateUrl: 'application/directives/table/table.template.html',
 		controller: 'TableController'

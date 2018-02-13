@@ -1,16 +1,9 @@
 //This is probably not needed, but the compiler is flippin'
 $error-color: #dd342f;
 $warning-color: #ff5819;
-$info-color: #349bff;
+$info-color: #33C3F0;
 $success-color: #19b319;
 $lighten-factor: 40;
-
-.popup__form{
-	border: 1px solid #eeeeee;
-	padding: 40px;
-	text-align: center;
-	background-color: white;
-}
 
 .input--error{
 	border-color: $error-color !important;
@@ -26,4 +19,45 @@ $lighten-factor: 40;
 
 .input--success{
 	border-color: $success-color !important;
+}
+
+// BUTTONS
+.button__group{
+    padding: 0px;
+
+	a, button{
+	    display: inline-block;
+	    height: 38px;
+	    padding: 0 1rem;
+	    color: #555;
+	    text-align: center;
+	    font-size: 1.1rem;
+	    font-weight: 600;
+	    line-height: 38px;
+	    letter-spacing: .1rem;
+	    text-transform: uppercase;
+	    text-decoration: none;
+	    white-space: nowrap;
+	    background-color: transparent;
+	    border-radius: 4px;
+	    border: 1px solid #bbb;
+	    cursor: pointer;
+	    box-sizing: border-box;
+	    margin-left: -2px;
+	    margin-right: -3px;
+
+		&:first-child{
+			border-radius: 4px 0px 0px 4px;
+		}
+		&:last-child{
+			border-radius: 0px 4px 4px 0px;
+		}
+
+		&:hover{
+			color: #333;
+		    border-color: #888;
+		    outline: 0;
+		    z-index: 10;
+		}
+	}
 }
