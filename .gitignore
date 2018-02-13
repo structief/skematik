@@ -15,6 +15,7 @@ images/public/bower_components
 # Ignore minified files
 images/public/assets/css/minified
 images/public/assets/js/minified
+images/public/index.html
 images/server/src
 
 images/api/src/helpers/config.js
