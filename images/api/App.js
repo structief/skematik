@@ -14,6 +14,7 @@ const Roles = require('./src/Roles.js');
 const Participants = require('./src/Participants.js');
 const Auth = require('./src/Auth.js');
 const Seeder = require('./src/helpers/seeder.js')
+const Feedback = require("./src/Feedback.js");
 
 
 const app = express();
@@ -77,6 +78,7 @@ class App {
     new Roles().assignFields(app, this.pg);
     new Participants().assignFields(app, this.pg);
     new Seeder().assignFields(app, this.pg);
+    new Feedback().assignFields(app, this.pg);
 
     server.listen(PORT, () => {
       console.log(`server up and listening on ${PORT}`)
@@ -141,12 +143,10 @@ class App {
       table.uuid("uuid");
       table.uuid("organisation");
       table.json("roles");
-      table.string('username').notNullable();
       table.string('password').notNullable();
-      table.string("usermail").notNullable();
+      table.string("mail").notNullable();
       table.integer("status");
       table.string('given_name');
-      table.integer("status");
       table.string("family_name");
       table.timestamps(true, true);
     }).then(function() {
@@ -157,7 +157,7 @@ class App {
     await this.pg.schema.createTableIfNotExists('participants', function (table) {
       table.increments();
       table.uuid("uuid");
-      table.string("usermail").notNullable();
+      table.string("mail").notNullable();
       table.json("roles");
       table.string("code");
       table.integer("status")
@@ -189,6 +189,18 @@ class App {
       table.uuid('organisationID')
     }).then(function() {
       console.log("created roles")
+    });
+
+
+    await this.pg.schema.createTableIfNotExists('feedback', function (table) {
+      table.increments();
+      table.timestamps(true, true);
+      table.uuid("uuid");
+      table.string("feeling");
+      table.string("url");
+      table.string("user");
+    }).then(function() {
+      console.log("created feedback")
     });
   }
 }
