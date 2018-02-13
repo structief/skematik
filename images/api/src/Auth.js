@@ -101,7 +101,7 @@ class Auth {
             // TODO: add expires_at to body
             // 
 
-            res.send(200, token)
+            res.send(200, {"token": token})
 
 
           } else {
