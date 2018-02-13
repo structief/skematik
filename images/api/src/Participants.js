@@ -1,6 +1,4 @@
 const uuidV1 = require('uuid/v1');
-const jwt = require('jwt-simple');
-
 
 class Participants {
 
@@ -24,15 +22,21 @@ class Participants {
       })
     })
 
-    app.delete
+
     app.post('/participants', async (req, res, next) => {
-      const request = req.body;
-      for(let i = 0; i < request.participants.length; i++) {
-        const secret = "test";
-        const payload = { schema: request.participants[i].schema, user: request.participants[i].user };
-        request.participants[i]["token"] = jwt.encode(payload, secret);
-        request.participants[i]["uuid"] = uuidV1();
-        await pg("participants").insert(request.participants[i]).then(function() {
+
+      const roles = pg.select("uuid").table("roles").where({organisationID: req.body.organisationID, type: "PARTICIPANT"});
+      for(let i = 0; i < req.body.participants.length; i++) {
+        const el = req.body.participants[i];
+        const uuid1 = uuidV1();
+        await pg("participants").insert({
+          uuid: uuid1,
+          usermail: req.body.usermail,
+          roles: {roles: roles},
+          code: "",
+          status: "created",
+          organisationID: req.body.organisationID
+        }).then(function() {
           res.send(200)
         })
       }

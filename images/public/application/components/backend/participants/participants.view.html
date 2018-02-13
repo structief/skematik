@@ -66,18 +66,16 @@
 				Acties
 			</div>
 		</div>
-		<div class="twelve columns row table__row" ng-repeat="participant in participants" ng-if="filterParticipants(participant)" ng-class="{'table__row--focus': participant.status == -1}">
-			<div class="four columns">
-				<span ng-if="participant.status > -1">{{participant.mail}}</span>
-				<input type="text" ng-model="participant.mail" placeholder="participant@student.be" ng-if="participant.status == -1"/>
+		<div class="twelve columns row table__row" ng-repeat="participant in participants" ng-if="filterParticipants(participant)">
+			<div class="four columns text-overflow--ellipsis">
+				<span ng-if="participant.status > -1">{{participant.name}} <i style="font-size: 80%">({{participant.mail}})</i></span>
 			</div>
-			<div class="two columns" ng-class="{'u__top-bottom-padding--5': participant.status == -1}">
+			<div class="two columns">
 				<span ng-if="participant.status == 1">Actief</span>
 				<span ng-if="participant.status == 0">Inactief</span>
-				<span ng-if="participant.status == -1"><i>In bewerking</i></span>
 			</div>
-			<div class="three columns" ng-class="{'u__top-bottom-padding--5': participant.status == -1}">
-				<span ng-repeat="role in participant.roles">
+			<div class="three columns">
+				<span ng-repeat="role in participant.roles" class="text--lowercase">
 					{{role}}
 					<span ng-if="$index < participant.roles.length-1">, </span>
 				</span>
@@ -85,9 +83,9 @@
 					<i>Geen rollen</i>
 				</span>
 			</div>
-			<div class="three columns text--right" ng-class="{'u__top-bottom-padding--5': participant.status == -1}">
+			<div class="three columns text--right">
 				<ul class="list__horizontal" style="margin: -7px">
-					<li class="u__no-margin" ng-if="participant.status > -1">
+					<li class="u__no-margin">
 						<div class="u__dropdown">
 							<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
 								<img src="https://icongr.am/feather/users.svg?color=999999">
@@ -127,18 +125,6 @@
 							<img src="https://icongr.am/feather/minus-circle.svg?color=999999" alt="Deelnemer verwijderen">
 						</a>
 					</li>
-					<!-- Participant is being edited, cancel edit -->
-					<li class="u__no-margin" ng-if="participant.status == -1">
-						<a ng-click="cancelEditParticipant($index)" title="Wijziging annuleren">
-							<img src="https://icongr.am/feather/x.svg?color=bbbbbb" alt="Wijziging annuleren">
-						</a>
-					</li>
-					<!-- Participant is being edited, save it -->
-					<li class="u__no-margin" ng-if="participant.status == -1">
-						<a ng-click="saveParticipant($index)" title="Deelnemer toevoegen">
-							<img src="https://icongr.am/feather/check.svg?color=19b319" alt="Deelnemer toevoegen">
-						</a>
-					</li>
 				</ul>
 			</div>
 		</div>
@@ -151,3 +137,31 @@
 		To switch back to the list, click <a ng-click="system.import = false">here</a>.
 	</section>
 </div>
+<skematik-sidebar position="right" title="{{system.edit.index > -1 ? 'Deelnemer wijzigen' : 'Nieuwe deelnemer'}}" uuid="edit-participant">
+	<div class="row">
+		<div class="twelve columns">
+			<div class="input__group">
+				<label for="mail">Mail</label>
+				<input type="email" id="mail" ng-model="system.edit.user.mail" placeholder="mail@live.com" />
+			</div>
+			<div class="input__group">
+				<label for="status">Status</label>
+				<select ng-model="system.edit.user.status">
+					<option value="1">Actief</option>
+					<option value="0">Inactief</option>
+				</select>
+			</div>
+			<div class="input__group">
+				<label>Roles</label>
+				<div class="button__group button__group--white">
+					<a href="#" ng-repeat="role in system.roles" ng-click="toggleRole(system.edit.user.roles, role)" ng-class="{'button--active': inRoles(system.edit.user.roles, role)}">
+						{{role}}
+					</a>
+				</div>
+			</div>
+			<div class="input__group">
+				<button class="button button-white" ng-click="saveParticipant()">{{system.edit.index > -1 ? 'Wijziging opslaan' : 'Deelnemer bewaren'}}</button>
+			</div>
+		</div>
+	</div>
+</skematik-sidebar>

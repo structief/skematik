@@ -10,9 +10,11 @@ const Cells = require('./src/Cells.js');
 const Users = require('./src/Users.js');
 const Answers = require('./src/Answers.js');
 const Organisations = require('./src/Organisations.js');
+const Roles = require('./src/Roles.js');
 const Participants = require('./src/Participants.js');
 const Auth = require('./src/Auth.js');
 const Seeder = require('./src/helpers/seeder.js')
+const Feedback = require("./src/Feedback.js");
 
 
 const app = express();
@@ -64,7 +66,7 @@ class App {
         result["answers"] = r;
       })
 
-      res.send(result)``
+      res.send(result)
     })
 
     new Schema().assignFields(app, this.pg);
@@ -73,8 +75,10 @@ class App {
     new Users().assignFields(app, this.pg);
     new Answers().assignFields(app, this.pg);
     new Organisations().assignFields(app, this.pg);
+    new Roles().assignFields(app, this.pg);
     new Participants().assignFields(app, this.pg);
     new Seeder().assignFields(app, this.pg);
+    new Feedback().assignFields(app, this.pg);
 
     server.listen(PORT, () => {
       console.log(`server up and listening on ${PORT}`)
@@ -92,8 +96,9 @@ class App {
       table.json('rows');
       table.dateTime("opens");
       table.dateTime("closes");
-      table.string("creator");
+      table.uuid("creator");
       table.timestamps();
+      table.uuid('organisationID');
       table.integer('published')
     }).then(function() {
       console.log("created tables")
@@ -114,10 +119,8 @@ class App {
     await this.pg.schema.createTableIfNotExists('answers', function (table) {
       table.increments();
       table.uuid("cellID");
-      table.uuid("userID");
+      table.uuid("participantID");
       table.uuid("tableID");
-      table.string("username");
-      table.string("usermail");
       table.timestamps();
     }).then(function() {
       console.log("created answers")
@@ -125,9 +128,8 @@ class App {
 
     await this.pg.schema.createTableIfNotExists('organisations', function (table) {
       table.increments();
-      table.uuid("uuid");
-      table.string("name");
-      table.uuid("owner");
+      table.uuid("uuid").notNullable();
+      table.string("name").notNullable();
       table.string("mainPhone");
       table.string("mainAddress");
       table.string("billInfo");
@@ -136,50 +138,69 @@ class App {
       console.log("created organisations")
     });
 
-
     await this.pg.schema.createTableIfNotExists('users', function (table) {
       table.increments();
       table.uuid("uuid");
       table.uuid("organisation");
-      table.string('username').notNullable();
+      table.json("roles");
       table.string('password').notNullable();
-      table.string("usermail");
+      table.string("mail").notNullable();
+      table.integer("status");
+      table.string('given_name');
+      table.string("family_name");
       table.timestamps(true, true);
     }).then(function() {
       console.log("created users")
     });
 
-    await this.pg.schema.createTableIfNotExists('roles', function(table) {
-      table.increments();
-      table.uuid("uuid");
-      table.string('user');
-      table.string('role');
-      table.timestamps(true, true);
-    }).then(function() {
-        console.log('created roles')
-    })
 
     await this.pg.schema.createTableIfNotExists('participants', function (table) {
       table.increments();
       table.uuid("uuid");
-      table.uuid("user");
-      table.uuid("schema");
-      table.string("token");
-      table.dateTime("expires_on");
+      table.string("mail").notNullable();
+      table.json("roles");
+      table.string("code");
+      table.integer("status")
+      table.uuid("organisationID");
       table.timestamps(true, true);
     }).then(function() {
       console.log("created participants")
     });
 
-
     await this.pg.schema.createTableIfNotExists('tokens', function (table) {
       table.increments();
       table.timestamps(true, true);
       table.uuid("user");
-      table.string("token");
+      table.text("token", "longtext");
       table.dateTime("expires_on");
     }).then(function() {
       console.log("created tokens")
+    });
+
+    
+
+    await this.pg.schema.createTableIfNotExists('roles', function (table) {
+      table.increments();
+      table.timestamps(true, true);
+      table.uuid("uuid");
+      table.string("type");
+      table.string("short");
+      table.string("permissions");
+      table.uuid('organisationID')
+    }).then(function() {
+      console.log("created roles")
+    });
+
+
+    await this.pg.schema.createTableIfNotExists('feedback', function (table) {
+      table.increments();
+      table.timestamps(true, true);
+      table.uuid("uuid");
+      table.string("feeling");
+      table.string("url");
+      table.string("user");
+    }).then(function() {
+      console.log("created feedback")
     });
   }
 }
