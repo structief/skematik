@@ -81,7 +81,7 @@ class Schema {
       organisation: organisation["uuid"],
       roles: { roles: [ {"uuid": insertRolesOwner[0]},  {"uuid": insertRolesAdmin[0]}, ]},
       username: faker.internet.userName(),
-      usermail: faker.internet.email(),
+      mail: faker.internet.email(),
       password: cryptr.encrypt(standardPass),
       given_name: faker.name.firstName(),
       family_name: faker.name.lastName()
@@ -95,7 +95,7 @@ class Schema {
         organisation: organisation["uuid"],
         roles: { roles: [  {"uuid": insertRolesUser[0]}, ]},
         username: faker.internet.userName(),
-        usermail: faker.internet.email(),
+        mail: faker.internet.email(),
         password: cryptr.encrypt(standardPass),
         given_name: faker.name.firstName(),
         family_name: faker.name.lastName()
@@ -110,7 +110,7 @@ class Schema {
         organisation: organisation["uuid"],
         roles: { roles: [  {"uuid": insertRolesParticipant[0]}, ]},
         username: faker.internet.userName(),
-        usermail: faker.internet.email(),
+        mail: faker.internet.email(),
         password: cryptr.encrypt(standardPass),
         given_name: faker.name.firstName(),
         family_name: faker.name.lastName()

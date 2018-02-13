@@ -24,7 +24,6 @@ class Auth {
   assignFields(app, pg) {
 
     app.get('/tokenCheck/:token', async(req, res, next) => {
-      console.log(req.params.token)
       await this.verifyToken(pg, req.params.token, (check) => {
         console.log(check)
         if(check) {
@@ -40,13 +39,11 @@ class Auth {
       if(req.query.path.includes("/admin/")) {
         checkToken('000', pg, req.headers.authorization, async (user) => {
 
-          console.log(user);
           pg.select().table('users').where({ uuid: user.uuid }).then((data) => {
-            console.log(data)
             if(data.length > 0) {
               res.send({
                 username: data[0].username,
-                usermail: data[0].usermail,
+                mail: data[0].mail,
                 organisation: data[0].organisation
               })
             } else {
@@ -75,7 +72,6 @@ class Auth {
     app.post('/login',  async (req, res, next) => {
       pg.select().table("users").where({"username": req.body.username}).then( async (result) =>{
         if(result.length > 0) {
-          console.log(result[0].uuid)
           await pg.table('tokens').where( "user", result[0].uuid ).del()
 
           if(this.comparePass(req.body.password, result[0].password)) {
@@ -105,23 +101,9 @@ class Auth {
             // TODO: add expires_at to body
             // 
 
+            res.send(200, {"token": token})
 
-            pg.select().table("tokens").where({"token": token}).then((result2) => {
-              if (!result2.length  > 0) {
-                pg("tokens").insert({
-                  token: token,
-                  user: result[0].uuid
-                }).returning("id").then(() => {
-                  res.send({
-                    token: token
-                  })
-                })
-              } else {
-                res.send({
-                  token: result2[0].token
-                })
-              }
-            })
+
           } else {
             res.send(401, { message: "Password incorrect, try again", status: 401});
           }
@@ -168,7 +150,7 @@ class Auth {
         uuid: uuid,
         username: req.body.username,
         password: req.body.password,
-        usermail: req.body.usermail
+        mail: req.body.mail
       })
       .returning('*');
   }
