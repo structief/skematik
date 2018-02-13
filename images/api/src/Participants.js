@@ -30,42 +30,22 @@ class Participants {
 
 
     app.post('/participants', async (req, res, next) => {
-      if(req.headers.authorization) {
-        checkToken('777', pg, req.headers.authorization, async (user) => {
-          console.log("user", user)
-      
-          const roles = await pg.select("uuid").table("roles").where({organisationID: user.organisation.uuid, type: "PARTICIPANT"});
-          console.log("roles", roles)
-          for(let i = 0; i < req.body.participants.length; i++) {
-            const el = req.body.participants[i];
-            console.log("el", el)
-            if(el.uuid) {
-              await pg("participants").where({uuid: el.uuid}).update({
-                usermail: el.usermail,
-                name: el.name,
-                roles: {roles: roles[0]},
-                code: "",
-                status: el.status,
-                organisationID: user.organisationID
-              }).then(function() {
-                res.send(200)
-              })
-            } else {
-              const uuid1 = uuidV1();
-              await pg("participants").insert({
-                uuid: uuid1,
-                usermail: el.usermail,
-                name: el.name,
-                roles: {roles: roles[0]},
-                code: "",
-                status: el.status,
-                organisationID: user.organisationID
-              }).then(function() {
-                res.send(200)
-              })
-            }
-          }
-        }, res)
+
+
+      const roles = pg.select("uuid").table("roles").where({organisationID: req.body.organisationID, type: "PARTICIPANT"});
+      for(let i = 0; i < req.body.participants.length; i++) {
+        const el = req.body.participants[i];
+        const uuid1 = uuidV1();
+        await pg("participants").insert({
+          uuid: uuid1,
+          mail: req.body.mail,
+          roles: {roles: roles},
+          code: "",
+          status: "created",
+          organisationID: req.body.organisationID
+        }).then(function() {
+          res.send(200)
+        })
       }
     })
 
