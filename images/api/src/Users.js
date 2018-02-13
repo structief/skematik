@@ -1,5 +1,10 @@
 const uuidV1 = require('uuid/v1');
 const {checkToken} = require("./helpers/auth")
+const config = require('./helpers/config.js') 
+
+const Cryptr = require('cryptr'),
+    cryptr = new Cryptr(config.auth.secret);
+
 
 class Users {
 
@@ -15,9 +20,8 @@ class Users {
       if(req.headers.authorization) {
         checkToken('777', pg, req.headers.authorization, async (user) => {
 
-          const list = await pg.select(['roles', 'status', 'usermail', 'uuid', 'username']).table('users').where({'organisation': user.organisation.uuid});
+          const list = await pg.select(['roles', 'status', 'mail', 'uuid', 'username']).table('users').where({'organisation': user.organisation.uuid});
           const roles = await pg.select().table('roles').where({'organisationID': user.organisation.uuid});
-          console.log(roles);
           const searchable = {}
           for(let i = 0; i < roles.length; i++) {
             searchable[roles[i].uuid] = roles[i].type;
@@ -29,13 +33,9 @@ class Users {
             for(let j = 0; j<cur.length; j++) {
               index['roles'].push(searchable[cur[j].uuid])
             }
-
-            console.log(index)
-
             return index
           })
           res.send(list)
-          console.log("tested")
         }, res)
       } else {
         res.send(400)
@@ -47,7 +47,6 @@ class Users {
       await pg.select().table("users").then(function(r) {
         res.send(r)
       })
-      console.log("tested")
     })
 
 
@@ -73,6 +72,9 @@ class Users {
       request["uuid"] = uuidV1();
       const userRole = await pg("roles").select("uuid").where({ type: "USER", organisationID: req.body.organisation});
       request["roles"] = { roles: userRole }
+
+      request["password"] = cryptr.encrypt(req.body.password);
+
       await pg("users").insert(request).then(function() {
         res.send({ uuid: request['uuid']})
       })
