@@ -19,6 +19,7 @@
     <!-- Stylesheets -->
 	<link rel='stylesheet' id='fonts-style-css'  href='http://fonts.googleapis.com/css?family=Lato:300,300italic,700&v=dce7cb5599201696e2e1de6167d2bec4' type='text/css' media='all' />
 	<!-- inject:css -->
+	<link rel="stylesheet" href="/assets/css/minified/skematik_stylesheets.css">
 	<!-- endinject -->
     <base href="/">
 	</head>
@@ -30,7 +31,39 @@
         <skematik-feedback-box></skematik-feedback-box>
 	</body>
     <!-- head:js -->
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/bower_components/angular/angular.min.js"></script>
+    <script src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="/bower_components/angular-resource/angular-resource.min.js"></script>
+    <script src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="/bower_components/angular-jwt/dist/angular-jwt.min.js"></script>
     <!-- endinject -->
 	<!-- inject:js -->
+	<script src="/application/app.module.js"></script>
+	<script src="/application/app.settings.js"></script>
+	<script src="/application/factories/account.factory.js"></script>
+	<script src="/application/factories/interceptor.factory.js"></script>
+	<script src="/application/factories/scheme.factory.js"></script>
+	<script src="/application/core/footer/footer.controller.js"></script>
+	<script src="/application/core/header/header.controller.js"></script>
+	<script src="/application/directives/alert/alert.controller.js"></script>
+	<script src="/application/directives/alert/alert.directive.js"></script>
+	<script src="/application/directives/popup/popup.controller.js"></script>
+	<script src="/application/directives/popup/popup.directive.js"></script>
+	<script src="/application/directives/feedback-box/feedback-box.controller.js"></script>
+	<script src="/application/directives/feedback-box/feedback-box.directive.js"></script>
+	<script src="/application/directives/feedback-box/feedback-box.factory.js"></script>
+	<script src="/application/directives/table/table.controller.js"></script>
+	<script src="/application/directives/table/table.directive.js"></script>
+	<script src="/application/components/backend/dashboard/dashboard.controller.js"></script>
+	<script src="/application/components/backend/account/account.controller.js"></script>
+	<script src="/application/components/backend/login/login.controller.js"></script>
+	<script src="/application/components/backend/organisation/organisation.controller.js"></script>
+	<script src="/application/components/backend/participants/participants.controller.js"></script>
+	<script src="/application/components/backend/scheme/scheme.controller.js"></script>
+	<script src="/application/components/frontend/entry/entry.controller.js"></script>
+	<script src="/application/components/frontend/landing/landing.controller.js"></script>
+	<script src="/application/components/frontend/page/page.controller.js"></script>
+	<script src="/application/components/frontend/scheme/scheme.controller.js"></script>
 	<!-- endinject -->
 </html>

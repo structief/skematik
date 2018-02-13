@@ -1,4 +1,4 @@
-skematikControllers.controller('FeedbackBoxController',["$scope", "$rootScope", "$timeout", "$sce", "$location", function($scope, $rootScope, $timeout, $sce, $location) {
+skematikControllers.controller('FeedbackBoxController',["$scope", "$rootScope", "$timeout", "$sce", "$location", "FeedbackFactory", function($scope, $rootScope, $timeout, $sce, $location, FeedbackFactory) {
 	//Just get the reacted pages already
 	$scope.reactedTo = JSON.parse(localStorage.getItem('feedback'));
 	$scope.feedbackAvailableForThisPage = true;
@@ -39,15 +39,17 @@ skematikControllers.controller('FeedbackBoxController',["$scope", "$rootScope", 
 			'url': $location.url()
 		};
 
-		//Add this page to the localStorage
-		//Just a little check
-		if($scope.reactedTo == null){
-			$scope.reactedTo = {'urls': []};
-		}
-		$scope.reactedTo.urls.push($scope.success.url);
-		localStorage.setItem('feedback', JSON.stringify($scope.reactedTo));
-
-		//@TODO: send $scope.success to certain endpoit
+		//Send $scope.success to certain endpoint
+		FeedbackFactory.post({"feeling": $scope.success.name, "url": $scope.success.url}, function(response){
+			//Add this page to the localStorage
+			if($scope.reactedTo == null){
+				$scope.reactedTo = {'urls': []};
+			}
+			$scope.reactedTo.urls.push($scope.success.url);
+			localStorage.setItem('feedback', JSON.stringify($scope.reactedTo));
+		}, function(error){
+			//Do nothing, popup will show up again next time
+		});
 	}
 
 	$scope.dismissReaction = function(){
