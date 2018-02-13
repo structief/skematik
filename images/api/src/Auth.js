@@ -23,17 +23,6 @@ class Auth {
 
   assignFields(app, pg) {
 
-    app.get('/tokenCheck/:token', async(req, res, next) => {
-      await this.verifyToken(pg, req.params.token, (check) => {
-        console.log(check)
-        if(check) {
-          res.send(check)
-        } else {
-          res.sendStatus(401)
-        }
-      })
-    })
-
     app.get('/me', async (req, res, next) => {
       // return name, org, and image url
       if(req.query.path.includes("/admin/")) {
@@ -42,7 +31,7 @@ class Auth {
           pg.select().table('users').where({ uuid: user.uuid }).then((data) => {
             if(data.length > 0) {
               res.send({
-                username: data[0].username,
+                mail: data[0].mail,
                 mail: data[0].mail,
                 organisation: data[0].organisation
               })
@@ -70,7 +59,7 @@ class Auth {
     })
 
     app.post('/login',  async (req, res, next) => {
-      pg.select().table("users").where({"username": req.body.username}).then( async (result) =>{
+      pg.select().table("users").where({"mail": req.body.mail}).then( async (result) =>{
         if(result.length > 0) {
           await pg.table('tokens').where( "user", result[0].uuid ).del()
 
@@ -89,7 +78,7 @@ class Auth {
 
             const token = jwt.encode(
               { 
-                username: req.body.username,
+                mail: req.body.mail,
                 givenName: result[0][ 'given_name'],
                 familyName: result[0][ 'family_name'],
                 roles: roles,
@@ -108,7 +97,7 @@ class Auth {
             res.send(401, { message: "Password incorrect, try again", status: 401});
           }
         } else {
-          res.send(401, { message: "Username not recognized in the system", status: 401});
+          res.send(401, { message: "mail not recognized in the system", status: 401});
         }
       })
 
@@ -123,12 +112,10 @@ class Auth {
     })
 
     app.post('/register',  async (req, res, next) => {
-      const result = {};
-
-      this.createUser(req, pg).then((result) => {
-        res.send(result)
+      await this.createUser(req, pg).then((result) => {
+        res.send(200)
       }).catch((error) => {
-        res.send(error)
+        res.send(400, error)
       })
     })
   }
@@ -140,19 +127,60 @@ class Auth {
   }
 
 
-  createUser (req, pg) {
-    console.log("body?", req.body)
-    const pswd = cryptr.encrypt(req.body.password);
-    console.log(req.body)
+  async createUser (req, pg) {
+
     const uuid = uuidV1();
-    return pg('users')
+
+    const request = {};
+
+    request["uuid"] = uuidV1();
+    request["name"] = req.body.organisation;
+    request["created_at"] = new Date()
+    request["updated_at"] = new Date()
+
+
+    const insert1 =  await pg("organisations").insert(request).returning("uuid");
+    const insertRolesOwner = await pg("roles").insert({
+      uuid: uuidV1(),
+      organisationID: request["uuid"],
+      type: "OWNER",
+      short: "owner of the organisation",
+      permissions: "777"
+     }).returning("uuid");
+    const insertRolesAdmin = await pg("roles").insert({
+      uuid: uuidV1(),
+      organisationID: request["uuid"],
+      type: "ADMIN",
+      short: "admin of the organisation",
+      permissions: "777"
+     }).returning("uuid")
+    const insertRolesUser = await pg("roles").insert({
+      uuid: uuidV1(),
+      organisationID: request["uuid"],
+      type: "USER",
+      short: "user of the organisation",
+      permissions: "300"
+    })
+    const insertRolesParticipant = await pg("roles").insert({
+      uuid: uuidV1(),
+      organisationID: request["uuid"],
+      type: "PARTICIPANT",
+      short: "participant of the organisation",
+      permissions: "300"
+    })
+    console.log('insert 1', insert1, insertRolesOwner)
+
+    return await pg('users')
       .insert({
         uuid: uuid,
-        username: req.body.username,
-        password: req.body.password,
-        mail: req.body.mail
-      })
-      .returning('*');
+        password: cryptr.encrypt(req.body.account.password),
+        mail: req.body.account.mail,
+        organisation: insert1[0],
+        given_name: req.body.account.givenName,
+        family_name: req.body.account.familyName,
+        roles: { roles: [{uuid: insertRolesOwner[0]}]}
+      }).returning('uuid')
+    
   }
 }
 
