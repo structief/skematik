@@ -96,7 +96,7 @@
 				<b>Email</b>
 			</div>
 			<div class="three columns">
-				<b>Status</b>
+				<b>Created at</b>
 			</div>
 			<div class="four columns">
 				<b>Actions</b>
@@ -104,10 +104,10 @@
 		</div>
 		<div class="row" ng-repeat="subscription in active.cell.current">
 			<div class="five columns">
-				{{subscription.usermail}}
+				{{subscription.participant}}
 			</div>
 			<div class="three columns">
-				???
+				{{subscription.created_at}}
 			</div>
 			<div class="four columns">
 				Some actions

@@ -13,7 +13,7 @@ skematikFactories.factory('SchemeFactory',["$resource", "$location", function($r
     },
     participate: {
       method: 'POST',
-      isArray: true,
+      isArray: false,
       params: {
         type: "answer"
       },
