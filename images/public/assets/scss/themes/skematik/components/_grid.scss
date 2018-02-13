@@ -1,6 +1,7 @@
 // CRAZY GRID STUFF
 .u--full-width{
-	width: 90vw; //90% of total viewport
+	width: auto;
+	max-width: 90vw; //90% of total viewport
 	margin: 0 auto;
 }
 
