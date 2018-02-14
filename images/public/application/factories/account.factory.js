@@ -13,6 +13,7 @@ skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", "$r
             },
             login: {
                 method: "POST",
+                isArray: false,
                 params: {
                     type: "login",
                 },
