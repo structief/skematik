@@ -6,7 +6,7 @@ Skematik is a tool to have participants take action in a certain event or thing,
 
 ### How do I set this up?
 
-0) Copy the config.template file to images/api/src/helpers/config.js, and add a passphrase that suits you best
+0) Copy the config.template file to images/api/src/helpers/config.js, and add a passphrase that suits you best (something with 'horses' or alike)
 
 If you're familiar with Docker (and we suggest you do, cause everything else might be some setup), it's as easy as following these steps:
 1) Run `npm install`, `bower install` & `gulp prod` in /public to make sure you have the right front-end files
