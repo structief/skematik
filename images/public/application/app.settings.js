@@ -172,8 +172,6 @@ skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFac
 
     //On login, redirect automatically to /dashboard
     $rootScope.$on("account.login", function(data){
-    	console.log("User logged in");
-    	console.info(data);
 		$stateProvider.go('be.dashboard');
 		$rootScope.isAuthenticated = true;
     });
@@ -181,8 +179,6 @@ skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFac
     //On logout, redirect automatically to homepage
     $rootScope.$on("account.logout", function(data){
 		$stateProvider.go('fe.landing');
-    	console.log("User logged out");
-    	console.info(data);
         $rootScope.isAuthenticated = false;
     });
 

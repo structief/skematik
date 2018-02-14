@@ -1,5 +1,5 @@
 //Account factory
-skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", "$rootScope", function($resource, $q, $location, $rootScope) {
+skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", "$rootScope", "jwtHelper", function($resource, $q, $location, $rootScope, jwtHelper) {
     var account, host = $location.host();
     return {
         api: $resource('http://' + host + ':3000/:type', {type: "@type"}, {
@@ -68,7 +68,7 @@ skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", "$r
                 if(data.$status == 200){
                     //Save jwt-token in local storage
                     localStorage.setItem("jwt-token", data.token);
-                    wrapper.setAccount(account);
+                    wrapper.setAccount(jwtHelper.decodeToken(data.token));
                     $rootScope.$broadcast('account.login', {account: wrapper.getAccount()});
                     $rootScope.isAuthenticated = true;
                 }
