@@ -21,7 +21,7 @@
 						<input class="u-full-width input--with-feedback" type="email" ng-model="user.mail" placeholder="E-mailadres" id="mail" required>
 						<span class="input__feedback" data-text-invalid="Da's geen geldig e-mailadres hoor" data-text-empty="Wat is je e-mailadres?" data-text-valid="Check." data-text-wrong="Err. Heb je hiermee geregistreerd?"></span>
 						<label for="password">Wachtwoord</label>
-						<input class="u-full-width input--with-feedback" type="password" ng-model="user.password" placeholder="Wachtwoord" id="password" pattern=".{4,}" required>
+						<input class="u-full-width input--with-feedback" type="password" ng-model="user.password" placeholder="Wachtwoord" id="password" pattern=".{4,}" required ng-keypress="possibleSubmit($event)">
 						<span class="input__feedback" data-text-invalid="Nogal kort voor een wachtwoord, niet?" data-text-empty="Geef je superveilige wachtwoord in!" data-text-valid="Goodie, dit kan het zijn!" data-text-wrong="Nee, 't is toch mis."></span>
 						<button class="button-white button" ng-click="login()">Aanmelden</button>
 						<!--<a href="#" ng-click="toStep(2)" class="float--right"><i>Wachtwoord vergeten?</i></a>-->

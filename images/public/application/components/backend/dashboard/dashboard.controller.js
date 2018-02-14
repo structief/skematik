@@ -9,6 +9,8 @@ skematikControllers.controller('BeDashboardController',["$scope", "$state", "$st
 	//Load schemes from be
 	SchemeFactory.get({}, function(response){
 		$scope.schemes = response;
+	}, function(error){
+		//Could be: uauthorized
 	})
 
 	//View functions
