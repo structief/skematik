@@ -151,7 +151,7 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 	        }
 	        return localStorage.getItem('jwt-token');
 		}],
-		whiteListedDomains: ['api.skematik.io', 'localhost', 'skematik.localhost'],
+		whiteListedDomains: ['api.skematik.io', 'localhost', 'skematik.localhost', 'skematik.online', '146.185.161.104'],
 		unauthenticatedRedirectPath: '/login'
     });
 

@@ -24,6 +24,12 @@ skematikControllers.controller('LoginController',["$scope", "$state", "$statePar
 		$scope.wizard.step.active = integer;
 	}
 
+	$scope.possibleSubmit = function(event){
+		if(event.keyCode == 13){
+			$scope.login();
+		}
+	}
+
 	//Watch input fields, remove "wrong"-class on edit
 	$scope.$watch('user.username', function() {
        $("input[ng-model='user.username']").removeClass("ng-wrong");
