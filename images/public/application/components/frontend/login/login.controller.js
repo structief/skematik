@@ -1,6 +1,6 @@
 skematikControllers.controller('LoginController',["$scope", "$state", "$stateParams", "AccountFactory", function($scope, $stateProvider, $stateParams, AccountFactory) {
 	$scope.user = {
-		username: null,
+		mail: null,
 		password: null
 	};
 
@@ -31,7 +31,7 @@ skematikControllers.controller('LoginController',["$scope", "$state", "$statePar
 	}
 
 	//Watch input fields, remove "wrong"-class on edit
-	$scope.$watch('user.username', function() {
-       $("input[ng-model='user.username']").removeClass("ng-wrong");
+	$scope.$watch('user.mail', function() {
+       $("input[ng-model='user.mail']").removeClass("ng-wrong");
     });
 }]);
