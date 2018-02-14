@@ -7,5 +7,4 @@ cp -R ./public/assets/ ./server/src/
 cp -R ./public/application/ ./server/src/application/
 
 cd ../
-docker-compose build
-docker-compose up
+docker-compose up --build -d
