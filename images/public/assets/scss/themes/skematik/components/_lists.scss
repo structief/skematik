@@ -135,3 +135,19 @@ ul.accordeon__list{
 		}
 	}
 }
+
+ul.vertical-list--bordered{
+	li{
+		border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+		padding-bottom: 5px;
+
+		&:first-of-type{
+			font-weight: 700;
+			padding-bottom: 10px;
+			border-color: rgba(255, 255, 255, 1);
+		}
+		&:not(:first-of-type){
+			padding-left: 10px;
+		}
+	}
+}
