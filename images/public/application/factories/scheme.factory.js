@@ -22,6 +22,10 @@ skematikFactories.factory('SchemeFactory',["$resource", "$location", function($r
     update: {
       method: 'PUT',
       isArray: true
+    },
+    create: {
+      method: 'POST',
+      isArray: true
     }
   });
 }]);
