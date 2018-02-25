@@ -1,7 +1,7 @@
 <div class="container">
 	<section class="row help-box help-box--info">
 		<div class="one column">
-			<img src="https://icongram.jgog.in/feather/plus-square.svg?color=33C3F0" alt="icon">
+			<img src="https://icongr.am/feather/plus-square.svg?color=33C3F0" alt="icon">
 		</div>
 		<div class="eleven columns">
 			<b>Here's a tip!</b>
@@ -40,10 +40,10 @@
 	        <div class="clearfix" ng-if="$index % 3 == 0"></div>
 			<div class="four columns box--white text--center scheme__box">
 				<a ui-sref="be.scheme({ schemeUuid: scheme.uuid })" href="backend/scheme/{{scheme.uuid}}" class="padding--40">
-					<img src="https://icongram.jgog.in/feather/grid.svg?color=82CC00" ng-if="scheme.currentParticipants <= scheme.maxParticipants*0.5"></img>
-					<img src="https://icongram.jgog.in/feather/grid.svg?color=FFA401" ng-if="scheme.currentParticipants > scheme.maxParticipants*0.5 && scheme.currentParticipants <= scheme.maxParticipants*0.75"></img>
-					<img src="https://icongram.jgog.in/feather/grid.svg?color=CC4635" ng-if="scheme.currentParticipants > scheme.maxParticipants*0.75 && scheme.currentParticipants <= scheme.maxParticipants*0.95"></img>
-					<img src="https://icongram.jgog.in/feather/grid.svg?color=dddddd" ng-if="scheme.currentParticipants >= scheme.maxParticipants"></img>
+					<img src="https://icongr.am/feather/grid.svg?color=82CC00" ng-if="scheme.currentParticipants <= scheme.maxParticipants*0.5"></img>
+					<img src="https://icongr.am/feather/grid.svg?color=FFA401" ng-if="scheme.currentParticipants > scheme.maxParticipants*0.5 && scheme.currentParticipants <= scheme.maxParticipants*0.75"></img>
+					<img src="https://icongr.am/feather/grid.svg?color=CC4635" ng-if="scheme.currentParticipants > scheme.maxParticipants*0.75 && scheme.currentParticipants <= scheme.maxParticipants*0.95"></img>
+					<img src="https://icongr.am/feather/grid.svg?color=dddddd" ng-if="scheme.currentParticipants >= scheme.maxParticipants"></img>
 					<h6>{{scheme.title}}</h6>
 					<div class="row row--close">
 						<div class="eight columns text--left">Participants:</div>
@@ -60,7 +60,7 @@
 		<!-- Add a new scheme -->
 		<div class="four columns box--white text--center scheme__box">
 			<a ui-sref="be.scheme({ schemeUuid: 'new' })" href="backend/scheme/new" class="padding--40">
-				<img src="https://icongram.jgog.in/feather/plus-square.svg?color=dddddd"></img>
+				<img src="https://icongr.am/feather/plus-square.svg?color=dddddd"></img>
 				<h6>Add a new scheme</h6>
 			</a>
 		</div>
