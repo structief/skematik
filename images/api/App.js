@@ -157,7 +157,7 @@ class App {
     await this.pg.schema.createTableIfNotExists('participants', function (table) {
       table.increments();
       table.uuid("uuid");
-      table.string("usermail").notNullable();
+      table.string("mail").notNullable();
       table.string("name");
       table.json("roles");
       table.string("code");
