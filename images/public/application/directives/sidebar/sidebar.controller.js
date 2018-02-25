@@ -1,4 +1,4 @@
-skematikControllers.controller('SidebarController',["$scope", "$rootScope", "$sce", function($scope, $rootScope, $sce) {
+skematikControllers.controller('SidebarController',["$scope", "$rootScope", "$sce", "hotkeys", function($scope, $rootScope, $sce, hotkeys) {
 	$scope.open = false;
 
 	$rootScope.$on("sidebar.open", function(event, data){
@@ -6,14 +6,18 @@ skematikControllers.controller('SidebarController',["$scope", "$rootScope", "$sc
 			if(data.uuid == $scope.uuid){
 				$scope.open = true;
 			}else{
-				console.log("UUID not recognized, own uuid is: " + $scope.uuid);
+				console.log("UUID not recognized, own uuid is: " + $scope.uuid + " <-> " + data.uuid);
 			}
 		}else{
 			$scope.open = true;
 		}
 	});
+
 	$rootScope.$on("sidebar.close", function(event, data){
-		if(data.uuid !== undefined){
+		if(data.force){
+			//Force all sidebars to close
+			$scope.open = false;
+		}else if(data.uuid !== undefined){
 			if(data.uuid == $scope.uuid){
 				$scope.open = false;
 			}
@@ -32,4 +36,12 @@ skematikControllers.controller('SidebarController',["$scope", "$rootScope", "$sc
 	}
 
 	//Capture "escape" button
+	hotkeys.bindTo($scope).add({
+      combo: 'esc',
+      description: 'Close sidebar on Escape',
+      callback: function() {
+      	$rootScope.$broadcast('sidebar.close', {uuid: $scope.uuid, "force": true});
+      }
+    });
+
 }]);
