@@ -199,7 +199,7 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 
 		if($scope.scheme.uuid == 'new'){
 			//Do a post to save it, and store the response
-			SchemeFactory.post({scheme: $scope.scheme}, function(response){
+			SchemeFactory.create({scheme: $scope.scheme}, function(response){
 				$scope.scheme = response;
 
 				//Show alert
