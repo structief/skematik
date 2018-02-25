@@ -99,7 +99,7 @@ class Auth {
         } else {
           res.send(401, { message: "Mail not recognized in the system", status: 401, field: "mail"});
         }
-      })
+      }).catch(() => { res.send(500)})
 
     })
 
