@@ -29,6 +29,11 @@ $lighten-factor: 40;
 		margin-bottom: 0px;
 	}
 	a.icon--close{
+	    float: right;
+	    margin-top: -10px;
+	    margin-right: -20px;
+	    text-decoration: none;
+	    
 		&:hover{
 			background: none;
 			color: inherit;
