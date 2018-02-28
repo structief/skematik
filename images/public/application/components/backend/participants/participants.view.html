@@ -41,7 +41,7 @@
 							<li class="u__dropdownmenu--header">Rollen</li>
 							<li ng-repeat="role in system.roles" ng-click="toggleRole(filter.roles, role)">
 								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="inRoles(filter.roles, role)">
-								{{role}}
+								{{role.type}}
 							</li>
 						</ul>
 					</div>
@@ -66,9 +66,9 @@
 				Acties
 			</div>
 		</div>
-		<div class="twelve columns row table__row" ng-repeat="participant in participants" ng-if="filterParticipants(participant)">
+		<div class="twelve columns row table__row" ng-repeat="participant in participants" ng-if="filterParticipants(participant)" ng-class="{'table__row--inactive': participant.status < 1}">
 			<div class="four columns text-overflow--ellipsis">
-				<span ng-if="participant.status > -1">{{participant.name}} <i style="font-size: 80%">({{participant.mail}})</i></span>
+				<span ng-if="participant.status > -1">{{participant.mail}}</span>
 			</div>
 			<div class="two columns">
 				<span ng-if="participant.status == 1">Actief</span>
@@ -76,7 +76,7 @@
 			</div>
 			<div class="three columns">
 				<span ng-repeat="role in participant.roles" class="text--lowercase">
-					{{role}}
+					{{role.type}}
 					<span ng-if="$index < participant.roles.length-1">, </span>
 				</span>
 				<span ng-if="participant.roles.length == 0">
@@ -93,9 +93,9 @@
 							<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px;text-align: left;">
 								<ul>
 									<li class="u__dropdownmenu--header">Toggle role</li>
-									<li ng-repeat="role in system.roles" ng-click="toggleRole(participant.roles, role)">
+									<li ng-repeat="role in system.roles" ng-click="editRoles(participant, role)">
 										<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="inRoles(participant.roles, role)">
-										{{role}}
+										{{role.type}}
 									</li>
 								</ul>
 							</div>
@@ -103,7 +103,7 @@
 					</li>
 					<!-- Participant is active, deactivate it -->
 					<li class="u__no-margin" ng-if="participant.status == 1">
-						<a ng-click="participant.status = !participant.status" title="Deelnemer deactiveren">
+						<a ng-click="editStatus(participant, 0)" title="Deelnemer deactiveren">
 							<img src="https://icongr.am/feather/pause-circle.svg?color=999999" alt="Deelnemer deactiveren">
 						</a>
 					</li>
@@ -115,7 +115,7 @@
 					</li>
 					<!-- Participant is inactive, activate it -->
 					<li class="u__no-margin" ng-if="participant.status == 0">
-						<a ng-click="participant.status = !participant.status" title="Deelnemer activeren">
+						<a ng-click="editStatus(participant, 1)" title="Deelnemer activeren">
 							<img src="https://icongr.am/feather/play-circle.svg?color=999999" alt="Deelnemer activeren">
 						</a>
 					</li>
@@ -139,23 +139,22 @@
 </div>
 <skematik-sidebar position="right" title="{{system.edit.index > -1 ? 'Deelnemer wijzigen' : 'Nieuwe deelnemer'}}" uuid="edit-participant">
 	<div class="row">
-		<div class="twelve columns">
+		<div class="twelve columns wizard">
 			<div class="input__group">
 				<label for="mail">Mail</label>
-				<input type="email" id="mail" ng-model="system.edit.user.mail" placeholder="mail@live.com" />
+				<input class="u-full-width input--with-feedback" type="email" id="mail" ng-model="system.edit.user.mail" placeholder="mail@live.com" required />
+				<span class="input__feedback" data-text-invalid="Da's geen geldig e-mailadres" data-text-empty="Wat is het e-mailadres?" data-text-valid="Check."></span>
 			</div>
 			<div class="input__group">
 				<label for="status">Status</label>
-				<select ng-model="system.edit.user.status">
-					<option value="1">Actief</option>
-					<option value="0">Inactief</option>
+				<select ng-options="i.value as i.label for i in system.status" ng-model="system.edit.user.status">
 				</select>
 			</div>
 			<div class="input__group">
 				<label>Roles</label>
 				<div class="button__group button__group--white">
 					<a href="#" ng-repeat="role in system.roles" ng-click="toggleRole(system.edit.user.roles, role)" ng-class="{'button--active': inRoles(system.edit.user.roles, role)}">
-						{{role}}
+						{{role.type}}
 					</a>
 				</div>
 			</div>
