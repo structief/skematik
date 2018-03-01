@@ -56,76 +56,70 @@ class Schema {
 
       if(req.headers.authorization) {
         // TODO: check if token exists
-        checkToken(pg, req.headers.authorization, async (result) => {
-          console.log(result)
-          if(result.length > 0) {
-            const request = {};
+        checkToken('777', pg, req.headers.authorization, async (user) => {
+          const request = {};
 
-            request["updated_at"] = new Date();
-            if(req.body.headers) {
-              request["headers"] = req.body.headers.reduce(function(result, item, index, array) {
-                result[item] = index; //a, b, c
-                return result;
-              }, {}) ;
-            }
+          request["updated_at"] = new Date();
+          if(req.body.headers) {
+            request["headers"] = req.body.headers.reduce(function(result, item, index, array) {
+              result[item] = index; //a, b, c
+              return result;
+            }, {}) ;
+          }
 
-            if(req.body.title) {
-              request['title'] = req.body.title;
-            }
+          if(req.body.title) {
+            request['title'] = req.body.title;
+          }
 
-            if(req.body.rows) {
-              request['rows'] = req.body.rows.reduce(function(result, item, index, array) {
-                result[item.name] = index; //a, b, c
-                return result;
-              }, {}) 
-            }
+          if(req.body.rows) {
+            request['rows'] = req.body.rows.reduce(function(result, item, index, array) {
+              result[item.name] = index; //a, b, c
+              return result;
+            }, {}) 
+          }
 
-            if(req.body.published) {
-              request['published'] = req.body.published
-            }
-            if(req.body.opens) {
-              request['opens'] = req.body.opens
-            }
-            if(req.body.closes) {
-              request['closes'] = req.body.closes
-            }
+          if(req.body.published) {
+            request['published'] = req.body.published
+          }
+          if(req.body.opens) {
+            request['opens'] = req.body.opens
+          }
+          if(req.body.closes) {
+            request['closes'] = req.body.closes
+          }
 
 
-            const id = await pg("schema").update(request).where({uuid: req.params.uuid}).returning('id');
+          const id = await pg("schema").update(request).where({uuid: req.params.uuid}).returning('id');
 
-            if(req.body.rows) {
-              for(let i = 0; i < req.body.rows.length; i++) {
-                for(let j = 0; j < req.body.rows[i].cells.length; j++) {
-                  if(req.body.rows[i].cells[j].uuid) {
-                    const obj = {
-                      max: req.body.rows[i].cells[j].max
-                    }
-                    await pg("cells").update(obj).where({uuid: req.body.rows[i].cells[j].uuid});
-                  } else {
-                    const obj = {
-                      tableID: id[0],
-                      col: req.body.headers[j],
-                      row: req.body.rows[i].name,
-                      max: req.body.rows[i].cells[j].max,
-                      current: 0,
-                      uuid: uuidV1()
-                    }
-                    await pg("cells").insert(obj);
+          if(req.body.rows) {
+            for(let i = 0; i < req.body.rows.length; i++) {
+              for(let j = 0; j < req.body.rows[i].cells.length; j++) {
+                if(req.body.rows[i].cells[j].uuid) {
+                  const obj = {
+                    max: req.body.rows[i].cells[j].max
                   }
+                  await pg("cells").update(obj).where({uuid: req.body.rows[i].cells[j].uuid});
+                } else {
+                  const obj = {
+                    tableID: id[0],
+                    col: req.body.headers[j],
+                    row: req.body.rows[i].name,
+                    max: req.body.rows[i].cells[j].max,
+                    current: 0,
+                    uuid: uuidV1()
+                  }
+                  await pg("cells").insert(obj);
                 }
               }
             }
-
-            await pg('schema').select('*').where({uuid: req.params.uuid}).then((data) => {
-              res.send(data)
-            }).catch(() => {
-              res.send('401', 'could not fetch')
-            })
-          } else {
-            res.send(401, {status: 401, message: "token not found"})
           }
-        })
 
+          await pg('schema').select('*').where({uuid: req.params.uuid}).then((data) => {
+            res.send(data)
+          }).catch(() => {
+            res.send('401', 'could not fetch')
+          })
+        }, res)
       } else {
         res.sendStatus(401);
       }
