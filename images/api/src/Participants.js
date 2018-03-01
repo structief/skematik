@@ -30,44 +30,6 @@ class Participants {
       }
     })
 
-    app.post('/participants/upload', upload.single("participants"), async (req, res, next) => {
-      if(req.headers.authorization) {
-        checkToken('777', pg, req.headers.authorization, async (user) => {
-          console.log(req.file)
-
-          var filePath = req.file.path;
-          console.log(filePath);
-
-          const roles = await pg.select("uuid").table("roles").where({organisationID: user.organisation.uuid, type: "PARTICIPANT"})
-
-          async function onNewRecord(record) {
-            const data = record;
-            record["organisationID"] = user.organisation.uuid;
-            record["roles"] = JSON.stringify(roles);
-            record["uuid"] = uuidV1();
-            await pg.insert(data).table("participants").returning("*").then((res) => {
-              
-            })
-          }
-
-          function onError(error){
-              // console.log(error)
-              res.send(400);
-          }
-
-          function done(linesRead){
-              res.send(200, {records: linesRead})
-          }
-
-          var columns = true; 
-          this.parseCSVFile(filePath, columns, onNewRecord, onError, done);  
-          
-        }, res)
-      }else{
-        res.sendStatus(401);
-      }
-    })
-
     app.delete('/participants/:participantsID', async (req, res, next) => {
        //Is authorization present?
       if(req.headers.authorization) {
@@ -91,7 +53,12 @@ class Participants {
         //Check if user has necessary rights
         checkToken('777', pg, req.headers.authorization, async (user) => {
           //Lookup default role, just in case
-          const default_role = pg.select("uuid").table("roles").where({organisationID: user.organisation.uuid, type: "PARTICIPANT"});
+          var default_role = "", uuids = [];
+          await pg.select(["uuid", "type", "short"]).table("roles").where({organisationID: user.organisation.uuid, type: "PARTICIPANT"}).then(function(r) {
+            console.log(r);
+            default_role = r;
+          });
+
           for(let i = 0; i < req.body.participants.length; i++) {
             const participant = req.body.participants[i];
             //Participant should contain roles, but in case it doesn't, add the default role
@@ -113,9 +80,10 @@ class Participants {
               status: participant.status,
               organisationID: user.organisation.uuid
             }).then(function() {
-              res.status(200).send({uuid: uuid1});
+              uuids.push(uuid1);
             })
           }
+          res.status(200).send({uuid: uuids});
         }, res);
       }else{
         res.sendStatus(401);
@@ -161,30 +129,6 @@ class Participants {
       }
     });
   }
-
-  parseCSVFile(sourceFilePath, columns, onNewRecord, handleError, done){
-    var source = fs.createReadStream(sourceFilePath);
-    var linesRead = 0;
-    var parser = Parse({
-        delimiter: ',', 
-        columns:columns
-    });
-    parser.on("readable", function(){
-        var record;
-        while (record = parser.read()) {
-            linesRead++;
-            onNewRecord(record);
-        }
-    });
-    parser.on("error", function(error){
-        handleError(error)
-    });
-    parser.on("end", function(){
-        done(linesRead);
-    });
-    source.pipe(parser);
-  }
-
 }
 
 

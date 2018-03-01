@@ -135,6 +135,8 @@
 		This is the import view.
 
 		To switch back to the list, click <a ng-click="system.import = false">here</a>.
+		<input type="file" id="csv-file">
+		<button ng-click="submitCSV()">Submit</button>
 	</section>
 </div>
 <skematik-sidebar position="right" title="{{system.edit.index > -1 ? 'Deelnemer wijzigen' : 'Nieuwe deelnemer'}}" uuid="edit-participant">
