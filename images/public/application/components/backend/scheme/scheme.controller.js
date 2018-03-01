@@ -100,6 +100,7 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 		$scope.scheme.status = angular.copy($scope.system.edit.status);
 		$scope.scheme.publication = angular.copy($scope.system.edit.publication);
 
+		$scope.saveScheme();
 		$rootScope.$broadcast("sidebar.close", "scheme-sidebar-backend");
 	}
 
