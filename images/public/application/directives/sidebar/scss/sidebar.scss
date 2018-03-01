@@ -51,6 +51,9 @@
 			h5{
 				color: white;
 			}
+			a{
+				text-decoration: none;
+			}
 		}
 	}
 	&.sidebar--right{
@@ -87,7 +90,7 @@
 		a{
 			position: absolute;
 			border-radius: 50%;
-			padding: 4px 0px 1px 0px;
+			padding: 11px 11px 8px 11px;
 			background-color: rgba(255,255,255,0);
 			transition: 0.4s all;
 			top: -5px;

@@ -10,9 +10,9 @@
 			<div class="text--right padding--10">
 				<div class="u__dropdown">
 					<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
-						<img src="https://icongr.am/feather/plus-square.svg?color=999999">
+						<i class="feather icon-plus-square icon--medium text--dark-grey u__margin--12" style="margin-right: 0px"></i>
 					</a>
-					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px; text-align: left">
+					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white">
 						<ul>
 							<li ng-click="addParticipant($event)">
 								<a>Nieuwe deelnemer</a>
@@ -25,22 +25,22 @@
 				</div>
 				<div class="u__dropdown">
 					<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
-						<img src="https://icongr.am/feather/filter.svg?color=999999">
+						<i class="feather icon-filter icon--medium text--dark-grey u__margin--12"></i>
 					</a>
-					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px;text-align: left">
+					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white">
 						<ul>
 							<li class="u__dropdownmenu--header">Account</li>
 							<li ng-click="filter.inactive = !filter.inactive">
-								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.inactive">
+								<i class="feather icon-check icon--medium text--green u__no-margin" ng-if="filter.inactive"></i>
 								Inactive
 							</li>
 							<li ng-click="filter.active = !filter.active">
-								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.active">
+								<i class="feather icon-check icon--medium text--green u__no-margin" ng-if="filter.active"></i>
 								Active
 							</li>
 							<li class="u__dropdownmenu--header">Rollen</li>
 							<li ng-repeat="role in system.roles" ng-click="toggleRole(filter.roles, role)">
-								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="inRoles(filter.roles, role)">
+								<i class="feather icon-check icon--medium text--green u__no-margin" ng-if="inRoles(filter.roles, role)"></i>
 								{{role.type}}
 							</li>
 						</ul>
@@ -88,13 +88,13 @@
 					<li class="u__no-margin">
 						<div class="u__dropdown">
 							<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
-								<img src="https://icongr.am/feather/users.svg?color=999999">
+								<i class="feather icon-users icon--medium text--dark-grey u__margin--12" style="line-height: 36px"></i>
 							</a>
-							<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px;text-align: left;">
+							<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white">
 								<ul>
 									<li class="u__dropdownmenu--header">Toggle role</li>
 									<li ng-repeat="role in system.roles" ng-click="editRoles(participant, role)">
-										<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="inRoles(participant.roles, role)">
+										<i class="feather icon-check icon--medium text--green u__no-margin" ng-if="inRoles(participant.roles, role)"></i>
 										{{role.type}}
 									</li>
 								</ul>
@@ -104,25 +104,25 @@
 					<!-- Participant is active, deactivate it -->
 					<li class="u__no-margin" ng-if="participant.status == 1">
 						<a ng-click="editStatus(participant, 0)" title="Deelnemer deactiveren">
-							<img src="https://icongr.am/feather/pause-circle.svg?color=999999" alt="Deelnemer deactiveren">
+							<i class="feather icon-pause-circle icon--medium text--dark-grey u__margin--12" style="line-height: 36px"></i>
 						</a>
 					</li>
 					<!-- Participant is active, edit it -->
 					<li class="u__no-margin" ng-if="participant.status == 1">
 						<a ng-click="editParticipant($index)" title="Deelnemer bewerken">
-							<img src="https://icongr.am/feather/edit-2.svg?color=999999" alt="Deelnemer bewerken">
+							<i class="feather icon-edit-2 icon--medium text--dark-grey u__margin--12" style="line-height: 36px"></i>
 						</a>
 					</li>
 					<!-- Participant is inactive, activate it -->
 					<li class="u__no-margin" ng-if="participant.status == 0">
 						<a ng-click="editStatus(participant, 1)" title="Deelnemer activeren">
-							<img src="https://icongr.am/feather/play-circle.svg?color=999999" alt="Deelnemer activeren">
+							<i class="feather icon-play-circle icon--medium text--dark-grey u__margin--12" style="line-height: 36px"></i>
 						</a>
 					</li>
 					<!-- Participant is inactive, remove it -->
 					<li class="u__no-margin" ng-if="participant.status == 0">
 						<a ng-click="deleteParticipant($index)" title="Deelnemer verwijderen">
-							<img src="https://icongr.am/feather/minus-circle.svg?color=999999" alt="Deelnemer verwijderen">
+							<i class="feather icon-minus-circle icon--medium text--dark-grey u__margin--12" style="line-height: 36px"></i>
 						</a>
 					</li>
 				</ul>
