@@ -2,11 +2,11 @@
 	<div class="row row--full-width" ng-if="!account">
 		<div class="six columns logo">
 			<a ui-sref="fe.landing" href="/">
-				<img src="https://icongr.am/feather/minus-square.svg?color=33C3F0" style="float:left;margin:12px"></img>
+				<i class="feather icon-minus-square icon--large text--blue u__margin--12" style="float: left;line-height: 34px;"></i>
 				<h6><span class="hide--on-tablet">Yay, this is a working version of </span>Skematik<span class="hide--on-tablet">!</span></h6>
 			</a>
 			<a href="#" class="hide--after-mobile" style="float: right;padding: 16px 32px 12px 12px;margin-top: -4px;" ng-click="isMenuActive = !isMenuActive" ng-class="{'animate--right-70': isMenuActive}">
-				<img src="https://icongr.am/feather/menu.svg?color=dddddd"></img>
+				<i class="feather icon-menu icon--large text--grey" style="margin: 2px;float: right;"></i>
 			</a>
 		</div>
 		<div class="six columns menu--secondary" ng-class="{'hide--on-mobile': !isMenuActive, 'animate--left-0': isMenuActive, 'text--right': !isMenuActive, 'animate--opacity-1': isMenuActive}">
@@ -23,32 +23,32 @@
 				</li>
 			</ul>
 			<a href="#" class="hide--after-mobile" style="float: right;padding: 16px 12px 12px 12px;margin-top: -65px;" ng-click="isMenuActive = !isMenuActive" ng-class="{'animate--left-60': isMenuActive}">
-				<img src="https://icongr.am/feather/x.svg?color=dddddd"></img>
+				<i class="feather icon-x icon--medium text--grey" style="margin: 6px;float: right;"></i>
 			</a>
 		</div>
 	</div>
 	<div class="row row--full-width" ng-if="account">
 		<div class="two columns logo">
-			<img src="https://icongr.am/feather/minus-square.svg?color=33C3F0" style="float:left;margin:12px"></img>
+			<i class="feather icon-minus-square icon--large text--blue u__margin--12" style="float: left;line-height: 34px;"></i>
 			<h6>Skematik</h6>
 		</div>
 		<div class="six columns">
 			<ul>
 				<li>
 					<a ui-sref="be.dashboard" href="/admin/dashboard">
-						<img src="https://icongr.am/feather/sidebar.svg?color=dddddd"></img>
+						<i class="feather icon-sidebar icon--medium text--grey u__margin--12" style="vertical-align: middle;"></i>
 						Dashboard
 					</a>
 				</li>
 				<li>
 					<a ui-sref="be.participants" href="/admin/participants">
-						<img src="https://icongr.am/feather/users.svg?color=dddddd"></img>
+						<i class="feather icon-users icon--medium text--grey u__margin--12" style="vertical-align: middle;"></i>
 						Deelnemers
 					</a>
 				</li>
 				<!--<li>
 					<a ui-sref="be.organisation" href="/admin/organisation">
-						<img src="https://icongr.am/feather/briefcase.svg?color=dddddd"></img>
+						<i class="feather icon-briefcase icon--medium text--grey u__margin--12" style="vertical-align: middle;"></i>
 						Organisatie
 					</a>
 				</li>-->
