@@ -2,6 +2,7 @@
 	<!-- Header -->
 	<section class="row">
 		<div class="eight columns">
+			<i class="feather icon-arrow-left text--dark-grey u__margin--12" ng-if="system.import" ng-click="system.import = false"></i>
 			<h4>
 				Deelnemers
 			</h4>
@@ -132,11 +133,21 @@
 
 	<!-- Import view -->
 	<section class="row" ng-if="system.import">
-		This is the import view.
-
-		To switch back to the list, click <a ng-click="system.import = false">here</a>.
+		Hier kan je deelnemers importeren, volgens volgend schema (in CSV):
+		<ul class="vertical-list--bordered">
+			<li class="row">
+				<div class="five columns">mail</div>
+				<div class="four columns">name</div>
+				<div class="three columns">status</div>
+			</li>
+			<li class="row" style="padding-bottom: 10px">
+				<div class="five columns">example@live.com,</div>
+				<div class="four columns">Frank Franklin,</div>
+				<div class="three columns">0 (or 1, you know, for active)</div>
+			</li>
+		</ul>
 		<input type="file" id="csv-file">
-		<button ng-click="submitCSV()">Submit</button>
+		<button ng-click="submitCSV()">Import CSV</button>
 	</section>
 </div>
 <skematik-sidebar position="right" title="{{system.edit.index > -1 ? 'Deelnemer wijzigen' : 'Nieuwe deelnemer'}}" uuid="edit-participant">
