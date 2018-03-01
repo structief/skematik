@@ -93,7 +93,7 @@
 							<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white">
 								<ul>
 									<li class="u__dropdownmenu--header">Toggle role</li>
-									<li ng-repeat="role in system.roles" ng-click="toggleRole(participant.roles, role)">
+									<li ng-repeat="role in system.roles" ng-click="editRoles(participant, role)">
 										<i class="feather icon-check icon--medium text--green u__no-margin" ng-if="inRoles(participant.roles, role)"></i>
 										{{role.type}}
 									</li>
