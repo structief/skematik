@@ -23,7 +23,7 @@
 
 	&.u__dropdown--show{
 		.u__dropdowntoggle{
-			img{
+			i{
 				opacity: 1;
 			}
 		}
@@ -35,8 +35,9 @@
 }
 .u__dropdowntoggle{
 	cursor: pointer;
+	text-decoration: none;
 
-	img{
+	i{
 		opacity: 0.4;
 		z-index: 0
 	}
@@ -48,10 +49,12 @@
     background: #fff;
     border: 1px solid #eee;
     border-radius: 4px;
-    margin-top: 5px;
+    margin-top: 10px;
     -webkit-filter: drop-shadow(0 0 6px rgba(0,0,0,.1));
     -moz-filter: drop-shadow(0 0 6px rgba(0,0,0,.1));
     filter: drop-shadow(0 0 6px rgba(0,0,0,.1));
+    min-width: 150px; 
+    text-align: left;
 
 	&.u__dropdownmenu--boxed{
 		ul{
