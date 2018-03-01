@@ -45,18 +45,18 @@ class Participants {
             record["organisationID"] = user.organisation.uuid;
             record["roles"] = JSON.stringify(roles);
             record["uuid"] = uuidV1();
-            console.log(record);
             await pg.insert(data).table("participants").returning("*").then((res) => {
-              // console.log(res)
+              
             })
           }
 
           function onError(error){
               // console.log(error)
+              res.send(400);
           }
 
           function done(linesRead){
-              res.send(200, linesRead)
+              res.send(200, {records: linesRead})
           }
 
           var columns = true; 
