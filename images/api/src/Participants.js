@@ -1,10 +1,16 @@
 const uuidV1 = require('uuid/v1');
 const {checkToken} = require("./helpers/auth")
+const multer  = require('multer')
+const upload = multer({ dest: './uploads/' })
+
+const Parse = require('csv-parse');
+const fs = require('fs')
 
 class Participants {
 
   constructor() {
     this.assignFields = this.assignFields.bind(this);
+    this.parseCSVFile = this.parseCSVFile.bind(this);
   }
 
   assignFields(app, pg) {
@@ -18,6 +24,44 @@ class Participants {
           await pg.select().table("participants").where({organisationID: user.organisation.uuid}).orderBy('mail', 'desc').then(function(r) {
             res.send(r)
           })
+        }, res)
+      }else{
+        res.sendStatus(401);
+      }
+    })
+
+    app.post('/participants/upload', upload.single("participants"), async (req, res, next) => {
+      if(req.headers.authorization) {
+        checkToken('777', pg, req.headers.authorization, async (user) => {
+          console.log(req.file)
+
+          var filePath = req.file.path;
+          console.log(filePath);
+
+          const roles = await pg.select("uuid").table("roles").where({organisationID: user.organisation.uuid, type: "PARTICIPANT"})
+
+          async function onNewRecord(record) {
+            const data = record;
+            record["organisationID"] = user.organisation.uuid;
+            record["roles"] = JSON.stringify(roles);
+            record["uuid"] = uuidV1();
+            console.log(record);
+            await pg.insert(data).table("participants").returning("*").then((res) => {
+              // console.log(res)
+            })
+          }
+
+          function onError(error){
+              // console.log(error)
+          }
+
+          function done(linesRead){
+              res.send(200, linesRead)
+          }
+
+          var columns = true; 
+          this.parseCSVFile(filePath, columns, onNewRecord, onError, done);  
+          
         }, res)
       }else{
         res.sendStatus(401);
@@ -117,6 +161,30 @@ class Participants {
       }
     });
   }
+
+  parseCSVFile(sourceFilePath, columns, onNewRecord, handleError, done){
+    var source = fs.createReadStream(sourceFilePath);
+    var linesRead = 0;
+    var parser = Parse({
+        delimiter: ',', 
+        columns:columns
+    });
+    parser.on("readable", function(){
+        var record;
+        while (record = parser.read()) {
+            linesRead++;
+            onNewRecord(record);
+        }
+    });
+    parser.on("error", function(error){
+        handleError(error)
+    });
+    parser.on("end", function(){
+        done(linesRead);
+    });
+    source.pipe(parser);
+  }
+
 }
 
 
