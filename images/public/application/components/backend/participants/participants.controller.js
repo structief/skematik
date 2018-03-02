@@ -183,4 +183,32 @@ skematikControllers.controller('BeParticipantsController',["$scope", "$state", "
 			});
 		}
 	};
+
+	$scope.submitCSV = function(){	
+		var f = document.getElementById('csv-file').files[0],
+		r = new FileReader();
+
+		r.onloadend = function(e) {
+			var data = e.target.result, result = [];
+			var lines = data.split("\n");
+			var headers = lines[0].split(",");
+		
+			for(var i=1;i<lines.length;i++){
+				var obj = {};
+				var currentline=lines[i].split(",");
+				for(var j=0;j<headers.length;j++){
+					obj[headers[j]] = currentline[j];
+				}
+				result.push(obj);
+			}
+
+			ParticipantsFactory.create({participants: result}, function(success){
+				window.location.reload();
+			}, function(error){
+				$rootScope.$broadcast('alert.show', {title: "Server error", message: "Deelnemer werd niet toegevoegd, probeer later nogmaals.", type: "error"}); 
+			});
+		}
+
+		r.readAsBinaryString(f);
+	}
 }]);
