@@ -10,17 +10,17 @@
 				<ul class="list__horizontal list__image-links" ng-if="!isEditing">
 					<li>
 						<a href="#" ng-click="editSchemeMeta()" title="Edit scheme meta">
-							<img src="https://icongr.am/feather/info.svg?color=999999">
+							<i class="feather icon-info icon--medium text--dark-grey u__margin--12"></i>
 						</a>
 					</li>
 					<li>
 						<a href="#" ng-click="toggleEditMode()" title="Edit scheme">
-							<img src="https://icongr.am/feather/edit-2.svg?color=999999">
+							<i class="feather icon-edit-2 icon--medium text--dark-grey u__margin--12"></i>
 						</a>
 					</li>
 					<li>
 						<a href="#" ng-click="" title="Export results">
-							<img src="https://icongr.am/feather/share.svg?color=999999">
+							<i class="feather icon-share icon--medium text--dark-grey u__margin--12"></i>
 						</a>
 					</li>
 				</ul>
@@ -44,7 +44,7 @@
 		<div class="one column text--center">
 			<div class="button__group">
 				<a ng-click="previous()" ng-disabled="nav.min==0" style="padding: 0px">
-					<img src="https://icongram.jgog.in/feather/chevron-left.svg?color=555555&size=14" alt="earlier" style="margin-top: 6px;"></img>
+					<i class="feather icon-chevron-left icon--medium text--dark-grey u__margin--12"></i>
 				</a>
 				<a ng-click="addColumn('before')">
 					+ column
@@ -55,7 +55,7 @@
 		<div class="one column text--center" ng-repeat="header in scheme.headers track by $index" ng-if="$index >= nav.min && $index < (nav.min+8)">
 			<input type="text" placeholder="Function name" ng-model="scheme.headers[$index]" class="text--center" />
 			<a href="#" ng-click="deleteColumn($index)" class="icon__action" tabindex="-1">
-				<img src="https://icongram.jgog.in/feather/minus-circle.svg?color=666666&size=20"></img>
+				<i class="feather icon-minus-circle icon--medium text--dark-grey"></i>
 			</a>
 		</div>
 		<div class="one column text--center">
@@ -64,7 +64,7 @@
 					+ column
 				</a>
 				<a ng-click="next()" ng-disabled="nav.min >= (scheme.headers.length-8)" style="padding: 0px">
-					<img src="https://icongram.jgog.in/feather/chevron-right.svg?color=555555&size=14" style="margin-top: 6px"></img>
+					<i class="feather icon-chevron-left icon--medium text--dark-grey u__margin--12"></i>
 				</a>
 			</div>
 		</div>
@@ -73,7 +73,7 @@
 		<div class="two columns box--white padding--15">
 			<input type="text" placeholder="Function name" ng-model="row.name" />
 			<a href="#" ng-click="deleteRow($index)" class="icon__action" tabindex="-1">
-				<img src="https://icongram.jgog.in/feather/minus-circle.svg?color=666666&size=20"></img>
+				<i class="feather icon-minus-circle icon--medium text--dark-grey"></i>
 			</a>
 		</div>
 		<div class="one column text--center">
@@ -84,11 +84,10 @@
 			ng-class="{'box--info': cell.max, 'text--center': !cell.max}"
 			ng-repeat="cell in row.cells track by $index" 
 			ng-if="$index >= nav.min && $index < (nav.min+8)" >
-			<img src="https://icongram.jgog.in/feather/plus-circle.svg?color=dddddd&size=20" ng-click="addSpace($parent.$parent.$parent.$index, $index, false)" ng-if="!cell.max" style="margin-top: 10px;cursor:pointer"></img>
-
+			<i class="feather icon-plus-circle icon--medium text--grey u__margin--12" ng-click="addSpace($parent.$parent.$parent.$index, $index, false)" ng-if="!cell.max" style="cursor: pointer; display: inherit;"></i>
 			<input type="number" ng-model="row.cells[$index].max" ng-if="cell.max" placeholder="Free spaces">
 			<a href="#" ng-click="addSpace($parent.$parent.$parent.$index, $index, true)" class="icon__action" ng-if="cell.max" tabindex="-1">
-				<img src="https://icongram.jgog.in/feather/minus-circle.svg?color=666666&size=20"></img>
+				<i class="feather icon-minus-circle icon--medium text--dark-grey"></i>
 			</a>
 		</div>
 		<div class="one column text--center">

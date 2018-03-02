@@ -46,6 +46,36 @@
 			cursor: default;
 			min-height: 70px;
 
+			&.cell--active{
+				&:before {
+					content: '';
+					background-color: darken(#f9f9f9, 4);
+					border-radius: 50%;
+					display: block;
+					position: absolute;
+					top: 0;
+					right: 0;
+					bottom: 0;
+					left: 0;
+					transform: scale(0.001, 0.001);
+					animation: click-wave 0.8s ease-out;
+				}
+
+				span{
+					background: url(https://icongr.am/feather/check.svg?color=19b319&size=20) no-repeat center center;
+					width: 30px;
+					height: 30px;
+					display: inline-block;
+					transition: 0.4s all;
+				}
+
+				&:hover{
+					span{
+						background-image: url(https://icongr.am/feather/minus-circle.svg?color=555555&size=20)
+					}
+				}
+			}
+
 			&.cell--disabled{
 				color: #cccccc;
 			}
@@ -58,6 +88,20 @@
 			}
 		}
 	}
-
-
 }
+
+@keyframes click-wave {
+  50% {
+    transform: scale(1.5, 2.5);
+    opacity: 0;
+  }
+  99% {
+    transform: scale(0.001, 0.001);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.001, 0.001);
+    opacity: 1;
+  }
+}
+

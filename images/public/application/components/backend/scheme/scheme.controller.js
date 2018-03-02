@@ -100,6 +100,7 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 		$scope.scheme.status = angular.copy($scope.system.edit.status);
 		$scope.scheme.publication = angular.copy($scope.system.edit.publication);
 
+		$scope.saveScheme();
 		$rootScope.$broadcast("sidebar.close", "scheme-sidebar-backend");
 	}
 
@@ -199,7 +200,7 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 
 		if($scope.scheme.uuid == 'new'){
 			//Do a post to save it, and store the response
-			SchemeFactory.post({scheme: $scope.scheme}, function(response){
+			SchemeFactory.create({scheme: $scope.scheme}, function(response){
 				$scope.scheme = response;
 
 				//Show alert

@@ -13,6 +13,12 @@
 	    text-align: left;
 	    border-bottom: 1px solid #E1E1E1;
 	    margin: 0 !important;
+
+	    &.table__row--inactive{
+	    	.columns:not(:last-of-type){
+		    	opacity: 0.5;
+		    }
+	    }
 	
 		&.table__row--header{
 			font-weight: bold;

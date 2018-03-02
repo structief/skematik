@@ -1,4 +1,4 @@
-skematikFactories.factory('resourceInterceptor', ["$rootScope", function ($rootScope) {
+skematikFactories.factory('resourceInterceptor', ["$rootScope", "$q", function ($rootScope, $q) {
   return {
     request: function (config) {
       //Intercept all calls to api
@@ -26,7 +26,9 @@ skematikFactories.factory('resourceInterceptor', ["$rootScope", function ($rootS
     responseError: function (error) {
       $rootScope.$broadcast("request.error", {error: error});
 
-      return error;
+      //Set status
+      error.data.$status = error.status;
+      return $q.reject(error);
     }
   };
 }]);

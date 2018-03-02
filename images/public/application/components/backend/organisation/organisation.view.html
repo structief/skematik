@@ -12,9 +12,9 @@
 			<div class="text--right padding--10">
 				<div class="u__dropdown">
 					<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
-						<img src="https://icongr.am/feather/plus-square.svg?color=999999">
+						<i class="feather icon-plus-square icon--medium text--dark-grey u__margin--12" style="margin-right: 0px"></i>
 					</a>
-					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px; text-align: left">
+					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white">
 						<ul>
 							<li ng-click="addParticipant($event)">
 								<a>Nieuwe deelnemer</a>
@@ -27,22 +27,22 @@
 				</div>
 				<div class="u__dropdown">
 					<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
-						<img src="https://icongr.am/feather/filter.svg?color=999999">
+						<i class="feather icon-filter icon--medium text--dark-grey u__margin--12"></i>
 					</a>
-					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px;text-align: left">
+					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white">
 						<ul>
 							<li class="u__dropdownmenu--header">Account</li>
 							<li ng-click="filter.inactive = !filter.inactive">
-								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.inactive">
+								<i class="feather icon-check icon--medium text--green u__no-margin" ng-if="filter.inactive"></i>
 								Inactive
 							</li>
 							<li ng-click="filter.active = !filter.active">
-								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.active">
+								<i class="feather icon-check icon--medium text--green u__no-margin" ng-if="filter.active"></i>
 								Active
 							</li>
 							<li class="u__dropdownmenu--header">Rollen</li>
 							<li ng-repeat="role in system.roles" ng-click="toggleRole(filter.roles, role)">
-								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="inRoles(filter.roles, role)">
+								<i class="feather icon-check icon--medium text--green u__no-margin" ng-if="inRoles(filter.roles, role)"></i>
 								{{role}}
 							</li>
 						</ul>

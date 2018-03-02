@@ -1,4 +1,4 @@
-skematikControllers.controller('BeParticipantsController',["$scope", "$state", "$stateParams", "$rootScope", "ParticipantsFactory", function($scope, $stateProvider, $stateParams, $rootScope, ParticipantsFactory) {
+skematikControllers.controller('BeParticipantsController',["$scope", "$state", "$stateParams", "$rootScope", "ParticipantsFactory", "RolesFactory", "$timeout", function($scope, $stateProvider, $stateParams, $rootScope, ParticipantsFactory, RolesFactory, $timeout) {
 	$scope.participants = [];
 	$scope.new = {
 		'username': ""
@@ -14,28 +14,35 @@ skematikControllers.controller('BeParticipantsController',["$scope", "$state", "
 		roles: [],
 		import: false,
 		edit: null,
+		status: [
+			{
+				value: 1,
+				label: "Actief"
+			},
+			{
+				value: 0,
+				label: "Inactief"
+			}
+		]
 	};
 
 	//Fetch participants
-	$scope.participants = [];
 	ParticipantsFactory.get({}, function(participants){
-		//Temp cleanup
-		for(var i=0;i<participants.length;i++){
-			$scope.participants.push({
-				"name": participants[i].username,
-				"mail": participants[i].usermail,
-				"roles": participants[i].roles,
-				"status": participants[i].status,
-				"uuid": participants[i].uuid
+		$scope.participants = participants;
+	});
+
+	//Fetch roles
+	RolesFactory.get({}, function(roles){
+		//Determine system roles
+		for(var j=0;j<roles.length;j++){
+			$scope.system.roles.push({
+				"uuid": roles[j].uuid,
+				"type": roles[j].type,
+				"short": roles[j].short
 			});
-			for(var j=0;j<participants[i].roles.length;j++){
-				if($scope.system.roles.indexOf(participants[i].roles[j]) === -1){
-					//Add to system & filter
-					$scope.system.roles.push(participants[i].roles[j]);
-					$scope.filter.roles.push(participants[i].roles[j]);
-				}
-			}
 		}
+		//Add them to filter
+		$scope.filter.roles = angular.copy($scope.system.roles);
 	});
 
 
@@ -53,8 +60,14 @@ skematikControllers.controller('BeParticipantsController',["$scope", "$state", "
 	}
 
 	$scope.inRoles = function(roles, role){
+		//Compare uuids
 		if(roles !== undefined){
-			return roles.indexOf(role) !== -1;
+			for(var i=0; i<roles.length; i++){
+				if(roles[i].uuid == role.uuid){
+					return true;
+				}
+			}
+			return false;
 		}else{
 			return false;
 		}
@@ -62,17 +75,33 @@ skematikControllers.controller('BeParticipantsController',["$scope", "$state", "
 
 	$scope.toggleRole = function(roles, role){
 		if($scope.inRoles(roles, role)){
-			roles.splice(roles.indexOf(role), 1);
+			//Find index of role
+			for(var i=0;i<roles.length;i++){
+				if(roles[i].uuid == role.uuid){
+					roles.splice(i, 1);
+				}
+			}
 		}else{
 			roles.push(role);
 		}
 	};
 
+	$scope.editRoles = function(participant, role){
+		$scope.toggleRole(participant.roles, role);
+		ParticipantsFactory.update({participants: [participant]}, function(success){}, function(error){
+			$scope.toggleRole(participant.roles, role);
+		});
+	};
+
+	$scope.editStatus = function(participant, status){
+		var oldStatus = participant.status;
+		participant.status = status;
+		ParticipantsFactory.update({participants: [participant]}, function(success){}, function(error){
+			participant.status = oldStatus;
+		});
+	}
+
 	$scope.filterParticipants = function(participant){
-		//Is user a temporary (new) user?
-		if(participant.status == -1){
-			return true;
-		} 
 		//Check activity of participant
 		if((participant.status && $scope.filter.active) || (!participant.status && $scope.filter.inactive)){
 			//Check participant roles
@@ -94,10 +123,17 @@ skematikControllers.controller('BeParticipantsController',["$scope", "$state", "
 
 	$scope.deleteParticipant = function(index){
 		var deletedParticipant = $scope.participants[index];
+		var timeout = $timeout(function(){
+			ParticipantsFactory.delete({uuid: deletedParticipant.uuid});
+		}, 4000);
 
 		//Callback function for the alert
 		var undoDeletion = function(){
 			if(deletedParticipant !== null){
+				//Cancel server deletion
+				$timeout.cancel(timeout);
+
+				//Re-place participant
 				$scope.participants.splice(index, 0, deletedParticipant);
 				deletedParticipant = null;	
 				$rootScope.$broadcast('alert.show', {title: "Actie ongedaan gemaakt!", message: "Beter opletten volgende keer, oké?", type: "success"}); 
@@ -106,8 +142,8 @@ skematikControllers.controller('BeParticipantsController',["$scope", "$state", "
 
 		//Show alert
 		$scope.participants.splice(index, 1);
-		$rootScope.$broadcast('alert.show', {title: "Deelnemer is verwijderd", message: "Klik <u>hier</u> om deze actie ongedaan te maken", type: "warning", clickCallback: undoDeletion}); 
-	}
+		$rootScope.$broadcast('alert.show', {title: "Deelnemer is verwijderd", message: "Klik <u>hier</u> om deze actie ongedaan te maken", type: "warning", clickCallback: undoDeletion, hide: 4000}); 
+	};
 
 	$scope.addParticipant = function($event){
 		$scope.system.edit = {"index": -1, "user": {"mail": null, "status": 1, "roles": [], "uuid": null}};
@@ -115,25 +151,64 @@ skematikControllers.controller('BeParticipantsController',["$scope", "$state", "
 
 		//Toggle dropdown
 		$scope.toggleDropdown($event);
-	}
+	};
 
 	$scope.editParticipant = function($index){
 		$scope.system.edit = {"index": $index, "user": angular.copy($scope.participants[$index])};
 
 		//Toggle sidebar
 		$rootScope.$broadcast("sidebar.open", {uuid: "edit-participant"});
-	}
+	};
 
 	$scope.saveParticipant = function(){
 		//Add or update the user
 		if($scope.system.edit.index > -1){
 			//Update
-			$scope.participants[$scope.system.edit.index] = angular.copy($scope.system.edit.user);
+			ParticipantsFactory.update({participants: [$scope.system.edit.user]}, function(success){
+				$scope.participants[$scope.system.edit.index] = angular.copy($scope.system.edit.user);
+
+				//Toggle sidebar
+				$rootScope.$broadcast("sidebar.close", {uuid: "edit-participant"});
+			}, function(error){});
 		}else{
-			$scope.participants.push(angular.copy($scope.system.edit.user));
+			//Send the new dude to the server
+			ParticipantsFactory.create({participants: [{mail: $scope.system.edit.user.mail, roles: $scope.system.edit.user.roles, status: $scope.system.edit.user.status}]}, function(success){
+				$scope.system.edit.user.uuid = success.uuid;
+				$scope.participants.push(angular.copy($scope.system.edit.user));
+			
+				//Toggle sidebar
+				$rootScope.$broadcast("sidebar.close", {uuid: "edit-participant"});
+			}, function(error){
+				$rootScope.$broadcast('alert.show', {title: "Server error", message: "Deelnemer werd niet toegevoegd, probeer later nogmaals.", type: "error"}); 
+			});
+		}
+	};
+
+	$scope.submitCSV = function(){	
+		var f = document.getElementById('csv-file').files[0],
+		r = new FileReader();
+
+		r.onloadend = function(e) {
+			var data = e.target.result, result = [];
+			var lines = data.split("\n");
+			var headers = lines[0].split(",");
+		
+			for(var i=1;i<lines.length;i++){
+				var obj = {};
+				var currentline=lines[i].split(",");
+				for(var j=0;j<headers.length;j++){
+					obj[headers[j]] = currentline[j];
+				}
+				result.push(obj);
+			}
+
+			ParticipantsFactory.create({participants: result}, function(success){
+				window.location.reload();
+			}, function(error){
+				$rootScope.$broadcast('alert.show', {title: "Server error", message: "Deelnemer werd niet toegevoegd, probeer later nogmaals.", type: "error"}); 
+			});
 		}
 
-		//Toggle sidebar
-		$rootScope.$broadcast("sidebar.close", {uuid: "edit-participant"});
+		r.readAsBinaryString(f);
 	}
 }]);

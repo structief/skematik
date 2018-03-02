@@ -13,12 +13,12 @@ class Schema {
     this.createSchema = this.createSchema.bind(this);
   }
 
-  assignFields(app, pg) {
+  async assignFields(app, pg) {
 
     app.get('/faker', async (req, res, next) => {
 
-      this.createSchema(pg);
-      res.send(200)
+      const user = await this.createSchema(pg);
+      res.send(200, { mail: user })
     })
   }
 
@@ -75,12 +75,12 @@ class Schema {
 
   //create users
 
-
+    const mail = faker.internet.email();
     const adminUser = await pg("users").insert({
       uuid: uuidV1(),
       organisation: organisation["uuid"],
       roles: { roles: [ {"uuid": insertRolesOwner[0]},  {"uuid": insertRolesAdmin[0]}, ]},
-      mail: faker.internet.email(),
+      mail: mail,
       password: cryptr.encrypt(standardPass),
       given_name: faker.name.firstName(),
       family_name: faker.name.lastName()
@@ -119,7 +119,6 @@ class Schema {
 
 
 
-    console.log(insertRolesParticipant, insertRolesUser)
     const vals = {
       "title": `${faker.random.word()} ${faker.random.word()}`,
       "headers": {
@@ -214,7 +213,7 @@ class Schema {
     for(let i = 0; i < cells.length; i++) {
       await pg("cells").insert(cells[i]);
     }
-
+    return mail;
     //add user
 
   }
