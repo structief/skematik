@@ -3,14 +3,12 @@ const {checkToken} = require("./helpers/auth")
 const multer  = require('multer')
 const upload = multer({ dest: './uploads/' })
 
-const Parse = require('csv-parse');
 const fs = require('fs')
 
 class Participants {
 
   constructor() {
     this.assignFields = this.assignFields.bind(this);
-    this.parseCSVFile = this.parseCSVFile.bind(this);
   }
 
   assignFields(app, pg) {
@@ -55,7 +53,6 @@ class Participants {
           //Lookup default role, just in case
           var default_role = "", uuids = [];
           await pg.select(["uuid", "type", "short"]).table("roles").where({organisationID: user.organisation.uuid, type: "PARTICIPANT"}).then(function(r) {
-            console.log(r);
             default_role = r;
           });
 
