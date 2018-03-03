@@ -27,6 +27,9 @@ skematikFactories.factory('resourceInterceptor', ["$rootScope", "$q", function (
       $rootScope.$broadcast("request.error", {error: error});
 
       //Set status
+      if(error.data == null){
+        error.data = {};
+      }
       error.data.$status = error.status;
       return $q.reject(error);
     }
