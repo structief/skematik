@@ -229,8 +229,6 @@ class Schema {
           //all schemas
           res.send(r);
         })
-        console.log('result', result)
-
       }, res)
       
     })

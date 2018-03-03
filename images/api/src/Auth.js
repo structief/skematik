@@ -169,7 +169,6 @@ class Auth {
       short: "participant of the organisation",
       permissions: "300"
     })
-    console.log('insert 1', insert1, insertRolesOwner)
 
     return await pg('users')
       .insert({
