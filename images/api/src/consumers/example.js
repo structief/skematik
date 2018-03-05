@@ -1,0 +1,8 @@
+// Load the emitter, this one contains all the events
+var emitter = require('../helpers/emitter.js');
+
+// Subscribe to certain events.
+// Best to documet them properly
+emitter.on('server.start', function(data){
+  console.log('The server has started!');
+});

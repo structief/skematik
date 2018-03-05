@@ -1,5 +1,5 @@
 const uuidV1 = require('uuid/v1');
-
+const emitter = require('./helpers/emitter.js');
 
 class Answers {
 
@@ -26,10 +26,6 @@ class Answers {
 
 
     app.post('/schema/:uuid/answer', async (req, res, next) => {
-
-      //check for token 
-
-      
       const insert = {};
 
 
@@ -127,30 +123,27 @@ class Answers {
                 result["rows"] = rowstructure;
 
                 result["answers"] = answers;
+
+                // Subscription worked, fire event
+                // Replace 'mail' by the selected method by the admin
+                // But this is just a first setup
+                emitter.event("mail.subscription.added", {insert});
                 res.send(result);
               } else {
                 res.sendStatus(404);
 
               }
-            }).then(function() {
-
-          }).catch(function(error) {
-            res.sendStatus(404);
-          })
-
-
+            })
+            .then(function() {})
+            .catch(function(error) {
+              res.sendStatus(404);
+            })
         }).catch(function(error) {
           res.send("error" + error)
         })
       }
     })
-
-
-
-
-
   }
-
 }
 
 module.exports = Answers;
