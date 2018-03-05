@@ -10,9 +10,10 @@
   "author": "Jan Everaert",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^6.2.1",
     "body-parser": "^1.18.2",
-    "cryptr": "2.0.0",
     "cors": "^2.8.4",
+    "cryptr": "2.0.0",
     "express": "^4.15.4",
     "faker": "^4.1.0",
     "http": "0.0.0",
