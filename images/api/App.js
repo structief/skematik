@@ -34,7 +34,7 @@ class App {
 
   constructor(opts) {
 
-   /* this.pg = require('knex')({
+    this.pg = require('knex')({
       client: 'pg',
       connection: process.env.PG_CONNECTION_STRING,
       searchPath: 'knex,public'
@@ -43,7 +43,7 @@ class App {
 
     this.pg.raw('select 1+1 as result').then(function () {
       _this.initialiseTables();
-    });*/
+    });
 
     const _this = this;
 
@@ -58,6 +58,8 @@ class App {
     fs.readdirSync(consumers).forEach(file => {
       require(consumers + file);
     });
+    //Emit an example event
+    emitter.emit("server.start", {}):
 
 
     app.use( bodyParser.json() );       // to support JSON-encoded bodies
