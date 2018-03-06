@@ -18,7 +18,7 @@ const Auth = require('./src/Auth.js');
 const Feedback = require("./src/Feedback.js");
 
 //Local helpers
-const Seeder = require('./src/helpers/seeder.js')
+const Seeder = require('./src/helpers/seeder.js');
 const emitter = require('./src/helpers/emitter.js');
 
 
@@ -59,7 +59,7 @@ class App {
       require(consumers + file);
     });
     //Emit an example event
-    emitter.emit("server.start", {}):
+    emitter.emit("server.start", {});
 
 
     app.use( bodyParser.json() );       // to support JSON-encoded bodies
