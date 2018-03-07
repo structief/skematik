@@ -1,13 +1,14 @@
 // Load the emitter, this one contains all the events
 const emitter = require('../helpers/emitter.js');
-var soap = require('soap');
-var parser = require('xml2json');
+const soap = require('soap');
+const parser = require('xml2json');
+const base_type = "mail";
 
 // Configuration
-var url = 'https://sintguido.smartschool.be/Webservices/V3?wsdl';
+const url = 'https://sintguido.smartschool.be/Webservices/V3?wsdl';
 
 // This shouldn't be in any commit, but hey, it is now. Let's replace it later on ¯\_(ツ)_/¯
-var pswds = {
+const pswds = {
 	'getAllAccounts': '4168af95eb0b7ee2bacc',
 	'sendMsg': '937085f2c099a1dbf9d3',
 	'getAllGroupsAndClasses': '8dea6f880425ee81f7d4'
@@ -15,7 +16,7 @@ var pswds = {
 
 // Subscribe to certain events.
 // Best to document them properly
-emitter.on('smartschool.getAllAccounts', function(data){
+emitter.on(base_type + '.getAllAccounts', function(data){
 	soap.createClient(url, function(err, client) {
 	  	var payload = {
 	  		"accesscode": pswds.getAllAccounts,
@@ -45,7 +46,7 @@ emitter.on('smartschool.getAllAccounts', function(data){
  * - read "userIdentifier" out of data, not inline
  * - needs better error- and succes-handling
 */
-emitter.on('smartschool.sendMsg', function(data){
+emitter.on(base_type + '.sendMsg', function(data){
 	soap.createClient(url, function(err, client) {
 	    client.sendMsg({
 	    	"accesscode": pswds.sendMsg,
