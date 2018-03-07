@@ -1,16 +1,19 @@
 const sgMail = require('@sendgrid/mail');
-var fs = require('fs');
+const fs = require('fs');
+
+const config = require('../config.js');
 
 class Mail {
   constructor() {
-    sgMail.setApiKey('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');
+    sgMail.setApiKey(config.ApiKey);
     sgMail.setSubstitutionWrappers('{{', '}}');
 
     this._recipients = [];
     this._subject = "A Skematik mail";
     this._text = "Default texting, please do replace me";
     this._body = null; // Replace by body
-    this._template_id = 'bbb1133a-c69f-428f-93c5-1dc9783f0c7f'; // See SendGrid
+    this._template_id = config.DefaultTemplateId;
+    this._substitutions = {};
   }
 
   //Recipients
@@ -53,6 +56,14 @@ class Mail {
     return this._template_id;
   }
 
+  //Substitutions
+  set substitutions(substitutions){
+    this._substitutions = substitutions;
+  }
+  get substitutions(){
+    return this._substitutions;
+  }
+
   send(){
     sgMail.send({
       to: this.recipients,
@@ -61,29 +72,28 @@ class Mail {
       text: this.text,
       html: this.body,
       templateId: this._template_id,
-      substitutions: {
-        previewText: this.text,
-        body: this.body,
-        title: "Require some lines",
-        firstname: "Franklin",
-        buttonName: "Call on me",
-        buttonUrl: "http://www.google.com"
-      }
+      substitutions: this._substitutions
     }, true)
     .then(function(){
       //Celebrate
-      console.log("Mail sent!");
+      return true;
     })
     .catch(function(error){
       //Log friendly error
-      console.error(error.toString());
-
-      //Extract error msg
-      const {message, code, response} = error;
-
-      //Extract response msg
-      const {headers, body} = response;
+      return error.toString();
     });
+  }
+
+  fake(){
+    return {
+      to: this.recipients,
+      from: 'hello@skematik.io',
+      subject: this.subject,
+      text: this.text,
+      html: this.body,
+      templateId: this._template_id,
+      substitutions: this._substitutions
+    };
   }
 }
 
