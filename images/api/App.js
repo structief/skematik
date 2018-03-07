@@ -4,7 +4,9 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const uuidV1 = require('uuid/v1');
 const faker = require("faker");
+const fs = require('fs');
 
+//Load all schemes
 const Schema = require('./src/Schema.js');
 const Cells = require('./src/Cells.js');
 const Users = require('./src/Users.js');
@@ -13,9 +15,15 @@ const Organisations = require('./src/Organisations.js');
 const Roles = require('./src/Roles.js');
 const Participants = require('./src/Participants.js');
 const Auth = require('./src/Auth.js');
-const Seeder = require('./src/helpers/seeder.js')
 const Feedback = require("./src/Feedback.js");
 
+//Local helpers
+const Seeder = require('./src/helpers/seeder.js')
+const emitter = require('./src/helpers/emitter.js');
+
+
+//Location of consumer-scropts
+const consumers = './src/consumers/';
 
 const app = express();
 const server = http.Server(app);
@@ -38,7 +46,6 @@ class App {
       _this.initialiseTables();
     });
 
-
     this.start = this.start.bind(this);
 
     this.app = express();
@@ -46,6 +53,13 @@ class App {
   }
 
   async start() {
+    //Initiate consumer-scripts for listening
+    fs.readdirSync(consumers).forEach(file => {
+      require(consumers + file);
+    });
+    //Emit an example event
+    emitter.emit("server.start", {}):
+
 
     app.use( bodyParser.json() );       // to support JSON-encoded bodies
 
@@ -82,8 +96,7 @@ class App {
 
     server.listen(PORT, () => {
       console.log(`server up and listening on ${PORT}`)
-    })
-
+    });
   }
 
   async initialiseTables() {
