@@ -14,6 +14,3 @@ const fs = require('fs');
 fs.readdirSync(consumers).forEach(file => {
   require(consumers + file);
 });
-
-//Emit an example event
-emitter.emit("smartschool.getAllAccounts", {});

@@ -5,6 +5,8 @@ var parser = require('xml2json');
 
 // Configuration
 var url = 'https://sintguido.smartschool.be/Webservices/V3?wsdl';
+
+// This shouldn't be in any commit, but hey, it is now. Let's replace it later on ¯\_(ツ)_/¯
 var pswds = {
 	'getAllAccounts': '4168af95eb0b7ee2bacc',
 	'sendMsg': '937085f2c099a1dbf9d3',
@@ -33,23 +35,16 @@ emitter.on('smartschool.getAllAccounts', function(data){
 				console.log(parser.toJson(Buffer.from(result.return['$value'], 'base64').toString('ascii')));
 			}
 		});
-		/*client.getAllGroupsAndClasses({"accesscode": pswds.getAllGroupsAndClasses}, function(err, result) {
-			if(err){
-				console.log("Error:");
-				console.log(err.body);
-			}else{
-				/*
-				 * :facepalm:
-				 * This sh*t replied with a BASE64-encoded string, ànd in xml. Yay
-				*
-				console.log("Result");
-				console.log(result);
-			}
-		});*/
 	});
 });
 
 //Send Message
+/*
+ * This function works, but needs some rework:
+ * - replace inline html with template or something
+ * - read "userIdentifier" out of data, not inline
+ * - needs better error- and succes-handling
+*/
 emitter.on('smartschool.sendMsg', function(data){
 	soap.createClient(url, function(err, client) {
 	    client.sendMsg({
@@ -82,6 +77,7 @@ $result = $client->getAllAccounts('webserviceswachtwoord','Beheerders','0');
 console.log(client.describe().V3Service.V3Port.getAllAccountsExtended);
 */
 
+// This is just a reference for developing, but quite useful
 var smartschoolErrorCodes = {
 	"1":"De naam dient minimaal uit 2 karakters te bestaan.",
 	"2":"De voornaam dient uit minimaal 2 karakters te bestaan.",
