@@ -40,12 +40,11 @@ class App {
       searchPath: 'knex,public'
     });
 
+    const _this = this;
 
     this.pg.raw('select 1+1 as result').then(function () {
       _this.initialiseTables();
     });
-
-    const _this = this;
 
     this.start = this.start.bind(this);
 
