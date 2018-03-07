@@ -58,7 +58,7 @@ class App {
       require(consumers + file);
     });
     //Emit an example event
-    emitter.emit("server.start", {}):
+    emitter.emit("server.start", {});
 
 
     app.use( bodyParser.json() );       // to support JSON-encoded bodies
