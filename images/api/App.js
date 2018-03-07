@@ -54,11 +54,13 @@ class App {
 
   async start() {
     //Initiate consumer-scripts for listening
-    fs.readdirSync(consumers).forEach(file => {
-      require(consumers + file);
+    fs.readdirSync(consumers).forEach(consumer => {
+      if(consumer.indexOf(".DS_Store") == -1 ){
+        require(consumers + consumer + "/index.js");
+      }
     });
     //Emit an example event
-    emitter.emit("server.start", {}):
+    emitter.emit("server.start", {});
 
 
     app.use( bodyParser.json() );       // to support JSON-encoded bodies
