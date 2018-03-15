@@ -19,3 +19,4 @@ images/public/index.html
 images/server/src
 
 images/api/src/helpers/config.js
+images/api/src/consumers/*/config.js
