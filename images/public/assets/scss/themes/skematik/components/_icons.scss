@@ -32,6 +32,27 @@
   font-size: 14px;
 }
 
+.icon--spin{
+  display: inline-block;
+
+  -webkit-animation-name: spin;
+  -webkit-animation-duration: 1500ms;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -moz-animation-name: spin;
+  -moz-animation-duration: 1500ms;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-timing-function: linear;
+  -ms-animation-name: spin;
+  -ms-animation-duration: 1500ms;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-timing-function: linear;
+  animation-name: spin;
+  animation-duration: 1500ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
 .icon-alert-octagon:before { content: "\e81b"; }
 
 .icon-alert-circle:before { content: "\e81c"; }
@@ -515,3 +536,30 @@
 .icon-star-on:before { content: "\e90b"; }
 
 .icon-heart-on:before { content: "\e90c"; }
+
+
+@-moz-keyframes spin {
+  0% { 
+    -moz-transform: rotate(0deg); 
+  }
+  100% { 
+    -moz-transform: rotate(360deg); 
+  }
+}
+@-webkit-keyframes spin {
+    0% { 
+      -webkit-transform: rotate(0deg); 
+    }
+    100% { 
+      -webkit-transform: rotate(360deg); 
+    }
+}
+@keyframes spin {
+    0% {
+      transform:rotate(0deg);
+    }
+    100% {
+      transform:rotate(360deg);
+    }
+}
+
