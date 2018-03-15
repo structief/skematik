@@ -170,7 +170,7 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
     $httpProvider.interceptors.push('jwtInterceptor');
 }]);
 
-skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFactory", "$transitions", function($rootScope, $stateProvider, $stateParams, authManager, AccountFactory, $transitions){	
+skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFactory", "$transitions", "ngProgressFactory", function($rootScope, $stateProvider, $stateParams, authManager, AccountFactory, $transitions, ngProgressFactory){	
 	//Account check
 	AccountFactory.isLoggedIn();
 	
@@ -199,5 +199,26 @@ skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFac
 		}else{
 			$rootScope.$broadcast("menu.show", {});
 		}
+	});
+
+	//Create progressbar
+	var progressbar = ngProgressFactory.createInstance();
+
+	//Advance progressbar on event
+	$rootScope.$on("progressbar.start", function(data){
+		//Reset to 0
+		progressbar.reset();
+		//Add color
+		progressbar.setColor("#33C3F0");
+		progressbar.start();
+	});
+
+	$rootScope.$on("progressbar.advance", function(data){
+		progressbar.set(data.value);
+	});
+
+	//End progressbar on event
+	$rootScope.$on("progressbar.complete", function(data){
+		progressbar.complete();
 	});
 }]);

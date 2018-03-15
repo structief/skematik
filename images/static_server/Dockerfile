@@ -11,6 +11,6 @@ RUN npm install --quiet || cat npm-debug.log
 
 VOLUME /skematik/src
 
-EXPOSE 3000
+EXPOSE 4000
 
 CMD ["npm", "start"]

@@ -7,6 +7,8 @@ skematikFactories.factory('resourceInterceptor', ["$rootScope", "$q", function (
           console.log("Started loading: " + config.url);
         }
       }
+
+      $rootScope.$broadcast("progressbar.start", {});
       
       //Return config
       return config;
@@ -19,6 +21,8 @@ skematikFactories.factory('resourceInterceptor', ["$rootScope", "$q", function (
         }
         response.data.$status = response.status;
       }
+      
+      $rootScope.$broadcast("progressbar.complete", {});
 
       //Return response
       return response;
