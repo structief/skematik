@@ -30,7 +30,8 @@ Skematik
 			<ul class="list__vertical list__boxed">
 				<li class="row" ng-repeat="app in status.apps">
 					<div class="two columns">
-						<i class="feather icon-alert-circle text--orange icon--medium" ng-if="app.status == -1"></i> <!-- Doesn't happen yet, could be response from server -->
+						<i class="feather icon-refresh-cw text--grey icon--medium icon--spin" ng-if="app.status == null"></i>
+						<i class="feather icon-alert-circle text--orange icon--medium" ng-if="app.status == -1"></i>
 						<i class="feather icon-x-circle text--red icon--medium" ng-if="app.status == 0"></i>
 						<i class="feather icon-check-circle text--green icon--medium" ng-if="app.status == 1"></i>
 					</div>
@@ -38,7 +39,8 @@ Skematik
 					<div class="six columns">
 						<span ng-if="app.status == 1">Works like a charm!</span>
 						<span ng-if="app.status == 0">That's down :( </span>
-						<span ng-if="app.status == -1">Some delays here </span> <!-- Doesn't happen yet, could be response from server -->
+						<span ng-if="app.status == -1">Some delays here </span>
+						<span ng-if="app.status == null" class="text--grey">Pending...</span>
 					</div>
 				</li>
 			</ul>

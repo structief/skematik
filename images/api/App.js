@@ -16,6 +16,7 @@ const Roles = require('./src/Roles.js');
 const Participants = require('./src/Participants.js');
 const Auth = require('./src/Auth.js');
 const Feedback = require("./src/Feedback.js");
+const Check = require('./src/helpers/check.js');
 
 //Local helpers
 const Seeder = require('./src/helpers/seeder.js')
@@ -85,6 +86,10 @@ class App {
       })
 
       res.send(result)
+    })
+
+    app.get('/check', async (req, res, next) => {
+      await Check.checkCalls(res, this.pg);
     })
 
     new Schema().assignFields(app, this.pg);
