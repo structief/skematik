@@ -42,7 +42,7 @@ services:
     environment:
       DOMAIN:
     ports:
-      - "4000:3000"
+      - "4000:4000"
     volumes:
       - ./images/static_server/src:/skematik/src
       - ./images/public/:/skematik/src/public
