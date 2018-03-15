@@ -56,7 +56,9 @@ class App {
     //Initiate consumer-scripts for listening
     fs.readdirSync(consumers).forEach(consumer => {
       if(consumer.indexOf(".DS_Store") == -1 ){
-        require(consumers + consumer + "/index.js");
+        if(fs.existsSync(consumers + consumer + "/index.js")){
+          require(consumers + consumer + "/index.js");
+        }
       }
     });
     //Emit an example event

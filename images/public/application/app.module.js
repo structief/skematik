@@ -11,5 +11,6 @@ var skematik = angular.module('skematik', [
     'ngResource',
     'ngSanitize',
     'angular-jwt',
-    'cfp.hotkeys'
+    'cfp.hotkeys',
+    'ngProgress'
 ]);

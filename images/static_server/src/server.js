@@ -35,8 +35,8 @@ class App {
     this.app.use('/*', (req, res) => {
         res.sendFile(path.join(__dirname, 'public', 'index.html'));
     });
-    this.s.listen(3000, () => {
-      console.log(`server up and listening on ${3000}`)
+    this.s.listen(4000, () => {
+      console.log(`server up and listening on ${4000}`)
     })
 
   }
