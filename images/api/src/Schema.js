@@ -18,18 +18,29 @@ class Schema {
         request["updated_at"] = new Date();
         request["uuid"] = uuidV1();
         request["creator"] = user.uuid;
+        request["title"] = req.body.scheme.title;
+        request["organisationID"] = user.organisation.uuid;
+        request["published"] = req.body.scheme.status;
 
-        request["headers"] = req.body.headers.reduce(function(result, item, index, array) {
-          result[item] = index; //a, b, c
-          return result;
-        }, {}) ;
+        // @TODO: save publication.from and publication.to as well! 
 
-        request['title'] = req.body.title;
+        if(req.body.scheme.headers !== undefined){
+          request["headers"] = req.body.scheme.headers.reduce(function(result, item, index, array) {
+            result[item] = index; //a, b, c
+            return result;
+          }, {}) ;
+        }else{
+          request["headers"] = {};
+        }
 
-        request['rows'] = req.body.scheme.rows.reduce(function(result, item, index, array) {
-          result[item.name] = index; //a, b, c
-          return result;
-        }, {}) 
+        if(req.body.scheme.rows !== undefined){
+          request['rows'] = req.body.scheme.rows.reduce(function(result, item, index, array) {
+            result[item.name] = index; //a, b, c
+            return result;
+          }, {});
+        }else{
+          request['rows'] = {};
+        }
 
         request['published'] = 0
 
@@ -38,7 +49,7 @@ class Schema {
           for(let j = 0; j < req.body.scheme.rows[i].cells.length; j++) {
             const obj = {
               tableID: id[0],
-              col: req.body.headers[j],
+              col: req.body.scheme.headers[j],
               row: req.body.scheme.rows[i].name,
               max: req.body.scheme.rows[i].cells[j].max,
               current: 0,
@@ -47,6 +58,8 @@ class Schema {
             await pg("cells").insert(obj);
           }
         }
+        req.params.uuid = request["uuid"];
+        this.getSchema(pg, req, res);
       }, res)
     })
 
@@ -115,7 +128,7 @@ class Schema {
               }
             }
           }
-          this.getShema(pg, req, res);
+          this.getSchema(pg, req, res);
         }, res)
       } else {
         res.sendStatus(401);
@@ -124,13 +137,13 @@ class Schema {
     })
 
     app.get('/schema/:uuid', async (req, res, next) => {
-      this.getShema(pg, req, res)
+      this.getSchema(pg, req, res)
     });
 
     app.get('/schema', async (req, res, next) => {
       checkToken('000', pg, req.headers.authorization, async (user) => {
         var result = {};
-        await pg.select(['uuid', 'title', 'published', 'id']).table("schema").where({organisationID: user.organisation.uuid}).then(async function(r) {
+        await pg.select(['uuid', 'title', 'published', 'id']).table("schema").where({organisationID: user.organisation.uuid}).orderBy('created_at', 'desc').then(async function(r) {
           for(let i = 0; i< r.length; i++) {
             const el = r[i];
             let totalMax = 0;
@@ -156,7 +169,7 @@ class Schema {
     })
   }
 
-  async getShema(pg, req, res) {
+  async getSchema(pg, req, res) {
     let result = {};
     const rowstructure = [];
 
@@ -168,11 +181,10 @@ class Schema {
 
 
     // @TODO: make sure param 'uuid' is of type uuid
-
     await pg.select()
       .table("schema")
       .where({"schema.uuid": req.params.uuid})
-      .join('cells', 'schema.id', "=", "cells.tableID")
+      .leftJoin('cells', 'schema.id', "=", "cells.tableID")
       .then( function (r) {
         if(r.length > 0) {
 
@@ -229,13 +241,10 @@ class Schema {
         } else {
           res.status(404).send({error: 'something went wrong'});
           console.log('answer send')
-
         }
       })
   }
 
 }
-
-
 
 module.exports = Schema;

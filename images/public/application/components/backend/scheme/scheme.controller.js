@@ -10,35 +10,12 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 		"roles": ["owner", "admin", "user", "participant"]
 	};
 
-	if($scope.scheme.uuid == 'new'){
-		$scope.isEditing = true;
+	if($scope.scheme.uuid == "new"){
+		$scope.isEditing = false;
 		//Add some dummy content
 		$scope.scheme.title = "A new scheme";
-		$scope.scheme.headers = ['A string', 11, 'Click me!', '13:00', 14, 'Tomorrow'],
-		$scope.scheme.rows = [
-			{
-				name: "First function",
-				cells: [
-					{max: 0},
-					{max: 0},
-					{max: 3},
-					{max: 5},
-					{max: 1},
-					{max: 0}
-				]
-			},
-			{
-				name: "Edit me via clicking",
-				cells: [
-					{max: 1},
-					{max: 0},
-					{max: 2},
-					{max: 15},
-					{max: 0},
-					{max: 1}
-				]
-			}
-		]; 
+		$scope.scheme.headers = ['A string', 11, 'Click me!', '13:00', 14, 'Tomorrow'];
+		$scope.scheme.rows = [];
 	}else{
 		//Fetch scheme
 		SchemeFactory.getOne({uuid: $scope.scheme.uuid}, function(scheme){
@@ -198,6 +175,9 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 	$scope.saveScheme = function(){
 		console.log("Let's save!");
 
+
+        // @TODO: status of scheme isn't saved properly
+
 		if($scope.scheme.uuid == 'new'){
 			//Do a post to save it, and store the response
 			SchemeFactory.create({scheme: $scope.scheme}, function(response){
@@ -212,7 +192,7 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 			//Save the existing scheme with a put
 			SchemeFactory.update({uuid: $scope.scheme.uuid, scheme: $scope.scheme}, function(response){
 				$scope.scheme = response;
-				console.log(response);
+				$scope.isEditing = false;
 
 				//Show alert
 				$rootScope.$broadcast('alert.show', {title: "Changes saved", message: "Yas, we saved everything!", type: "success"}); 

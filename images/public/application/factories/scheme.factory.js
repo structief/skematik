@@ -21,11 +21,11 @@ skematikFactories.factory('SchemeFactory',["$resource", "$location", function($r
     },
     update: {
       method: 'PUT',
-      isArray: true
+      isArray: false
     },
     create: {
       method: 'POST',
-      isArray: true
+      isArray: false
     }
   });
 }]);
