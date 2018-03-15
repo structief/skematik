@@ -1,0 +1,79 @@
+<!-- Container with current status and build version -->
+<section class="container">
+	<section class="row">
+		<div class="twelve columns">
+			<h4>Current running status of Skematik</h4>
+		</div>
+	</section>
+	<section class="row help-box help-box--success">
+		<div class="one column">
+			<i class="feather icon-check-circle icon--large text--green u__margin--12" style="display: inline-block;"></i>
+		</div>
+		<div class="eleven columns">
+			<b>Things are looking good</b>
+			<p>As far as we can see, all is working as intended, so go on and enjoy your day on Skematik!</p>
+		</div>	
+	</section>
+	<section class="row" style="margin-top: -20px">
+		<div class="five columns">
+			<pre style="margin: 0px">
+				<code>
+Skematik
+{
+  "version": "{{status.v.app}}",
+  "build": "{{status.v.build}}"
+}
+				</code>
+			</pre>
+		</div>
+		<div class="seven columns" style="padding-top: 25px">
+			<ul class="list__vertical list__boxed">
+				<li class="row" ng-repeat="app in status.apps">
+					<div class="two columns">
+						<i class="feather icon-alert-circle text--orange icon--medium" ng-if="app.status == -1"></i> <!-- Doesn't happen yet, could be response from server -->
+						<i class="feather icon-x-circle text--red icon--medium" ng-if="app.status == 0"></i>
+						<i class="feather icon-check-circle text--green icon--medium" ng-if="app.status == 1"></i>
+					</div>
+					<div class="four columns">{{app.name}}</div>
+					<div class="six columns">
+						<span ng-if="app.status == 1">Works like a charm!</span>
+						<span ng-if="app.status == 0">That's down :( </span>
+						<span ng-if="app.status == -1">Some delays here </span> <!-- Doesn't happen yet, could be response from server -->
+					</div>
+				</li>
+			</ul>
+		</div>
+	</section>
+</section>
+
+<!-- Container with feature-follow up. What big parts are done, in progress, to do? -->
+<section class="container">
+	<section class="row">
+		<div class="twelve columns">
+			<h4>Skematik Updates</h4>
+			<p>Here are the details and progress on all of our planned features and services.</p>
+		</div>
+	</section>
+	<section class="container box--white u__padding--20" style="width: 100%">
+		<div class="row row__header text--dark-grey">
+			<div class="six columns">Awesome feature</div>
+			<div class="four columns hide--on-mobile">Hoe vlot het ermee?</div>
+			<div class="two columns hide--on-mobile">&nbsp;</div>
+		</div>
+		<div class="row" ng-repeat="feature in status.features">
+			<div class="six columns" ng-class="{'text--bold': feature.progress == 100, 'text--grey': feature.progress == 0}">
+				{{feature.name}}
+			</div>
+			<div class="four columns">
+				<span class="progress-bar" ng-class="{'progress-bar__green': feature.progress == 100, 'progress-bar__orange': feature.progress > 0 && feature.progress < 100, 'progress-bar__grey': feature.progress == 0}">
+					<span class="progress-bar__width" style="width:{{(feature.progress > 0) ? feature.progress : 100}}%" ng-class="{'progress-bar__null': feature.progress == 0}"></span>
+				</span>
+			</div>
+			<div class="two columns text--center hide--on-mobile">
+				<i class="feather icon-check-circle text--green icon--medium" ng-if="feature.progress == 100"></i>
+				<i class="feather icon-activity text--orange icon--medium" ng-if="feature.progress > 0 && feature.progress < 100"></i>
+				<i class="feather icon-clock text--grey icon--medium" ng-if="feature.progress == 0"></i>
+			</div>
+		</div>
+	</section>
+</section>
