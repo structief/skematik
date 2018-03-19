@@ -111,8 +111,8 @@
 				<input type="text" id="title" ng-model="system.edit.title" placeholder="Titel van het schema" />
 			</div>
 			<div class="input__group">
-				<label for="status" ng-model="system.edit.status" >Status</label>
-				<select>
+				<label for="status">Status</label>
+				<select id="status" ng-model="system.edit.status">
 					<option value="1">Actief</option>
 					<option value="0">Inactief</option>
 				</select>
@@ -126,11 +126,21 @@
 				</div>
 			</div>
 			<div class="input__group">
+				<label for="consumer">Consumer</label>
+				<select id="consumer" ng-model="system.edit.consumer">
+					<option value="smartschool">Smartschool</option>
+					<option value="sendgrid">SendGrid</option>
+				</select>
+			</div>
+			<div class="input__group" ng-if="system.edit.consumer == 'sendgrid'">
 				<label>Roles</label>
-				<div class="button__group button__group--white">
+				<div class="button__group button__group--white" ng-if="system.roles.length > 0">
 					<a href="#" ng-repeat="role in system.roles" ng-click="toggleRole(system.edit.roles, role)" ng-class="{'button--active': inRoles(system.edit.roles, role)}">
 						{{role}}
 					</a>
+				</div>
+				<div ng-if="system.roles.length == 0">
+					<i>Nog geen rollen toegevoegd, <a href="/admin/organisation" ui-sref="be.organisation">meteen doen!</a></i>
 				</div>
 			</div>
 			<div class="input__group">

@@ -20,9 +20,10 @@ class Schema {
         request["creator"] = user.uuid;
         request["title"] = req.body.scheme.title;
         request["organisationID"] = user.organisation.uuid;
+        request["consumer"] = req.body.scheme.consumer;
         request["published"] = req.body.scheme.status;
-
-        // @TODO: save publication.from and publication.to as well! 
+        request["opens"] = req.body.scheme.publication.from;
+        request["closes"] = req.body.scheme.publication.to;
 
         if(req.body.scheme.headers !== undefined){
           request["headers"] = req.body.scheme.headers.reduce(function(result, item, index, array) {
@@ -41,8 +42,6 @@ class Schema {
         }else{
           request['rows'] = {};
         }
-
-        request['published'] = 0
 
         const id = await pg("schema").insert(request).returning('id');
         for(let i = 0; i < req.body.scheme.rows.length; i++) {
@@ -71,7 +70,6 @@ class Schema {
         // TODO: check if token exists
         checkToken('777', pg, req.headers.authorization, async (user) => {
           const request = {};
-          console.log(req);
           request["updated_at"] = new Date();
           if(req.body.scheme.headers) {
             request["headers"] = req.body.scheme.headers.reduce(function(result, item, index, array) {
@@ -83,25 +81,27 @@ class Schema {
           if(req.body.scheme.title) {
             request['title'] = req.body.scheme.title;
           }
-
+          if(req.body.scheme.status) {
+            request['published'] = parseInt(req.body.scheme.status);
+          }
+          if(req.body.scheme.consumer) {
+            request['consumer'] = req.body.scheme.consumer;
+          }
           if(req.body.scheme.rows) {
             request['rows'] = req.body.scheme.rows.reduce(function(result, item, index, array) {
               result[item.name] = index; //a, b, c
               return result;
             }, {}) 
           }
-
-          if(req.body.scheme.published) {
-            request['published'] = req.body.scheme.published
+          if(req.body.scheme.status) {
+            request['published'] = parseInt(req.body.scheme.status);
           }
-          if(req.body.scheme.opens) {
-            request['opens'] = req.body.scheme.opens
+          if(req.body.scheme.publication.from) {
+            request['opens'] = req.body.scheme.publication.from;
           }
-          if(req.body.scheme.closes) {
-            request['closes'] = req.body.scheme.closes
+          if(req.body.scheme.publication.to) {
+            request['closes'] = req.body.scheme.publication.to;
           }
-
-          console.log('request', request)
 
           const id = await pg("schema").update(request).where({uuid: req.params.uuid}).returning('id');
 
@@ -112,7 +112,6 @@ class Schema {
                   const obj = {
                     max: req.body.scheme.rows[i].cells[j].max
                   }
-                  console.log('obj', obj)
                   await pg("cells").update(obj).where({uuid: req.body.scheme.rows[i].cells[j].uuid});
                 } else {
                   const obj = {
@@ -185,11 +184,17 @@ class Schema {
       .table("schema")
       .where({"schema.uuid": req.params.uuid})
       .leftJoin('cells', 'schema.id', "=", "cells.tableID")
-      .then( function (r) {
+      .then(async function (r) {
         if(r.length > 0) {
 
           result["uuid"] = req.params.uuid;
           result["title"] = r[0].title;
+          result["consumer"] = r[0].consumer;
+          result["status"] = r[0].published;
+          result["publication"] = {
+            "from": r[0].opens,
+            "to": r[0].closes
+          };
           const temp = [];
           Object.keys(r[0].headers).map((key, index) => {
             temp.push(key);
@@ -198,9 +203,14 @@ class Schema {
 
 
           result["created_at"] = r[0].created_at;
-          result["created_at"] = r[0].created_at;
           result["updated_at"] = r[0].updated_at;
 
+          result["roles"] = [];
+          await pg.select("type").table("roles").where({"organisationID":r[0].organisationID}).then(function(a){
+            for(var i=0;i<a.length;i++){
+              result["roles"].push(a[i]["type"]);
+            }
+          })
 
           Object.keys(r[0].rows).map((key, index) => {
             const found = [];
@@ -237,10 +247,8 @@ class Schema {
 
           result["answers"] = answers;
           res.status(200).send(result);
-          console.log('answer send result')
         } else {
           res.status(404).send({error: 'something went wrong'});
-          console.log('answer send')
         }
       })
   }
