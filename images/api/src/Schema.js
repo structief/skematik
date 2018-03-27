@@ -1,6 +1,6 @@
 const uuidV1 = require('uuid/v1');
 
-const {checkToken} = require("./helpers/auth")
+const {checkToken} = require('./helpers/auth')
 
 class Schema {
 
@@ -14,24 +14,24 @@ class Schema {
       checkToken('777', pg, req.headers.authorization, async (user) => {
         const request = {};
 
-        request["created_at"] = new Date();
-        request["updated_at"] = new Date();
-        request["uuid"] = uuidV1();
-        request["creator"] = user.uuid;
-        request["title"] = req.body.scheme.title;
-        request["organisationID"] = user.organisation.uuid;
-        request["consumer"] = req.body.scheme.consumer;
-        request["published"] = req.body.scheme.status;
-        request["opens"] = req.body.scheme.publication.from;
-        request["closes"] = req.body.scheme.publication.to;
+        request['created_at'] = new Date();
+        request['updated_at'] = new Date();
+        request['uuid'] = uuidV1();
+        request['creator'] = user.uuid;
+        request['title'] = req.body.scheme.title;
+        request['organisationID'] = user.organisation.uuid;
+        request['consumer'] = req.body.scheme.consumer;
+        request['published'] = req.body.scheme.status;
+        request['opens'] = req.body.scheme.publication.from;
+        request['closes'] = req.body.scheme.publication.to;
 
         if(req.body.scheme.headers !== undefined){
-          request["headers"] = req.body.scheme.headers.reduce(function(result, item, index, array) {
+          request['headers'] = req.body.scheme.headers.reduce(function(result, item, index, array) {
             result[item] = index; //a, b, c
             return result;
           }, {}) ;
         }else{
-          request["headers"] = {};
+          request['headers'] = {};
         }
 
         if(req.body.scheme.rows !== undefined){
@@ -43,7 +43,7 @@ class Schema {
           request['rows'] = {};
         }
 
-        const id = await pg("schema").insert(request).returning('id');
+        const id = await pg('schema').insert(request).returning('id');
         for(let i = 0; i < req.body.scheme.rows.length; i++) {
           for(let j = 0; j < req.body.scheme.rows[i].cells.length; j++) {
             const obj = {
@@ -54,10 +54,10 @@ class Schema {
               current: 0,
               uuid: uuidV1()
             }
-            await pg("cells").insert(obj);
+            await pg('cells').insert(obj);
           }
         }
-        req.params.uuid = request["uuid"];
+        req.params.uuid = request['uuid'];
         this.getSchema(pg, req, res);
       }, res)
     })
@@ -70,9 +70,9 @@ class Schema {
         // TODO: check if token exists
         checkToken('777', pg, req.headers.authorization, async (user) => {
           const request = {};
-          request["updated_at"] = new Date();
+          request['updated_at'] = new Date();
           if(req.body.scheme.headers) {
-            request["headers"] = req.body.scheme.headers.reduce(function(result, item, index, array) {
+            request['headers'] = req.body.scheme.headers.reduce(function(result, item, index, array) {
               result[item] = index; //a, b, c
               return result;
             }, {}) ;
@@ -103,7 +103,7 @@ class Schema {
             request['closes'] = req.body.scheme.publication.to;
           }
 
-          const id = await pg("schema").update(request).where({uuid: req.params.uuid}).returning('id');
+          const id = await pg('schema').update(request).where({uuid: req.params.uuid}).returning('id');
 
           if(req.body.scheme.rows) {
             for(let i = 0; i < req.body.scheme.rows.length; i++) {
@@ -112,7 +112,7 @@ class Schema {
                   const obj = {
                     max: req.body.scheme.rows[i].cells[j].max
                   }
-                  await pg("cells").update(obj).where({uuid: req.body.scheme.rows[i].cells[j].uuid});
+                  await pg('cells').update(obj).where({uuid: req.body.scheme.rows[i].cells[j].uuid});
                 } else {
                   const obj = {
                     tableID: id[0],
@@ -122,7 +122,7 @@ class Schema {
                     current: 0,
                     uuid: uuidV1()
                   }
-                  await pg("cells").insert(obj);
+                  await pg('cells').insert(obj);
                 }
               }
             }
@@ -141,8 +141,8 @@ class Schema {
 
     app.get('/schema', async (req, res, next) => {
       checkToken('000', pg, req.headers.authorization, async (user) => {
-        var result = {};
-        await pg.select(['uuid', 'title', 'published', 'id']).table("schema").where({organisationID: user.organisation.uuid}).orderBy('created_at', 'desc').then(async function(r) {
+        let result = {};
+        await pg.select(['uuid', 'title', 'published', 'id']).table('schema').where({organisationID: user.organisation.uuid}).orderBy('created_at', 'desc').then(async function(r) {
           for(let i = 0; i< r.length; i++) {
             const el = r[i];
             let totalMax = 0;
@@ -174,48 +174,48 @@ class Schema {
 
 
     let answers = [];
-    await pg.select().table("answers").where({tableID: req.params.uuid}).then(function(a) {
+    await pg.select().table('answers').where({tableID: req.params.uuid}).then(function(a) {
       answers = a;
     })
 
 
     // @TODO: make sure param 'uuid' is of type uuid
     await pg.select()
-      .table("schema")
-      .where({"schema.uuid": req.params.uuid})
-      .leftJoin('cells', 'schema.id', "=", "cells.tableID")
+      .table('schema')
+      .where({'schema.uuid': req.params.uuid})
+      .leftJoin('cells', 'schema.id', '=', 'cells.tableID')
       .then(async function (r) {
         if(r.length > 0) {
 
-          result["uuid"] = req.params.uuid;
-          result["title"] = r[0].title;
-          result["consumer"] = r[0].consumer;
-          result["status"] = r[0].published;
-          result["publication"] = {
-            "from": r[0].opens,
-            "to": r[0].closes
+          result['uuid'] = req.params.uuid;
+          result['title'] = r[0].title;
+          result['consumer'] = r[0].consumer;
+          result['status'] = r[0].published;
+          result['publication'] = {
+            from: r[0].opens,
+            to: r[0].closes
           };
           const temp = [];
           Object.keys(r[0].headers).map((key, index) => {
             temp.push(key);
           });
-          result["headers"] = temp;
+          result['headers'] = temp;
 
 
-          result["created_at"] = r[0].created_at;
-          result["updated_at"] = r[0].updated_at;
+          result['created_at'] = r[0].created_at;
+          result['updated_at'] = r[0].updated_at;
 
-          result["roles"] = [];
-          await pg.select("type").table("roles").where({"organisationID":r[0].organisationID}).then(function(a){
+          result['roles'] = [];
+          await pg.select('type').table('roles').where({'organisationID':r[0].organisationID}).then(function(a){
             for(var i=0;i<a.length;i++){
-              result["roles"].push(a[i]["type"]);
+              result['roles'].push(a[i]['type']);
             }
           })
 
           Object.keys(r[0].rows).map((key, index) => {
             const found = [];
             for (let i = 0; i < r.length; i++) {
-              if (r[i]["row"] === key) {
+              if (r[i]['row'] === key) {
                 const num = answers.filter(answer => answer.cellID === r[i].uuid);
                 found.push({
                   max: r[i].max,
@@ -243,9 +243,9 @@ class Schema {
           });
 
 
-          result["rows"] = rowstructure;
+          result['rows'] = rowstructure;
 
-          result["answers"] = answers;
+          result['answers'] = answers;
           res.status(200).send(result);
         } else {
           res.status(404).send({error: 'something went wrong'});

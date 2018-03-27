@@ -1,7 +1,7 @@
 const sgMail = require('@sendgrid/mail');
 const fs = require('fs');
 
-const config = require('../config.js');
+const config = require('./../config.js');
 
 class Mail {
   constructor() {
