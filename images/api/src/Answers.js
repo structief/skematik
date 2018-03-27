@@ -26,23 +26,23 @@ class Answers {
       const insert = [];
 
       //Repeat for all lines of participation
-      for(var i=0;i<req.body["participations"].length; i++){
-        var participation = req.body["participations"][i];
-        var timestamp = new Date();
+      for(var i=0;i<req.body['participations'].length; i++){
+        const participation = req.body['participations'][i];
+        const timestamp = new Date();
 
         // Assess if can register
-        await pg.select().table('answers').where({ cellID: participation["cell"]['uuid']}).join('cells', 'cells.uuid', '=', 'answers.cellID').then(function(d) {
+        await pg.select().table('answers').where({ cellID: participation['cell']['uuid']}).join('cells', 'cells.uuid', '=', 'answers.cellID').then(function(d) {
           if(d.length > 0 && d.length >= d[0].max) {
             //do not allow
             return res.send(417, { message: 'no more place', cell: {uuid: participation["cell"]['uuid']}});
           }else{
             //Add participation for insertion
             insert.push({
-              "cellID": participation["cell"]["uuid"],
-              "tableID": req.params.uuid,
-              "participant": req.body["participant"],
-              "created_at": timestamp,
-              "updated_at": timestamp
+              cellID: participation['cell']['uuid'],
+              tableID: req.params.uuid,
+              participant: req.body['participant'],
+              created_at: timestamp,
+              updated_at: timestamp
             });
           }
         });
@@ -51,8 +51,8 @@ class Answers {
       // add to answers, if there isn't already a 417 underway
       if(insert.length > 0 && !res.headersSent){
         //Up counter for each insertion
-        for(var i=0;i<insert.length;i++){
-          await pg.update({'current': pg.raw('current + 1')}).table('cells').where({uuid: insert[i]['cellID']}).then(function(v) {
+        for(let i=0;i<insert.length;i++){
+          await pg.update({'current': pg.raw('current + 1')}).table('cells').where({uuid: insert[i]['cellID']}).then((v) {
           });
         }
         
@@ -67,7 +67,7 @@ class Answers {
 
           let answers = [];
 
-          await pg.select().table("answers").where({tableID: req.params.uuid}).then(function(a) {
+          await pg.select().table("answers").where({tableID: req.params.uuid}).then((a) => {
             answers = a;
           });
 
