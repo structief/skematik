@@ -5,6 +5,13 @@ networks:
     driver: bridge
 
 services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
   db:
     image: postgres
     build:
@@ -14,6 +21,7 @@ services:
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
+      VIRTUAL_HOST: db.localhost
 
   api:
     build:
@@ -25,6 +33,7 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
       MODE: start
+      VIRTUAL_HOST: ~^api\.(localhost|skematik\.io)
     links:
       - db
     depends_on:
@@ -40,7 +49,8 @@ services:
     networks:
       - default
     environment:
-      DOMAIN:
+      VIRTUAL_HOST: ~^(www\.)?(localhost|skematik\.io)
+
     ports:
       - "4000:4000"
     volumes:

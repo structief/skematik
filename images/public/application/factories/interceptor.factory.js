@@ -3,7 +3,7 @@ skematikFactories.factory('resourceInterceptor', ["$rootScope", "$q", function (
     request: function (config) {
       //Intercept all calls to api
       if(system.logApi){
-        if(config.url.indexOf(":3000") !== -1){
+        if(config.url.indexOf("api.") !== -1){
           console.log("Started loading: " + config.url);
         }
       }
@@ -15,7 +15,7 @@ skematikFactories.factory('resourceInterceptor', ["$rootScope", "$q", function (
     },
     response: function (response) {
       //Intercept all calls to api
-      if(response.config.url.indexOf(":3000") !== -1){
+      if(response.config.url.indexOf("api.") !== -1){
         if(system.logApi){
           console.log("Done loading: " + response.config.url + " with code: " + response.status + ":" + response.statusText);
         }
