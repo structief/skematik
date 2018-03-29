@@ -8,6 +8,7 @@ skematikFactories.factory('resourceInterceptor', ["$rootScope", "$q", function (
         }
       }
 
+      //Start progressbar
       $rootScope.$broadcast("progressbar.start", {});
       
       //Return config
@@ -22,6 +23,7 @@ skematikFactories.factory('resourceInterceptor', ["$rootScope", "$q", function (
         response.data.$status = response.status;
       }
       
+      //End progressbar
       $rootScope.$broadcast("progressbar.complete", {});
 
       //Return response
@@ -35,6 +37,10 @@ skematikFactories.factory('resourceInterceptor', ["$rootScope", "$q", function (
         error.data = {};
       }
       error.data.$status = error.status;
+
+      //End progressbar
+      $rootScope.$broadcast("progressbar.complete", {});
+
       return $q.reject(error);
     }
   };

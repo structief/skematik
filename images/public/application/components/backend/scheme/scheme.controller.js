@@ -81,6 +81,30 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 		$rootScope.$broadcast("sidebar.close", "scheme-sidebar-backend");
 	}
 
+	$scope.exportParticipations = function(){
+        var str = 'UUID,participant,created_at,updated_at,row,column\r\n';
+
+        for (var i = 0; i < $scope.scheme.answers.length; i++) {
+            var line = '';
+            for (var index in $scope.scheme.answers[i]) {
+                if (line != '') line += ','
+
+                line += $scope.scheme.answers[i][index];
+            }
+
+            str += line + '\r\n';
+        }
+		var encodedUri = encodeURI(str);
+		var link = document.createElement("a");
+		link.setAttribute("href", "data:text/csv;charset=utf-8," + encodedUri);
+		link.setAttribute("target", "_blank");
+		link.setAttribute("download", "my_data.csv");
+		link.style.visibility = "hidden";
+		document.body.appendChild(link);
+		link.click(); 
+   		document.body.removeChild(link); 
+	}
+
 	//Row functions
 	$scope.addSpace = function(rowId, cellId, isDelete){
 		if (!isDelete){
