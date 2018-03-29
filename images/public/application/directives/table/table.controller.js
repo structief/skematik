@@ -91,9 +91,9 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 				window.location.reload();
 			}
 		}, function(error){
-			if(error.status == 401){
+			if(error.status == 401 || error.status == 417){
 				//Show the error
-				$rootScope.$broadcast('alert.show', {'title': "Sorry :(", 'message': "No seats left for this spot", type: 'error'}); 
+				$rootScope.$broadcast('alert.show', {'title': "Sorry :(", 'message': "No seats left for some spots, please refresh the page..", type: 'error'}); 
 			}else{
 				//Show some error
 				$rootScope.$broadcast('alert.show', {'title': "Though luck", 'message': "Something went wrong, try again later", type: 'warning'}); 

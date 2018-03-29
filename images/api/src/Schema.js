@@ -174,7 +174,7 @@ class Schema {
 
 
     let answers = [];
-    await pg.select().table('answers').where({tableID: req.params.uuid}).then(function(a) {
+    await pg.select("answers.cellID", "answers.participant", "answers.created_at", "answers.updated_at", "cells.row", "cells.col").table("answers").where({"answers.tableID": req.params.uuid}).join('cells', 'cells.uuid', '=', 'answers.cellID').then(function(a) {
       answers = a;
     })
 

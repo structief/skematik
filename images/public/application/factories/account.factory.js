@@ -1,8 +1,8 @@
 //Account factory
 skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", "$rootScope", "jwtHelper", function($resource, $q, $location, $rootScope, jwtHelper) {
-    var account, host = $location.host();
+    var account;
     return {
-        api: $resource('http://' + host + ':3000/:type', {type: "@type"}, {
+        api: $resource($location.protocol() + '://api.' + $location.host() + '/:type', {type: "@type"}, {
             me: {
                 method: 'GET',
                 isArray: false,

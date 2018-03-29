@@ -3,11 +3,12 @@ skematikFactories.factory('resourceInterceptor', ["$rootScope", "$q", function (
     request: function (config) {
       //Intercept all calls to api
       if(system.logApi){
-        if(config.url.indexOf(":3000") !== -1){
+        if(config.url.indexOf("api.") !== -1){
           console.log("Started loading: " + config.url);
         }
       }
 
+      //Start progressbar
       $rootScope.$broadcast("progressbar.start", {});
       
       //Return config
@@ -15,13 +16,14 @@ skematikFactories.factory('resourceInterceptor', ["$rootScope", "$q", function (
     },
     response: function (response) {
       //Intercept all calls to api
-      if(response.config.url.indexOf(":3000") !== -1){
+      if(response.config.url.indexOf("api.") !== -1){
         if(system.logApi){
           console.log("Done loading: " + response.config.url + " with code: " + response.status + ":" + response.statusText);
         }
         response.data.$status = response.status;
       }
       
+      //End progressbar
       $rootScope.$broadcast("progressbar.complete", {});
 
       //Return response
@@ -35,6 +37,10 @@ skematikFactories.factory('resourceInterceptor', ["$rootScope", "$q", function (
         error.data = {};
       }
       error.data.$status = error.status;
+
+      //End progressbar
+      $rootScope.$broadcast("progressbar.complete", {});
+
       return $q.reject(error);
     }
   };
