@@ -15,7 +15,7 @@
 			</div>
 		</div>
 		<div class="row scheme--no-box scheme__row--title" ng-repeat="row in scheme.rows" ng-show="scheme.rows">
-			<div class="twelve columns text--right">
+			<div class="twelve columns text--right text-overflow--ellipsis">
 				<span>
 					{{row.name}}
 				</span>
@@ -23,31 +23,34 @@
 		</div>
 	</div>
 	<div class="one column text--center">
-		<div class="row scheme__title">
+		<div class="row scheme__title" style="margin-bottom: 0px;">
 			<div class="twelve columns text--center">
-				<a ng-click="next()" ng-disabled="nav.min >= (scheme.cols.length-8)">
-					<i class="feather icon-arrow-left icon--medium text--dark-grey"></i>
+				<a ng-click="previous()" ng-disabled="nav.min == 0">
+					<i class="feather icon-arrow-left icon--medium"></i>
 				</a>
 			</div>
 		</div>
-		<div class="row scheme--no-box" ng-repeat="header in scheme.headers track by $index" ng-if="$index >= nav.min && $index < (nav.min+8)">
-			{{nav.min == 0 ? '&nbsp;' : '...'}}
+		<div 
+			class="row scheme--no-box has__overlay" ng-repeat="row in scheme.rows track by $index" ng-show="nav.min > 0" style="margin-right:5px">
+			<div class="overlay overlay--right"></div>
 		</div>
 	</div>
-	<div class="columns {{scheme.headers.size > 8 ? 'eight' : translation[scheme.headers.length]}}"" style="margin-left: 0px">
+	<div class="columns {{scheme.headers.length > 8 ? 'eight' : translation[scheme.headers.length]}}"" style="margin-left: 0px">
 		<div class="row scheme__title" style="margin-bottom: -20px;">
 			<!-- MAX EIGHT -->
-			<div class="text--center {{scheme.headers.size > 8 ? 'one column' : classes[scheme.headers.length] + ' columns'}}" ng-repeat="header in scheme.headers track by $index" ng-if="$index >= nav.min && $index < (nav.min+8)">
+			<div 
+				class="text-overflow--ellipsis text--center {{scheme.headers.length > 7 ? 'two columns' : classes[scheme.headers.length] + ' columns'}}" ng-repeat="header in scheme.headers track by $index" ng-if="$index >= nav.min && $index < (nav.min+7)">
 				<span>{{header}}</span>
 			</div>
 		</div>
 	        <div class="clearfix"></div>
 		<div class="row scheme__body" ng-repeat="row in scheme.rows" ng-show="scheme.rows">
 			<div 
-				class="padding--15 text--center {{scheme.headers.size > 8 ? 'one column' : classes[scheme.headers.length] + ' columns'}}"
+				class="padding--15 text--center {{scheme.headers.length > 7 ? 'two columns' : classes[scheme.headers.length] + ' columns'}}"
 				ng-class="{'cell--disabled': cell.current.length >= cell.max, 'cell--active': inParticipations(row, cell)}"
+				ng-disabled="cell.current.length >= cell.max"
 				ng-repeat="cell in row.cells track by $index" 
-				ng-if="$index >= nav.min && $index < (nav.min+8)" 
+				ng-if="$index >= nav.min && $index < (nav.min+7)" 
 				>
 				<span ng-if="inParticipations(row, cell)" ng-click="removeParticipation(row, cell)">
 				</span>
@@ -58,15 +61,16 @@
 		</div>
 	</div>
 	<div class="one column text--center">
-		<div class="row scheme__title">
+		<div class="row scheme__title" style="margin-bottom: 0px;">
 			<div class="twelve columns text--center">
-				<a ng-click="next()" ng-disabled="nav.min >= (scheme.cols.length-8)">
-					<i class="feather icon-arrow-right icon--medium text--dark-grey"></i>
+				<a ng-click="next()" ng-disabled="nav.min >= (scheme.headers.length-7)">
+					<i class="feather icon-arrow-right icon--medium"></i>
 				</a>
 			</div>
 		</div>
-		<div class="row scheme--no-box" ng-repeat="header in scheme.headers track by $index" ng-if="$index >= nav.min && $index < (nav.min+8)">
-			{{nav.min >= (scheme.cols.length-8) ? '&nbsp;' : '...'}}
+		<div 
+			class="row scheme--no-box has__overlay" ng-repeat="row in scheme.rows track by $index" ng-show="(nav.min+7) < scheme.headers.length">
+			<div class="overlay overlay--left"></div>
 		</div>
 	</div>
 </section>

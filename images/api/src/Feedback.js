@@ -22,6 +22,7 @@ class Feedback {
 
       await pg.insert({
         feeling: req.body.feeling,
+        message: req.body.message,
         url: req.body.url,
         user: userID,
         uuid: uuidV1()

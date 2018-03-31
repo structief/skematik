@@ -11,18 +11,37 @@
 
 	ul{
 		margin: 0px;
-	}
 
-	i{
-		font-size: 20px;
+		li div{
+			display: inline-block;
+		}
 	}
 
 	&:hover{
+		i{
+			transition: all .1s ease-in-out;;
+		}
+
 		a:hover i{
 			opacity: 1;
+			transform: scale(1.4);
 		}
 		a:not(:hover) i{
 			opacity: 0.7;
+			transform: scale(1);
+		}
+	}
+
+	input{
+		margin-bottom: 0px;
+		height: 30px;
+
+		&:not(:focus):not(.ng-not-empty){
+			font-style: italic;
+			color: #999999;
+		}
+		&:not(:focus){
+			border-color: transparent;
 		}
 	}
 }
