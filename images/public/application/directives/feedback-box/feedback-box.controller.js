@@ -60,7 +60,7 @@ skematikControllers.controller('FeedbackBoxController',["$scope", "$rootScope", 
 				$scope.reactedTo = {'urls': []};
 			}
 			$scope.reactedTo.urls.push($scope.success.url);
-			//localStorage.setItem('feedback', JSON.stringify($scope.reactedTo));
+			localStorage.setItem('feedback', JSON.stringify($scope.reactedTo));
 		}, function(error){
 			//Do nothing, popup will show up again next time
 		});
