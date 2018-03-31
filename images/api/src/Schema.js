@@ -14,6 +14,8 @@ class Schema {
       checkToken('777', pg, req.headers.authorization, async (user) => {
         const request = {};
 
+        console.log(req.body)
+
         request['created_at'] = new Date();
         request['updated_at'] = new Date();
         request['uuid'] = uuidV1();
@@ -22,6 +24,7 @@ class Schema {
         request['organisationID'] = user.organisation.uuid;
         request['consumer'] = req.body.scheme.consumer;
         request['published'] = req.body.scheme.status;
+        request['roles'] = req.body.scheme.roles;
         request['opens'] = req.body.scheme.publication.from;
         request['closes'] = req.body.scheme.publication.to;
 
@@ -43,6 +46,16 @@ class Schema {
           request['rows'] = {};
         }
 
+        const r = [];
+        for(let role in request['roles']){
+          const tRole = request['roles'][role].toUpperCase();
+          await pg.select(['uuid', 'type']).table('roles').where({organisationID: request['organisationID'], type: tRole}).then((full) => {
+            console.log(full)
+            r.push(full[0]);
+          }) 
+        }
+        request['roles'] = { 'roles': r}
+      
         const id = await pg('schema').insert(request).returning('id');
         for(let i = 0; i < req.body.scheme.rows.length; i++) {
           for(let j = 0; j < req.body.scheme.rows[i].cells.length; j++) {

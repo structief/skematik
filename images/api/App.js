@@ -123,6 +123,7 @@ class App {
       table.uuid('organisationID');
       table.integer('published');
       table.json('consumer');
+      table.json('roles');
     }).then(function() {
       console.log("created tables")
     });
