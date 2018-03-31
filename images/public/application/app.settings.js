@@ -4,7 +4,7 @@ var system = {
 	logApi: false
 };
 
-skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$httpProvider", "jwtOptionsProvider", function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, jwtOptionsProvider) {
+skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$httpProvider", "jwtOptionsProvider", "$qProvider", function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, jwtOptionsProvider, $qProvider) {
 	// Crazy prefixes
 	$locationProvider.html5Mode(true).hashPrefix('!');
 
@@ -168,6 +168,9 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 	//Push interceptors for HTTP calls
     $httpProvider.interceptors.push('resourceInterceptor');
     $httpProvider.interceptors.push('jwtInterceptor');
+
+    //Ignore unhandled rejections
+    $qProvider.errorOnUnhandledRejections(system.logApi);
 }]);
 
 skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFactory", "$transitions", "ngProgressFactory", function($rootScope, $stateProvider, $stateParams, authManager, AccountFactory, $transitions, ngProgressFactory){	

@@ -1,4 +1,4 @@
-skematikControllers.controller('BeSchemeController',["$scope", "$state", "$stateParams", "$rootScope", "SchemeFactory", "RolesFactory", function($scope, $stateProvider, $stateParams, $rootScope, SchemeFactory, RolesFactory) {
+skematikControllers.controller('BeSchemeController',["$scope", "$state", "$stateParams", "$rootScope", "SchemeFactory", "RolesFactory", "$location",function($scope, $stateProvider, $stateParams, $rootScope, SchemeFactory, RolesFactory, $location) {
 	$scope.scheme = {
 		uuid: $stateParams.schemeUuid
 	}
@@ -10,21 +10,16 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 		"roles": []
 	};
 
-	if($scope.scheme.uuid == "new"){
-		$scope.isEditing = false;
-		//Add some dummy content
-		$scope.scheme.title = "A new scheme";
-		$scope.scheme.headers = ['A string', 11, 'Click me!', '13:00', 14, 'Tomorrow'];
-		$scope.scheme.rows = [];
-	}else{
-		//Fetch scheme
-		SchemeFactory.getOne({uuid: $scope.scheme.uuid}, function(scheme){
-			$scope.scheme = scheme;
-		}, function(error){
-			console.error(error);
-		});
-	}
+	//Fetch scheme
+	console.log("Get one");
+	console.log($scope.scheme);
+	SchemeFactory.getOne({uuid: $scope.scheme.uuid}, function(scheme){
+		$scope.scheme = scheme;
+	}, function(error){
+		console.error(error);
+	});
 
+	//Fetch roles
 	RolesFactory.get({}, function(roles){
 		for(var i=0;i<roles.length;i++){
 			$scope.system.roles.push(roles[i].type);
@@ -209,6 +204,9 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 			//Do a post to save it, and store the response
 			SchemeFactory.create({scheme: $scope.scheme}, function(response){
 				$scope.scheme = response;
+
+				//Update url with uuid
+				$location.url("admin/scheme/" + $scope.scheme.uuid);
 
 				//Show alert
 				$rootScope.$broadcast('alert.show', {title: "Schema created", message: "Yas, we saved everything!", type: "success"}); 
