@@ -22,8 +22,7 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 		4: 'three',
 		5: 'two',
 		6: 'two',
-		7: 'one',
-		8: 'one'
+		7: 'two',
 	};
 
 	$scope.active = {
@@ -35,8 +34,7 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 	
 	// Functions
 	$scope.next = function(){
-		console.log($scope.nav.min);
-		if($scope.nav.min + 8 < $scope.scheme.cols.length){
+		if($scope.nav.min + 7 < $scope.scheme.headers.length){
 			$scope.nav.min++;
 		}
 	}
@@ -51,8 +49,11 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 		if($rootScope.isAuthenticated){
 			$rootScope.$broadcast("sidebar.open", {uuid: "participants-overview"});
 		}else{
-			$rootScope.$broadcast("sidebar.open", {uuid: "schedule-participate"});
-			$scope.participations.push({"row": row, "cell": cell});
+			//Is there still room in this spot?
+			if(cell.current.length < cell.max){
+				$rootScope.$broadcast("sidebar.open", {uuid: "schedule-participate"});
+				$scope.participations.push({"row": row, "cell": cell});
+			}
 		}
 		$scope.active = {
 			"row": row,

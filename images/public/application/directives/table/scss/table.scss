@@ -5,6 +5,33 @@
 	.scheme--no-box{
 		min-height: 60px;
 		margin-bottom: 0px;
+
+		&.has__overlay{
+			height: 81px;
+			margin-bottom: 2rem;
+			background-color: #fff;
+			border: 1px solid #eee;
+			padding: 10px 10px 0;
+			box-shadow: 1px 1px 5px rgba(0,0,0,.05);
+			position: relative;
+		}
+
+		.overlay{
+			display: inline-block;
+			position: absolute;
+			height: 110%;
+			width: 110%;
+			top: -5px;
+
+			&.overlay--left{
+				background: linear-gradient(to right, rgba(0,0,0,0) 0%,rgba(249,249,249,1) 100%);
+				left: 0;
+			}
+			&.overlay--right{
+				background: linear-gradient(to left, rgba(0,0,0,0) 0%,rgba(249,249,249,1) 100%);
+				right: 0;
+			}
+		}
 	}
 	.scheme__title{
 		a{
@@ -29,7 +56,7 @@
 		color: #B8BDC1;
 		font-size: 12px;
 		font-weight: 600;
-		margin-bottom: 2rem;
+		margin-bottom: 2rem !important;
 		min-height: 72px;
 		line-height: 70px;
 		box-sizing: content-box;
