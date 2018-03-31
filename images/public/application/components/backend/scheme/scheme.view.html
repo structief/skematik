@@ -127,12 +127,12 @@
 			</div>
 			<div class="input__group">
 				<label for="consumer">Consumer</label>
-				<select id="consumer" ng-model="system.edit.consumer">
+				<select id="consumer" ng-model="system.edit.consumer.index">
 					<option value="smartschool">Smartschool</option>
 					<option value="sendgrid">SendGrid</option>
 				</select>
 			</div>
-			<div class="input__group" ng-if="system.edit.consumer == 'sendgrid'">
+			<div class="input__group" ng-if="system.edit.consumer.index == 'sendgrid'">
 				<label>Roles</label>
 				<div class="button__group button__group--white" ng-if="system.roles.length > 0">
 					<a href="#" ng-repeat="role in system.roles" ng-click="toggleRole(system.edit.roles, role)" ng-class="{'button--active': inRoles(system.edit.roles, role)}">

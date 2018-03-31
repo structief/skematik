@@ -11,8 +11,6 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 	};
 
 	//Fetch scheme
-	console.log("Get one");
-	console.log($scope.scheme);
 	SchemeFactory.getOne({uuid: $scope.scheme.uuid}, function(scheme){
 		$scope.scheme = scheme;
 	}, function(error){
