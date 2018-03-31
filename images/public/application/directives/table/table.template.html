@@ -101,8 +101,9 @@
 	<div class="row" ng-if="participations.length > 0">
 		<p>Om je deelname te bevestigen, geef hieronder jouw gegevens in, en klik op "Deelnemen".</p>
 		<div class="twelve columns input__group">
-			<label for="email">Emailadres</label>
-			<input type="email" id="email" ng-model="active.data.email" placeholder="me@live.com" required ng-model-options="{allowInvalid: true}">
+			<label for="identifier">{{scheme.consumer.index == 'sendgrid' ? 'Emailadres' : 'Smartschool nummer'}}</label>
+			<input type="email" id="identifier" ng-model="active.data.identifier" placeholder="me@live.com" required ng-model-options="{allowInvalid: true}" ng-if="scheme.consumer.index == 'sendgrid'">
+			<input type="text" id="identifier" ng-model="active.data.identifier" placeholder="ex02324" required ng-if="scheme.consumer.index == 'smartschool'">
 		</div>
 		<div class="twelve columns input__group">
 			<button class="button button-white" ng-click="saveParticipation()">Deelnemen</button>

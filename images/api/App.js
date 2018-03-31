@@ -121,7 +121,9 @@ class App {
       table.uuid("creator");
       table.timestamps();
       table.uuid('organisationID');
-      table.integer('published')
+      table.integer('published');
+      table.json('consumer');
+      table.json('roles');
     }).then(function() {
       console.log("created tables")
     });

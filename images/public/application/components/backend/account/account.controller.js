@@ -3,6 +3,8 @@ skematikControllers.controller('BeAccountController',["$scope", "$state", "$stat
 	
 	AccountFactory.getAccount().then(function(account){
 		$scope.account = account;
+	}, function(reject){
+		//Rejected, probably a 401
 	});
 
 	$scope.logout = function(){

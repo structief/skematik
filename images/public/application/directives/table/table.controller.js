@@ -76,7 +76,7 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 	} 
 
 	$scope.saveParticipation = function(){
-		SchemeFactory.participate({uuid: $scope.scheme.uuid}, {participations: $scope.participations, participant: $scope.active.data.email}, function(response){
+		SchemeFactory.participate({uuid: $scope.scheme.uuid}, {participations: $scope.participations, participant: $scope.active.data.identifier}, function(response){
 			//You're added, show a message & close sidebar!
 			$rootScope.$broadcast('alert.show', {'title': "Yay", 'message': "You reserved them spot(s), congrats!", type: 'success'}); 
 			$rootScope.$broadcast('sidebar.close', {uuid: "schedule-participate"});

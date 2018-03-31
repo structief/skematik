@@ -43,7 +43,7 @@
 					<i class="feather icon-grid icon--medium text--green" ng-if="scheme.currentParticipants <= scheme.maxParticipants*0.5"></i>
 					<i class="feather icon-grid icon--medium text--orange" ng-if="scheme.currentParticipants > scheme.maxParticipants*0.5 && scheme.currentParticipants <= scheme.maxParticipants*0.75"></i>
 					<i class="feather icon-grid icon--medium text--red" ng-if="scheme.currentParticipants > scheme.maxParticipants*0.75 && scheme.currentParticipants < scheme.maxParticipants"></i>
-					<i class="feather icon-grid icon--medium text--grey" ng-if="scheme.currentParticipants >= scheme.maxParticipants"></i>
+					<i class="feather icon-grid icon--medium text--grey" ng-if="scheme.currentParticipants >= scheme.maxParticipants && scheme.maxParticipants > 0"></i>
 					<h6>{{scheme.title}}</h6>
 					<div class="row row--close">
 						<div class="eight columns text--left">Participants:</div>

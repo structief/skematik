@@ -1,4 +1,4 @@
-skematikControllers.controller('BeSchemeController',["$scope", "$state", "$stateParams", "$rootScope", "SchemeFactory", function($scope, $stateProvider, $stateParams, $rootScope, SchemeFactory) {
+skematikControllers.controller('BeSchemeController',["$scope", "$state", "$stateParams", "$rootScope", "SchemeFactory", "RolesFactory", "$location",function($scope, $stateProvider, $stateParams, $rootScope, SchemeFactory, RolesFactory, $location) {
 	$scope.scheme = {
 		uuid: $stateParams.schemeUuid
 	}
@@ -7,23 +7,22 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 	$scope.system = {
 		"isEditing": false,
 		"edit": null,
-		"roles": ["owner", "admin", "user", "participant"]
+		"roles": []
 	};
 
-	if($scope.scheme.uuid == "new"){
-		$scope.isEditing = false;
-		//Add some dummy content
-		$scope.scheme.title = "A new scheme";
-		$scope.scheme.headers = ['A string', 11, 'Click me!', '13:00', 14, 'Tomorrow'];
-		$scope.scheme.rows = [];
-	}else{
-		//Fetch scheme
-		SchemeFactory.getOne({uuid: $scope.scheme.uuid}, function(scheme){
-			$scope.scheme = scheme;
-		}, function(error){
-			console.error(error);
-		});
-	}
+	//Fetch scheme
+	SchemeFactory.getOne({uuid: $scope.scheme.uuid}, function(scheme){
+		$scope.scheme = scheme;
+	}, function(error){
+		console.error(error);
+	});
+
+	//Fetch roles
+	RolesFactory.get({}, function(roles){
+		for(var i=0;i<roles.length;i++){
+			$scope.system.roles.push(roles[i].type);
+		}
+	});
 
 	$scope.nav = {
 		min: 0
@@ -62,12 +61,13 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 		$rootScope.$broadcast("sidebar.open", {uuid: "scheme-sidebar-backend"});
 		$scope.system.edit = {
 			"title": angular.copy($scope.scheme.title),
-			"status": 0,
-			"publication": {
-				"from": null,
-				"to": null
+			"status": angular.copy($scope.scheme.status).toString(),
+			"publication": { // YYYY-MM-DD
+				"from": angular.copy($scope.scheme.publication.from).toString().substring(0, 10),
+				"to": angular.copy($scope.scheme.publication.to).toString().substring(0, 10)
 			},
-			"roles": []
+			"roles": angular.copy($scope.scheme.roles),
+			"consumer": angular.copy($scope.scheme.consumer)
 		};
 	}
 
@@ -76,6 +76,7 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 		$scope.scheme.roles = angular.copy($scope.system.edit.roles);
 		$scope.scheme.status = angular.copy($scope.system.edit.status);
 		$scope.scheme.publication = angular.copy($scope.system.edit.publication);
+		$scope.scheme.consumer = angular.copy($scope.system.edit.consumer);
 
 		$scope.saveScheme();
 		$rootScope.$broadcast("sidebar.close", "scheme-sidebar-backend");
@@ -197,15 +198,13 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 
 	//Scheme functions
 	$scope.saveScheme = function(){
-		console.log("Let's save!");
-
-
-        // @TODO: status of scheme isn't saved properly
-
 		if($scope.scheme.uuid == 'new'){
 			//Do a post to save it, and store the response
 			SchemeFactory.create({scheme: $scope.scheme}, function(response){
 				$scope.scheme = response;
+
+				//Update url with uuid
+				$location.url("admin/scheme/" + $scope.scheme.uuid);
 
 				//Show alert
 				$rootScope.$broadcast('alert.show', {title: "Schema created", message: "Yas, we saved everything!", type: "success"}); 

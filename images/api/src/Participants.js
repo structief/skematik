@@ -2,8 +2,11 @@ const uuidV1 = require('uuid/v1');
 const {checkToken} = require("./helpers/auth")
 const multer  = require('multer')
 const upload = multer({ dest: './uploads/' })
+const EventEmitter = require('events');
 
 const fs = require('fs')
+
+class Dispatch extends EventEmitter {}
 
 class Participants {
 
@@ -66,6 +69,7 @@ class Participants {
             //Error handle entry
             if(participant.mail == null || participant.status == null){
               res.sendStatus(400);
+              return false;
             }
             const uuid1 = uuidV1();
             //Insert participant
@@ -78,6 +82,9 @@ class Participants {
               organisationID: user.organisation.uuid
             }).then(function() {
               uuids.push(uuid1);
+
+              const d = new Dispatch();
+              d.emit('mail.subscription.added', {})
             })
           }
           res.status(200).send({uuid: uuids});

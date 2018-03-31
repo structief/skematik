@@ -15,7 +15,7 @@ class Roles {
 
     app.get('/roles', async (req, res, next) => {
       checkToken('333', pg, req.headers.authorization, async (user) => {
-        const list = await pg.select().table('roles').where({organisationID: user.organisation.uuid});
+        const list = await pg.select(['type', 'uuid']).table('roles').where({organisationID: user.organisation.uuid});
         res.send(200, list);
       }, res)
 

@@ -53,6 +53,10 @@ skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", "$r
                         deferred.resolve(account);
                         $rootScope.isAuthenticated = true;
                     }
+                }, function(error){
+                    //401, or anything else
+                    deferred.reject(error);
+                    $rootScope.isAuthenticated = false;
                 });
             }else{
                 deferred.resolve(account);
@@ -76,8 +80,7 @@ skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", "$r
                 //Component has no use for the response, unless it's an error
                 deferred.resolve(data);
             }, function(error){
-                console.log(error);
-                deferred.resolve(false);
+                deferred.reject(error);
             });
 
             return deferred.promise;
@@ -92,6 +95,8 @@ skematikFactories.factory('AccountFactory', ["$resource", "$q", "$location", "$r
                         $rootScope.isAuthenticated = true;
                         return true;
                     }
+                }, function(reject){
+                    //Rejected, probably a 401
                 });
             }else{
                 return true;
