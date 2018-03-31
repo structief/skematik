@@ -14,9 +14,6 @@ class Schema {
     app.post('/schema', async (req, res, next) => {
       checkToken('777', pg, req.headers.authorization, async (user) => {
         const request = {};
-
-        console.log(req.body)
-
         request['created_at'] = new Date();
         request['updated_at'] = new Date();
         request['uuid'] = uuidV1();
@@ -29,26 +26,28 @@ class Schema {
         request['opens'] = moment(req.body.scheme.publication.from).format();
         request['closes'] = moment(req.body.scheme.publication.to).format();
 
-        if(req.body.scheme.headers !== undefined){
+        if (req.body.scheme.headers !== undefined){
           request['headers'] = req.body.scheme.headers.reduce(function(result, item, index, array) {
             result[item] = index; //a, b, c
             return result;
           }, {}) ;
-        }else{
+        }
+        else{
           request['headers'] = {};
         }
 
-        if(req.body.scheme.rows !== undefined){
+        if (req.body.scheme.rows !== undefined){
           request['rows'] = req.body.scheme.rows.reduce(function(result, item, index, array) {
             result[item.name] = index; //a, b, c
             return result;
           }, {});
-        }else{
+        } 
+        else {
           request['rows'] = {};
         }
 
         const r = [];
-        for(let role in request['roles']){
+        for (let role in request['roles']){
           const tRole = request['roles'][role].toUpperCase();
           await pg.select(['uuid', 'type']).table('roles').where({organisationID: request['organisationID'], type: tRole}).then((full) => {
             console.log(full)
@@ -58,19 +57,6 @@ class Schema {
         request['roles'] = { 'roles': r}
       
         const id = await pg('schema').insert(request).returning('id');
-        for(let i = 0; i < req.body.scheme.rows.length; i++) {
-          for(let j = 0; j < req.body.scheme.rows[i].cells.length; j++) {
-            const obj = {
-              tableID: id[0],
-              col: req.body.scheme.headers[j],
-              row: req.body.scheme.rows[i].name,
-              max: req.body.scheme.rows[i].cells[j].max,
-              current: 0,
-              uuid: uuidV1()
-            }
-            await pg('cells').insert(obj);
-          }
-        }
         req.params.uuid = request['uuid'];
         this.getSchema(pg, req, res);
       }, res)
@@ -80,54 +66,66 @@ class Schema {
 
     app.put('/schema/:uuid', async (req, res, next) => {
 
-      if(req.headers.authorization) {
+      if (req.headers.authorization) {
         // TODO: check if token exists
         checkToken('777', pg, req.headers.authorization, async (user) => {
           const request = {};
           request['updated_at'] = new Date();
-          if(req.body.scheme.headers) {
+          if (req.body.scheme.headers) {
             request['headers'] = req.body.scheme.headers.reduce(function(result, item, index, array) {
               result[item] = index; //a, b, c
               return result;
             }, {}) ;
           }
 
-          if(req.body.scheme.title) {
+
+          if (req.body.scheme.title) {
             request['title'] = req.body.scheme.title;
           }
-          if(req.body.scheme.status) {
+          if (req.body.scheme.status) {
             request['published'] = parseInt(req.body.scheme.status);
           }
-          if(req.body.scheme.consumer) {
+          if (req.body.scheme.consumer) {
             request['consumer'] = req.body.scheme.consumer;
           }
-          if(req.body.scheme.rows) {
+          if (req.body.scheme.roles) {
+            const r = [];
+            for (let role in req.body.scheme.roles){
+              const tRole = req.body.scheme.roles[role].toUpperCase();
+              await pg.select(['uuid', 'type']).table('roles').where({organisationID: user.organisation.uuid, type: tRole}).then((full) => {
+                r.push(full[0]);
+              }) 
+            }
+            request['roles'] = { 'roles': r}
+          }
+          if (req.body.scheme.rows) {
             request['rows'] = req.body.scheme.rows.reduce(function(result, item, index, array) {
               result[item.name] = index; //a, b, c
               return result;
             }, {}) 
           }
-          if(req.body.scheme.status) {
+          if (req.body.scheme.status) {
             request['published'] = parseInt(req.body.scheme.status);
           }
-          if(req.body.scheme.publication.from) {
-            request['opens'] = req.body.scheme.publication.from;
+          if (req.body.scheme.publication.from) {
+            request['opens'] = moment(req.body.scheme.publication.from).format();
           }
-          if(req.body.scheme.publication.to) {
-            request['closes'] = req.body.scheme.publication.to;
+          if (req.body.scheme.publication.to) {
+            request['closes'] = moment(req.body.scheme.publication.to).format();
           }
 
           const id = await pg('schema').update(request).where({uuid: req.params.uuid}).returning('id');
 
-          if(req.body.scheme.rows) {
-            for(let i = 0; i < req.body.scheme.rows.length; i++) {
-              for(let j = 0; j < req.body.scheme.rows[i].cells.length; j++) {
-                if(req.body.scheme.rows[i].cells[j].uuid) {
+          if (req.body.scheme.rows) {
+            for (let i = 0; i < req.body.scheme.rows.length; i++) {
+              for (let j = 0; j < req.body.scheme.rows[i].cells.length; j++) {
+                if (req.body.scheme.rows[i].cells[j].uuid) {
                   const obj = {
                     max: req.body.scheme.rows[i].cells[j].max
                   }
                   await pg('cells').update(obj).where({uuid: req.body.scheme.rows[i].cells[j].uuid});
-                } else {
+                } 
+                else {
                   const obj = {
                     tableID: id[0],
                     col: req.body.scheme.headers[j],
@@ -143,7 +141,8 @@ class Schema {
           }
           this.getSchema(pg, req, res);
         }, res)
-      } else {
+      } 
+      else {
         res.sendStatus(401);
       }
 
@@ -157,12 +156,12 @@ class Schema {
       checkToken('000', pg, req.headers.authorization, async (user) => {
         let result = {};
         await pg.select(['uuid', 'title', 'published', 'id']).table('schema').where({organisationID: user.organisation.uuid}).orderBy('created_at', 'desc').then(async function(r) {
-          for(let i = 0; i< r.length; i++) {
+          for (let i = 0; i< r.length; i++) {
             const el = r[i];
             let totalMax = 0;
             let totalCur = 0;
             await pg.select().table('cells').where({'tableID': el.id}).then(function(cellRes) {
-              for(let j = 0; j < cellRes.length; j++) {
+              for (let j = 0; j < cellRes.length; j++) {
                 totalMax += cellRes[j].max;
                 totalCur += cellRes[j].current
               }
@@ -186,7 +185,7 @@ class Schema {
     let result = {};
 
 
-    if(req.params.uuid == "new"){
+    if (req.params.uuid == "new"){
       result = {
         "uuid": "new",
         "title": "A new scheme",
@@ -212,7 +211,8 @@ class Schema {
         }
       };
       res.status(200).send(result);
-    }else{
+    }
+    else {
       const rowstructure = [];
 
 
@@ -228,13 +228,12 @@ class Schema {
         .where({'schema.uuid': req.params.uuid})
         .leftJoin('cells', 'schema.id', '=', 'cells.tableID')
         .then(async function (r) {
-          if(r.length > 0) {
+          if (r.length > 0) {
             result['uuid'] = req.params.uuid;
             result['title'] = r[0].title;
             result['consumer'] = r[0].consumer;
             result['status'] = r[0].published;
-            result['roles'] = r[0].roles.roles.map((role) => { console.log(role.type); return role.type });
-            console.log(result['roles'], r[0].roles.roles)
+            result['roles'] = r[0].roles.roles.map((role) => { return role.type });
             result['publication'] = {
               from: moment(r[0].opens).format(),
               to: moment(r[0].closes).format()
@@ -265,9 +264,9 @@ class Schema {
 
               const intermediary = [];
 
-              for(let i = 0; i < temp.length; i++) {
-                for(let j = 0; j < found.length; j++) {
-                  if(found[j].col === temp[i]) {
+              for (let i = 0; i < temp.length; i++) {
+                for (let j = 0; j < found.length; j++) {
+                  if (found[j].col === temp[i]) {
                     intermediary.push(found[j])
                   }
                 }
@@ -284,7 +283,8 @@ class Schema {
 
             result['answers'] = answers;
             res.status(200).send(result);
-          } else {
+          }
+          else {
             res.status(404).send({error: 'something went wrong'});
           }
         });
