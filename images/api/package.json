@@ -20,6 +20,7 @@
     "identicon.js": "2.3.*",
     "jwt-simple": "0.5.*",
     "knex": "0.13.*",
+    "moment": "2.22.0",
     "mongodb": "2.2.*",
     "mongoose": "4.11.*",
     "multer": "1.3.*",

@@ -1,4 +1,5 @@
 const uuidV1 = require('uuid/v1');
+const moment = require('moment');
 
 const {checkToken} = require('./helpers/auth')
 
@@ -22,11 +23,11 @@ class Schema {
         request['creator'] = user.uuid;
         request['title'] = req.body.scheme.title;
         request['organisationID'] = user.organisation.uuid;
-        request['consumer'] = req.body.scheme.consumer;
+        request['consumer'] = {index: req.body.scheme.consumer};
         request['published'] = req.body.scheme.status;
         request['roles'] = req.body.scheme.roles;
-        request['opens'] = req.body.scheme.publication.from;
-        request['closes'] = req.body.scheme.publication.to;
+        request['opens'] = moment(req.body.scheme.publication.from).format();
+        request['closes'] = moment(req.body.scheme.publication.to).format();
 
         if(req.body.scheme.headers !== undefined){
           request['headers'] = req.body.scheme.headers.reduce(function(result, item, index, array) {
@@ -199,14 +200,15 @@ class Schema {
       .leftJoin('cells', 'schema.id', '=', 'cells.tableID')
       .then(async function (r) {
         if(r.length > 0) {
-
           result['uuid'] = req.params.uuid;
           result['title'] = r[0].title;
           result['consumer'] = r[0].consumer;
           result['status'] = r[0].published;
+          result['roles'] = r[0].roles.roles.map((role) => { console.log(role.type); return role.type });
+          console.log(result['roles'], r[0].roles.roles)
           result['publication'] = {
-            from: r[0].opens,
-            to: r[0].closes
+            from: moment(r[0].opens).format(),
+            to: moment(r[0].closes).format()
           };
           const temp = [];
           Object.keys(r[0].headers).map((key, index) => {
@@ -217,13 +219,6 @@ class Schema {
 
           result['created_at'] = r[0].created_at;
           result['updated_at'] = r[0].updated_at;
-
-          result['roles'] = [];
-          await pg.select('type').table('roles').where({'organisationID':r[0].organisationID}).then(function(a){
-            for(var i=0;i<a.length;i++){
-              result['roles'].push(a[i]['type']);
-            }
-          })
 
           Object.keys(r[0].rows).map((key, index) => {
             const found = [];

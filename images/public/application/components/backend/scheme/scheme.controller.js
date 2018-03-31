@@ -16,6 +16,13 @@ skematikControllers.controller('BeSchemeController',["$scope", "$state", "$state
 		$scope.scheme.title = "A new scheme";
 		$scope.scheme.headers = ['A string', 11, 'Click me!', '13:00', 14, 'Tomorrow'];
 		$scope.scheme.rows = [];
+		$scope.scheme.status = 0;
+		$scope.scheme.publication = {
+			"from": new Date().toUTCString(),
+			"to": new Date().toUTCString()
+		};
+		$scope.scheme.roles = [];
+		
 	}else{
 		//Fetch scheme
 		SchemeFactory.getOne({uuid: $scope.scheme.uuid}, function(scheme){
