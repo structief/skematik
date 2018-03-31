@@ -27,6 +27,8 @@ skematikControllers.controller('StatusController',["$scope", "$state", "$rootSco
 		v: null,
 		features: null
 	}
+
+	
 	$http({
 		method: 'GET',
 		url: '/package.json'

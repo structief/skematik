@@ -1,22 +1,46 @@
 <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
-<div class="feedback-box" ng-show="!success && !feedbackAvailableForThisPage">
+<div class="feedback-box" ng-show="step.index == 0 && !feedbackAvailableForThisPage">
 	<ul class="list__horizontal">
 		<li ng-repeat="(name, reaction) in reactions">
-			<a href="#" data-tooltip="{{reaction.tooltip}}" class="link--w-tooltip" ng-click="addReaction(name)">
+			<a href="#" data-tooltip="{{reaction.tooltip}}" class="link--w-tooltip" ng-click="toStep(name, 1)">
 				<!-- Some icon -->
-				<i class="em-svg em-{{reaction.emoji}}"></i>
+				<i class="em-svg em-{{reaction.emoji}} icon--medium"></i>
 			</a>
 		</li>
 	</ul>
 </div>
-<div class="feedback-box" ng-if="success && !feedbackAvailableForThisPage">
+<div class="feedback-box" ng-show="step.index == 1 && !feedbackAvailableForThisPage">
+	<ul class="list__horizontal">
+		<li style="margin-right: -10px">
+			<a href="#" ng-click="toStep(null, 0)" style="position: relative;top: 2px">
+				<i class="feather icon-chevron-left text--dark-grey icon--small"></i>
+			</a>
+		</li>
+		<li>
+			<i class="em-svg em-{{reactions[step.name].emoji}} icon--medium"></i>
+			<div class="u__margin-left--10">
+				<input type="text" placeholder="Ik wil nog iets zeggen.." ng-model="message" />
+			</div>
+		</li>
+		<li ng-click="saveReaction(step.name)">
+			<a href="#" class="link--active link--no-underline">
+				<i class="feather icon-check text--green icon--small"></i>
+			</a>
+		</li>
+	</ul>
+</div>
+<div class="feedback-box" ng-show="success && !feedbackAvailableForThisPage">
 	<ul class="list__horizontal">
 		<li>
-			<i class="em-svg em-{{success.emoji}}"></i>
-			<span class="u__margin-left--10">{{success.message}}</span>
+			<i class="em-svg em-{{success.emoji}} icon--medium"></i>
+			<div class="u__margin-left--10">
+				<span>{{success.message}}</span>
+			</div>
 		</li>
 		<li ng-click="dismissReaction()">
-			<a href="#" class="link--active link--no-underline">x</a>
+			<a href="#" class="link--active link--no-underline">
+				<i class="feather icon-x text--dark-grey icon--small"></i>
+			</a>
 		</li>
 	</ul>
 </div>

@@ -220,6 +220,7 @@ class App {
       table.timestamps(true, true);
       table.uuid("uuid");
       table.string("feeling");
+      table.text("message", "longtext");
       table.string("url");
       table.string("user");
     }).then(function() {

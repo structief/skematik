@@ -2,6 +2,12 @@ skematikControllers.controller('FeedbackBoxController',["$scope", "$rootScope", 
 	//Just get the reacted pages already
 	$scope.reactedTo = JSON.parse(localStorage.getItem('feedback'));
 	$scope.feedbackAvailableForThisPage = true;
+	$scope.message = null;
+
+	$scope.step = {
+		index: 0, 
+		name: null
+	};
 
 	$scope.reactions = {
 		'joy': {
@@ -22,7 +28,7 @@ skematikControllers.controller('FeedbackBoxController',["$scope", "$rootScope", 
 		'cry': {
 			'emoji': 'cry',
 			'tooltip': 'Not what I expected',
-			'success': 'Contact us with what you did expect, will you?'
+			'success': 'Thanks for the feedback, we\'ll do better next time!'
 		},
 		'rage': {
 			'emoji': 'rage',
@@ -31,7 +37,14 @@ skematikControllers.controller('FeedbackBoxController',["$scope", "$rootScope", 
 		}
 	};
 
-	$scope.addReaction = function(name){
+	$scope.toStep = function(name, index){
+		//Add step
+		$scope.step.index = index;
+		$scope.step.name = name;
+	}
+
+	$scope.saveReaction = function(name){
+		$scope.step.index = 2;
 		$scope.success = {
 			'name': name,
 			'emoji': $scope.reactions[name].emoji,
@@ -39,20 +52,22 @@ skematikControllers.controller('FeedbackBoxController',["$scope", "$rootScope", 
 			'url': $location.url()
 		};
 
+		console.log($scope.message);
 		//Send $scope.success to certain endpoint
-		FeedbackFactory.sendFeedback({"feeling": $scope.success.name, "url": $scope.success.url}, function(response){
+		FeedbackFactory.sendFeedback({"feeling": $scope.success.name, "message": $scope.message, "url": $scope.success.url}, function(response){
 			//Add this page to the localStorage
 			if($scope.reactedTo == null){
 				$scope.reactedTo = {'urls': []};
 			}
 			$scope.reactedTo.urls.push($scope.success.url);
-			localStorage.setItem('feedback', JSON.stringify($scope.reactedTo));
+			//localStorage.setItem('feedback', JSON.stringify($scope.reactedTo));
 		}, function(error){
 			//Do nothing, popup will show up again next time
 		});
 	}
 
 	$scope.dismissReaction = function(){
+		$scope.step = 0;
 		$scope.success = null;
 		$scope.feedbackAvailableForThisPage = true;
 	}
