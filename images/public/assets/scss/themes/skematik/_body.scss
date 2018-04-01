@@ -19,3 +19,9 @@ body{
 a{
 	cursor: pointer;
 }
+
+section[ui-view='pageContent']{
+	min-height: calc(100vh - 447px);
+    /*overflow: hidden;*/
+    margin-bottom: 100px;
+}

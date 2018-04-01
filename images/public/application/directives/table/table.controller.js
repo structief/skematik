@@ -1,4 +1,4 @@
-skematikControllers.controller('TableController',["$scope", "$rootScope", "SchemeFactory", function($scope, $rootScope, SchemeFactory) {
+skematikControllers.controller('TableController',["$scope", "$rootScope", "SchemeFactory", "$state", function($scope, $rootScope, SchemeFactory, $stateProvider) {
 	$scope.scheme = {
 		uuid: $scope.uuid
 	};
@@ -22,18 +22,19 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 		4: 'three',
 		5: 'two',
 		6: 'two',
-		7: 'one',
-		8: 'one'
+		7: 'two',
 	};
+
 	$scope.active = {
 		"row": null,
 		"cell": null
-	}
+	};
+
+	$scope.participations = []; // List of {row, cell}-objects for the active subscription, BEFORE entering email or other identification
 	
 	// Functions
 	$scope.next = function(){
-		console.log($scope.nav.min);
-		if($scope.nav.min + 8 < $scope.scheme.cols.length){
+		if($scope.nav.min + 7 < $scope.scheme.headers.length){
 			$scope.nav.min++;
 		}
 	}
@@ -48,7 +49,11 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 		if($rootScope.isAuthenticated){
 			$rootScope.$broadcast("sidebar.open", {uuid: "participants-overview"});
 		}else{
-			$rootScope.$broadcast("sidebar.open", {uuid: "schedule-participate"});
+			//Is there still room in this spot?
+			if(cell.current.length < cell.max){
+				$rootScope.$broadcast("sidebar.open", {uuid: "schedule-participate"});
+				$scope.participations.push({"row": row, "cell": cell});
+			}
 		}
 		$scope.active = {
 			"row": row,
@@ -56,11 +61,24 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 			"data": null
 		};
 	};
+	$scope.removeParticipation = function(par, cell){
+		//If 'cell' is set, "par" is the row
+		if(cell !== null && cell != undefined){
+			for(var i=0; i < $scope.participations.length; i++){
+				if(par == $scope.participations[i].row && cell == $scope.participations[i].cell){
+					$scope.participations.splice(i, 1);
+					return;
+				}
+			}
+		}else{
+			$scope.participations.splice($scope.participations.indexOf(par), 1);
+		}
+	} 
 
 	$scope.saveParticipation = function(){
-		SchemeFactory.participate({uuid: $scope.scheme.uuid}, {cellID: $scope.active.cell.uuid, participant: $scope.active.data.email}, function(response){
+		SchemeFactory.participate({uuid: $scope.scheme.uuid}, {participations: $scope.participations, participant: $scope.active.data.identifier}, function(response){
 			//You're added, show a message & close sidebar!
-			$rootScope.$broadcast('alert.show', {'title': "Yay", 'message': "You reserved a spot, congrats!", type: 'success'}); 
+			$rootScope.$broadcast('alert.show', {'title': "Yay", 'message': "You reserved them spot(s), congrats!", type: 'success'}); 
 			$rootScope.$broadcast('sidebar.close', {uuid: "schedule-participate"});
 
 			//Update scheme
@@ -68,19 +86,13 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 				//Expect a scheme from the server
 				$scope.scheme = response.scheme;
 			}else{
-				//Do this manually
-				for(var i = 0; i < $scope.scheme.rows.length; i++){
-					for(var j = 0; j < $scope.scheme.rows[i].cells.length; j++){
-						if($scope.scheme.rows[i].cells[j].uuid == $scope.active.cell.uuid){
-							$scope.scheme.rows[i].cells[j].current.push($scope.active.data.email);
-						}
-					}
-				}
+				//Reload the page for updates
+				window.location.reload();
 			}
 		}, function(error){
-			if(error.status == 401){
+			if(error.status == 401 || error.status == 417){
 				//Show the error
-				$rootScope.$broadcast('alert.show', {'title': "Sorry :(", 'message': "No seats left for this spot", type: 'error'}); 
+				$rootScope.$broadcast('alert.show', {'title': "Sorry :(", 'message': "No seats left for some spots, please refresh the page..", type: 'error'}); 
 			}else{
 				//Show some error
 				$rootScope.$broadcast('alert.show', {'title': "Though luck", 'message': "Something went wrong, try again later", type: 'warning'}); 
@@ -89,15 +101,22 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 	};
 
 	SchemeFactory.getOne({uuid: $scope.scheme.uuid}, function(response){
-		if(response.status == 404){
+		//All is fine
+		$scope.scheme = response;
+	}, function(error){
+		if(error.status == 404){
 			//Scheme not found
 			$stateProvider.go('fe.entry');
 			$rootScope.$broadcast('alert.show', {'title': "Scheme not found", 'message': "This UUID is not know in the database", type: 'error'}); 
-		}else{
-			//All is fine
-			$scope.scheme = response;
 		}
 	});
 
-
+	$scope.inParticipations = function(row, cell){
+		for(var i=0; i < $scope.participations.length; i++){
+			if(row == $scope.participations[i].row && cell == $scope.participations[i].cell){
+				return true;
+			}
+		}
+		return false;
+	}
 }]);

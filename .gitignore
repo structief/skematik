@@ -19,3 +19,8 @@ images/public/index.html
 images/server/src
 
 images/api/src/helpers/config.js
+images/api/src/consumers/*/config.js
+
+docs
+images/public/assets/css/minified/skematik_stylesheets.css
+images/public/index.html

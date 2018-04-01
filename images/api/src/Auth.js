@@ -99,15 +99,16 @@ class Auth {
         } else {
           res.send(401, { message: "Mail not recognized in the system", status: 401, field: "mail"});
         }
-      })
+      }).catch(() => { res.send(500)})
 
     })
 
 
     app.post('/logout',  async (req, res, next) => {
-      pg('tokens').del().where({token: req.headers.authorization.split(" ")[1]}).then((data) => {
+      await pg('tokens').del().where({token: req.headers.authorization.split(" ")[1]}).then((data) => {
         res.send(200, data)
-      }).catch((error) => { res.sendStatus(401)})
+      })
+      res.sendStatus(401)
 
     })
 
@@ -168,7 +169,6 @@ class Auth {
       short: "participant of the organisation",
       permissions: "300"
     })
-    console.log('insert 1', insert1, insertRolesOwner)
 
     return await pg('users')
       .insert({

@@ -2,9 +2,47 @@
   "name": "skematik-frontend",
   "version": "0.1.0",
   "v": {
-    "app": "0.5.0",
-    "build": "0.5.1-compile.262"
+    "app": "0.0.8",
+    "build": "0.0.8-compile.334"
   },
+  "features": [
+    {
+      "name": "Login / registratie accounts",
+      "progress": 100
+    },
+    {
+      "name": "Overzicht deelnemers",
+      "progress": 100
+    },
+    {
+      "name": "Import mogelijke deelnemers via csv",
+      "progress": 100
+    },
+    {
+      "name": "Eenvoudig feedbacksysteem op pagina's",
+      "progress": 100
+    },
+    {
+      "name": "Rollen / rechtenbeheer organisatie",
+      "progress": 81
+    },
+    {
+      "name": "Aanmaken / aanpassen schema's",
+      "progress": 95
+    },
+    {
+      "name": "Modulesysteem voor integratie SendGrid & Smartschool",
+      "progress": 24
+    },
+    {
+      "name": "Page-part systeem voor front-end",
+      "progress": 15
+    },
+    {
+      "name": "OAuth integratie",
+      "progress": 0
+    }
+  ],
   "description": "Frontend for the Skematik application",
   "main": "index.html",
   "scripts": {

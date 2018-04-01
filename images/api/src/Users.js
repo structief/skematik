@@ -60,7 +60,6 @@ class Users {
     app.post('/users/list', async (req, res, next) => {
       const request = req.body;
 
-      console.log("request", request)
       request["uuid"] = uuidV1();
       await pg("users").insert(request).then(function() {
         res.send({ uuid: request['uuid']})

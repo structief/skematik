@@ -7,6 +7,8 @@ skematikControllers.controller('HeaderController',["$scope", "$state", "$rootSco
 	if($rootScope.isAuthenticated){
 		AccountFactory.getAccount().then(function(account){
 			$scope.account = account;
+		}, function(reject){
+			//Rejected, probably a 401
 		});
 	}
 

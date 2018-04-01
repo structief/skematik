@@ -26,17 +26,17 @@ skematikControllers.controller('AlertController',["$scope", "$rootScope", "$time
 			switch(alert.type){
 				case 'error':
 				default:
-					alert.icon = "https://icongram.jgog.in/feather/alert-circle.svg?color=d91e18";
+					alert.icon = "https://icongr.am/feather/alert-circle.svg?color=d91e18";
 					alert.type = "error";
 					break;
 				case 'warning':
-					alert.icon = "https://icongram.jgog.in/feather/help-circle.svg?color=ff4500"
+					alert.icon = "https://icongr.am/feather/help-circle.svg?color=ff4500"
 					break;
 				case 'info':
-					alert.icon = "https://icongram.jgog.in/feather/info.svg?color=1e90ff"
+					alert.icon = "https://icongr.am/feather/info.svg?color=1e90ff"
 					break;
 				case 'success':
-					alert.icon = "https://icongram.jgog.in/feather/check-circle.svg?color=00aa00"
+					alert.icon = "https://icongr.am/feather/check-circle.svg?color=00aa00"
 					break;
 			}
 		}

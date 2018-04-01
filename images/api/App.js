@@ -4,7 +4,9 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const uuidV1 = require('uuid/v1');
 const faker = require("faker");
+const fs = require('fs');
 
+//Load all schemes
 const Schema = require('./src/Schema.js');
 const Cells = require('./src/Cells.js');
 const Users = require('./src/Users.js');
@@ -13,9 +15,16 @@ const Organisations = require('./src/Organisations.js');
 const Roles = require('./src/Roles.js');
 const Participants = require('./src/Participants.js');
 const Auth = require('./src/Auth.js');
-const Seeder = require('./src/helpers/seeder.js')
 const Feedback = require("./src/Feedback.js");
+const Check = require('./src/helpers/check.js');
 
+//Local helpers
+const Seeder = require('./src/helpers/seeder.js')
+const emitter = require('./src/helpers/emitter.js');
+
+
+//Location of consumer-scropts
+const consumers = './src/consumers/';
 
 const app = express();
 const server = http.Server(app);
@@ -38,7 +47,6 @@ class App {
       _this.initialiseTables();
     });
 
-
     this.start = this.start.bind(this);
 
     this.app = express();
@@ -46,6 +54,17 @@ class App {
   }
 
   async start() {
+    //Initiate consumer-scripts for listening
+    fs.readdirSync(consumers).forEach(consumer => {
+      if(consumer.indexOf(".DS_Store") == -1 ){
+        if(fs.existsSync(consumers + consumer + "/index.js")){
+          require(consumers + consumer + "/index.js");
+        }
+      }
+    });
+    //Emit an example event
+    emitter.emit("server.start", {});
+
 
     app.use( bodyParser.json() );       // to support JSON-encoded bodies
 
@@ -69,6 +88,10 @@ class App {
       res.send(result)
     })
 
+    app.get('/check', async (req, res, next) => {
+      await Check.checkCalls(res, this.pg);
+    })
+
     new Schema().assignFields(app, this.pg);
     new Cells().assignFields(app, this.pg);
     new Auth().assignFields(app, this.pg);
@@ -82,8 +105,7 @@ class App {
 
     server.listen(PORT, () => {
       console.log(`server up and listening on ${PORT}`)
-    })
-
+    });
   }
 
   async initialiseTables() {
@@ -99,7 +121,9 @@ class App {
       table.uuid("creator");
       table.timestamps();
       table.uuid('organisationID');
-      table.integer('published')
+      table.integer('published');
+      table.json('consumer');
+      table.json('roles');
     }).then(function() {
       console.log("created tables")
     });
@@ -157,7 +181,7 @@ class App {
     await this.pg.schema.createTableIfNotExists('participants', function (table) {
       table.increments();
       table.uuid("uuid");
-      table.string("usermail").notNullable();
+      table.string("mail").notNullable();
       table.string("name");
       table.json("roles");
       table.string("code");
@@ -198,6 +222,7 @@ class App {
       table.timestamps(true, true);
       table.uuid("uuid");
       table.string("feeling");
+      table.text("message", "longtext");
       table.string("url");
       table.string("user");
     }).then(function() {

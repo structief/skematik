@@ -4,7 +4,7 @@ var system = {
 	logApi: false
 };
 
-skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$httpProvider", "jwtOptionsProvider", function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, jwtOptionsProvider) {
+skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$httpProvider", "jwtOptionsProvider", "$qProvider", function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, jwtOptionsProvider, $qProvider) {
 	// Crazy prefixes
 	$locationProvider.html5Mode(true).hashPrefix('!');
 
@@ -80,6 +80,15 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 			}
 		}
 	})
+	.state('fe.status', {
+		url: "/status",
+		views: {
+			"pageContent@": {
+				templateUrl: base_url + "frontend/status/status.view.html",
+				controller: "StatusController",
+			}
+		}
+	})
 	.state('be', {
 		url: '/admin',
 		views: {
@@ -151,7 +160,7 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 	        }
 	        return localStorage.getItem('jwt-token');
 		}],
-		whiteListedDomains: ['api.skematik.io', 'localhost', 'skematik.localhost', 'skematik.online', '146.185.161.104'],
+		whiteListedDomains: ['api.skematik.io', 'localhost', 'skematik.localhost', 'skematik.online', '146.185.161.104', 'api.localhost'],
 		unauthenticatedRedirectPath: '/login'
     });
 
@@ -159,9 +168,12 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 	//Push interceptors for HTTP calls
     $httpProvider.interceptors.push('resourceInterceptor');
     $httpProvider.interceptors.push('jwtInterceptor');
+
+    //Ignore unhandled rejections
+    $qProvider.errorOnUnhandledRejections(system.logApi);
 }]);
 
-skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFactory", "$transitions", function($rootScope, $stateProvider, $stateParams, authManager, AccountFactory, $transitions){	
+skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFactory", "$transitions", "ngProgressFactory", function($rootScope, $stateProvider, $stateParams, authManager, AccountFactory, $transitions, ngProgressFactory){	
 	//Account check
 	AccountFactory.isLoggedIn();
 	
@@ -190,5 +202,26 @@ skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFac
 		}else{
 			$rootScope.$broadcast("menu.show", {});
 		}
+	});
+
+	//Create progressbar
+	var progressbar = ngProgressFactory.createInstance();
+
+	//Advance progressbar on event
+	$rootScope.$on("progressbar.start", function(data){
+		//Reset to 0
+		progressbar.reset();
+		//Add color
+		progressbar.setColor("#33C3F0");
+		progressbar.start();
+	});
+
+	$rootScope.$on("progressbar.advance", function(data){
+		progressbar.set(data.value);
+	});
+
+	//End progressbar on event
+	$rootScope.$on("progressbar.complete", function(data){
+		progressbar.complete();
 	});
 }]);

@@ -1,5 +1,5 @@
 const uuidV1 = require('uuid/v1');
-
+const emitter = require('./helpers/emitter.js');
 
 class Answers {
 
@@ -11,52 +11,53 @@ class Answers {
 
 
     app.get('/answers', async (req, res, next) => {
-      await pg.select().table("answers").then(function(r) {
+      await pg.select().table('answers').then((r) => {
         res.send(r)
       })
     })
 
     app.delete('/answers', async (req, res, next) => {
-      await pg("answers").where({uuid: req.body.uuid}).del().then(function(r) {
+      await pg('answers').where({uuid: req.body.uuid}).del().then((r) => {
         res.send(200)
       })
     })
 
-
-
-
     app.post('/schema/:uuid/answer', async (req, res, next) => {
+      const insert = [];
 
-      //check for token 
+      //Repeat for all lines of participation
+      for(let i=0;i<req.body['participations'].length; i++){
+        const participation = req.body['participations'][i];
+        const timestamp = new Date();
 
-      
-      const insert = {};
+        // Assess if can register
+        await pg.select().table('answers').where({ cellID: participation['cell']['uuid']}).join('cells', 'cells.uuid', '=', 'answers.cellID').then((d) => {
+          if(d.length > 0 && d.length >= d[0].max) {
+            //do not allow
+            return res.send(417, { message: 'no more place', cell: {uuid: participation['cell']['uuid']}});
+          }else{
+            //Add participation for insertion
+            insert.push({
+              cellID: participation['cell']['uuid'],
+              tableID: req.params.uuid,
+              participant: req.body['participant'],
+              created_at: timestamp,
+              updated_at: timestamp
+            });
+          }
+        });
+      }
 
-
-      insert["cellID"] = req.body["cellID"];
-      insert["tableID"] = req.params.uuid;
-      insert["participant"] = req.body["participant"];
-
-      insert["created_at"] = new Date();
-      insert["updated_at"] = new Date();
-
-      // asses if can register
-      let go = false;
-      await pg.update({'current': pg.raw('current + 1')}).table('cells').where({uuid: insert['cellID']}).then(function(v) {
-      })
-
-      await pg.select().table('answers').where({ cellID: insert['cellID']}).join('cells', 'cells.uuid', '=', 'answers.cellID').then(function(d) {
-        if(d.length > 0 && d.length >= d[0].max) {
-          //do not allow
-          res.send(417, { message: 'no more place'});
-        } else {
-          go = true;
+      // add to answers, if there isn't already a 417 underway
+      if(insert.length > 0 && !res.headersSent){
+        //Up counter for each insertion
+        for(let i=0;i<insert.length;i++){
+          await pg.update({'current': pg.raw('current + 1')}).table('cells').where({uuid: insert[i]['cellID']}).then((v) => {
+          });
         }
-      })
-
-      // add to answers
-      if( go ) {
-        await pg("answers").insert(insert).then(async(id) => {
+        
+        //Add entire stuff to db
+        await pg('answers').insert(insert).then(async(id) => {
           
 
 
@@ -66,37 +67,37 @@ class Answers {
 
           let answers = [];
 
-          await pg.select().table("answers").where({tableID: req.params.uuid}).then(function(a) {
+          await pg.select().table('answers').where({tableID: req.params.uuid}).then((a) => {
             answers = a;
           });
 
 
-
+          //Get scheme again
           await pg.select()
-            .table("schema")
-            .where({"schema.uuid": req.params.uuid})
-            .join('cells', 'schema.id', "=", "cells.tableID")
+            .table('schema')
+            .where({'schema.uuid': req.params.uuid})
+            .join('cells', 'schema.id', '=', 'cells.tableID')
             .then( function (r) {
               if(r.length > 0) {
 
-                result["uuid"] = req.params.uuid;
-                result["title"] = r[0].title;
+                result['uuid'] = req.params.uuid;
+                result['title'] = r[0].title;
                 const temp = [];
                 Object.keys(r[0].headers).map((key, index) => {
                   temp.push(key);
                 });
-                result["headers"] = temp;
+                result['headers'] = temp;
 
 
-                result["created_at"] = r[0].created_at;
-                result["created_at"] = r[0].created_at;
-                result["updated_at"] = r[0].updated_at;
+                result['created_at'] = r[0].created_at;
+                result['created_at'] = r[0].created_at;
+                result['updated_at'] = r[0].updated_at;
 
 
                 Object.keys(r[0].rows).map((key, index) => {
                   const found = [];
                   for (let i = 0; i < r.length; i++) {
-                    if (r[i]["row"] === key) {
+                    if (r[i]['row'] === key) {
                       const num = answers.filter(answer => answer.cellID === r[i].uuid);
                       found.push({
                         max: r[i].max,
@@ -124,33 +125,30 @@ class Answers {
                 });
 
 
-                result["rows"] = rowstructure;
+                result['rows'] = rowstructure;
 
-                result["answers"] = answers;
+                result['answers'] = answers;
+
+                // Subscription worked, fire event
+                // Replace 'mail' by the selected method by the admin
+                // But this is just a first setup
+                emitter.emit('mail.subscription.added', {insert});
+
                 res.send(result);
               } else {
                 res.sendStatus(404);
-
               }
-            }).then(function() {
-
-          }).catch(function(error) {
-            res.sendStatus(404);
-          })
-
-
+            })
+            .then(function() {})
+            .catch(function(error) {
+              res.sendStatus(404);
+            })
         }).catch(function(error) {
-          res.send("error" + error)
+          return res.send('error' + error)
         })
       }
     })
-
-
-
-
-
   }
-
 }
 
 module.exports = Answers;

@@ -15,7 +15,7 @@
 			</div>
 		</div>
 		<div class="row scheme--no-box scheme__row--title" ng-repeat="row in scheme.rows" ng-show="scheme.rows">
-			<div class="twelve columns text--right">
+			<div class="twelve columns text--right text-overflow--ellipsis">
 				<span>
 					{{row.name}}
 				</span>
@@ -23,60 +23,87 @@
 		</div>
 	</div>
 	<div class="one column text--center">
-		<div class="row scheme__title">
+		<div class="row scheme__title" style="margin-bottom: 0px;">
 			<div class="twelve columns text--center">
-				<a ng-click="next()" ng-disabled="nav.min >= (scheme.cols.length-8)">
-					<img src="https://icongram.jgog.in/feather/arrow-left.svg?color=555555&size=14"></img>
+				<a ng-click="previous()" ng-disabled="nav.min == 0">
+					<i class="feather icon-arrow-left icon--medium"></i>
 				</a>
 			</div>
 		</div>
-		<div class="row scheme--no-box" ng-repeat="header in scheme.headers track by $index" ng-if="$index >= nav.min && $index < (nav.min+8)">
-			{{nav.min == 0 ? '&nbsp;' : '...'}}
+		<div 
+			class="row scheme--no-box has__overlay" ng-repeat="row in scheme.rows track by $index" ng-show="nav.min > 0" style="margin-right:5px">
+			<div class="overlay overlay--right"></div>
 		</div>
 	</div>
-	<div class="columns {{scheme.headers.size > 8 ? 'eight' : translation[scheme.headers.length]}}"" style="margin-left: 0px">
+	<div class="columns {{scheme.headers.length > 8 ? 'eight' : translation[scheme.headers.length]}}"" style="margin-left: 0px">
 		<div class="row scheme__title" style="margin-bottom: -20px;">
 			<!-- MAX EIGHT -->
-			<div class="text--center {{scheme.headers.size > 8 ? 'one column' : classes[scheme.headers.length] + ' columns'}}" ng-repeat="header in scheme.headers track by $index" ng-if="$index >= nav.min && $index < (nav.min+8)">
+			<div 
+				class="text-overflow--ellipsis text--center {{scheme.headers.length > 7 ? 'two columns' : classes[scheme.headers.length] + ' columns'}}" ng-repeat="header in scheme.headers track by $index" ng-if="$index >= nav.min && $index < (nav.min+7)">
 				<span>{{header}}</span>
 			</div>
 		</div>
 	        <div class="clearfix"></div>
 		<div class="row scheme__body" ng-repeat="row in scheme.rows" ng-show="scheme.rows">
 			<div 
-				class="padding--15 text--center {{scheme.headers.size > 8 ? 'one column' : classes[scheme.headers.length] + ' columns'}}"
-				ng-class="{'cell--disabled': cell.current.length >= cell.max}"
+				class="padding--15 text--center {{scheme.headers.length > 7 ? 'two columns' : classes[scheme.headers.length] + ' columns'}}"
+				ng-class="{'cell--disabled': cell.current.length >= cell.max, 'cell--active': inParticipations(row, cell)}"
+				ng-disabled="cell.current.length >= cell.max"
 				ng-repeat="cell in row.cells track by $index" 
-				ng-click="participate(row, cell)"
-				ng-if="$index >= nav.min && $index < (nav.min+8)" >
-				{{cell.current.length}}<span class="u__opacity--40"> / {{cell.max}}</span> 
+				ng-if="$index >= nav.min && $index < (nav.min+7)" 
+				>
+				<span ng-if="inParticipations(row, cell)" ng-click="removeParticipation(row, cell)">
+				</span>
+				<span ng-if="!inParticipations(row, cell)" ng-click="participate(row, cell)">
+					{{cell.current.length}}<span class="u__opacity--40"> / {{cell.max}}</span> 
+				</span>
 			</div>
 		</div>
 	</div>
 	<div class="one column text--center">
-		<div class="row scheme__title">
+		<div class="row scheme__title" style="margin-bottom: 0px;">
 			<div class="twelve columns text--center">
-				<a ng-click="next()" ng-disabled="nav.min >= (scheme.cols.length-8)">
-					<img src="https://icongram.jgog.in/feather/arrow-right.svg?color=555555&size=14"></img>
+				<a ng-click="next()" ng-disabled="nav.min >= (scheme.headers.length-7)">
+					<i class="feather icon-arrow-right icon--medium"></i>
 				</a>
 			</div>
 		</div>
-		<div class="row scheme--no-box" ng-repeat="header in scheme.headers track by $index" ng-if="$index >= nav.min && $index < (nav.min+8)">
-			{{nav.min >= (scheme.cols.length-8) ? '&nbsp;' : '...'}}
+		<div 
+			class="row scheme--no-box has__overlay" ng-repeat="row in scheme.rows track by $index" ng-show="(nav.min+7) < scheme.headers.length">
+			<div class="overlay overlay--left"></div>
 		</div>
 	</div>
 </section>
 
 <skematik-sidebar position="right" title="Deelnemen" uuid="schedule-participate">
 	<div class="row">
-		<div class="twelve columns">
-			<p>Schrijf je hieronder in voor <strong>{{active.row.name}}</strong>?<br/>Je ontvangt na inschrijven een mail waarin je je deelname kan bevestigen.</p>
+		<div class="twelve columns" ng-if="participations.length > 0">
+			<p>Je neemt momenteel deel aan volgende items:</p>
+			<ul class="vertical-list--bordered">
+				<li class="row">
+					<div class="ten columns">Naam</div>
+					<div class="two columns">Acties</div>
+				</li>
+				<li ng-repeat="par in participations" class="row" style="padding-bottom: 10px">
+					<div class="ten columns">- {{par.row.name}} / <i>{{par.cell.col}}</i></div>
+					<div class="two columns">
+						<a ng-click="removeParticipation(par)">
+							<i class="feather icon-minus-circle icon--medium text--white"></i>
+						</a>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="twelve columns" ng-if="participations.length == 0">
+			<p>Je neemt nog nergens deel aan, klik op een cel in de tabel hiernaast voor een deelname.</p>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row" ng-if="participations.length > 0">
+		<p>Om je deelname te bevestigen, geef hieronder jouw gegevens in, en klik op "Deelnemen".</p>
 		<div class="twelve columns input__group">
-			<label for="email">Emailadres</label>
-			<input type="email" id="email" ng-model="active.data.email" placeholder="me@live.com" required ng-model-options="{allowInvalid: true}">
+			<label for="identifier">{{scheme.consumer.index == 'sendgrid' ? 'Emailadres' : 'Smartschool nummer'}}</label>
+			<input type="email" id="identifier" ng-model="active.data.identifier" placeholder="me@live.com" required ng-model-options="{allowInvalid: true}" ng-if="scheme.consumer.index == 'sendgrid'">
+			<input type="text" id="identifier" ng-model="active.data.identifier" placeholder="ex02324" required ng-if="scheme.consumer.index == 'smartschool'">
 		</div>
 		<div class="twelve columns input__group">
 			<button class="button button-white" ng-click="saveParticipation()">Deelnemen</button>
@@ -115,5 +142,4 @@
 		</div>
 	</section>
 	<p ng-if="active.cell.current.length == 0">Geen actieve deelnemers.</p>
-</section>
 </skematik-sidebar>

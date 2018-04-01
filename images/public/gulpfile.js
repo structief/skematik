@@ -179,6 +179,8 @@ gulp.task('inject-raw', function(){
                 config.development.root + '/bower_components/angular-resource/angular-resource.min.js',
                 config.development.root + '/bower_components/angular-sanitize/angular-sanitize.min.js',
                 config.development.root + '/bower_components/angular-jwt/dist/angular-jwt.min.js',
+                config.development.root + '/bower_components/angular-hotkeys/build/hotkeys.min.js',
+                config.development.root + '/bower_components/ngprogress/build/ngprogress.min.js',
                 ], {read: false}
             ), 
             {name: 'head'}

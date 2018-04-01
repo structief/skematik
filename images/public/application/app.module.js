@@ -10,5 +10,7 @@ var skematik = angular.module('skematik', [
     'ui.router',
     'ngResource',
     'ngSanitize',
-    'angular-jwt'
+    'angular-jwt',
+    'cfp.hotkeys',
+    'ngProgress'
 ]);

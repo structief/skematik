@@ -1,7 +1,7 @@
 <div class="container">
 	<section class="row help-box help-box--info">
 		<div class="one column">
-			<img src="https://icongram.jgog.in/feather/plus-square.svg?color=33C3F0" alt="icon">
+			<i class="feather icon-plus-square icon--large text--blue u__margin--12" style="display: inline-block;"></i>
 		</div>
 		<div class="eleven columns">
 			<b>Here's a tip!</b>
@@ -16,17 +16,17 @@
 			<div class="text--right padding--10">
 				<div class="u__dropdown">
 					<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
-						<img src="https://icongr.am/feather/filter.svg?color=999999">
+						<i class="feather icon-filter icon--medium text--dark-grey u__margin--12"></i>
 					</a>
-					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px;text-align: left">
+					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white">
 						<ul>
 							<li class="u__dropdownmenu--header">Filter</li>
 							<li ng-click="filter.unpublished = !filter.unpublished">
-								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.unpublished">
+								<i class="feather icon-check icon--medium text--green u__no-margin" ng-if="filter.unpublished"></i>
 								Unpublished
 							</li>
 							<li ng-click="filter.published = !filter.published">
-								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.published">
+								<i class="feather icon-check icon--medium text--green u__no-margin" ng-if="filter.published"></i>
 								Published
 							</li>
 						</ul>
@@ -40,10 +40,10 @@
 	        <div class="clearfix" ng-if="$index % 3 == 0"></div>
 			<div class="four columns box--white text--center scheme__box">
 				<a ui-sref="be.scheme({ schemeUuid: scheme.uuid })" href="backend/scheme/{{scheme.uuid}}" class="padding--40">
-					<img src="https://icongram.jgog.in/feather/grid.svg?color=82CC00" ng-if="scheme.currentParticipants <= scheme.maxParticipants*0.5"></img>
-					<img src="https://icongram.jgog.in/feather/grid.svg?color=FFA401" ng-if="scheme.currentParticipants > scheme.maxParticipants*0.5 && scheme.currentParticipants <= scheme.maxParticipants*0.75"></img>
-					<img src="https://icongram.jgog.in/feather/grid.svg?color=CC4635" ng-if="scheme.currentParticipants > scheme.maxParticipants*0.75 && scheme.currentParticipants <= scheme.maxParticipants*0.95"></img>
-					<img src="https://icongram.jgog.in/feather/grid.svg?color=dddddd" ng-if="scheme.currentParticipants >= scheme.maxParticipants"></img>
+					<i class="feather icon-grid icon--medium text--green" ng-if="scheme.currentParticipants <= scheme.maxParticipants*0.5"></i>
+					<i class="feather icon-grid icon--medium text--orange" ng-if="scheme.currentParticipants > scheme.maxParticipants*0.5 && scheme.currentParticipants <= scheme.maxParticipants*0.75"></i>
+					<i class="feather icon-grid icon--medium text--red" ng-if="scheme.currentParticipants > scheme.maxParticipants*0.75 && scheme.currentParticipants < scheme.maxParticipants"></i>
+					<i class="feather icon-grid icon--medium text--grey" ng-if="scheme.currentParticipants >= scheme.maxParticipants && scheme.maxParticipants > 0"></i>
 					<h6>{{scheme.title}}</h6>
 					<div class="row row--close">
 						<div class="eight columns text--left">Participants:</div>
@@ -51,7 +51,7 @@
 					</div>
 					<div class="row row--close">
 						<div class="eight columns text--left">Published:</div>
-						<div class="four columns text--right"><i>{{scheme.published}}</i></div>
+						<div class="four columns text--right"><i>{{scheme.published == 1 ? 'Yes' : 'No'}}</i></div>
 					</div>
 				</a>
 			</div>
@@ -60,7 +60,7 @@
 		<!-- Add a new scheme -->
 		<div class="four columns box--white text--center scheme__box">
 			<a ui-sref="be.scheme({ schemeUuid: 'new' })" href="backend/scheme/new" class="padding--40">
-				<img src="https://icongram.jgog.in/feather/plus-square.svg?color=dddddd"></img>
+				<i class="feather icon-plus-square icon--medium text--grey"></i>
 				<h6>Add a new scheme</h6>
 			</a>
 		</div>

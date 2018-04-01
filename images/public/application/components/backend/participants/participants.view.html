@@ -2,6 +2,10 @@
 	<!-- Header -->
 	<section class="row">
 		<div class="eight columns">
+			<a href="#" ng-if="system.import" ng-click="system.import = false" style="text-decoration: none;margin-bottom: 10px;display: block;">
+				<i class="feather icon-arrow-left text--dark-grey u__margin--12" style="margin-left: 0px;"></i>
+				<span class="text--dark-grey">Terugkeren</span>
+			</a>
 			<h4>
 				Deelnemers
 			</h4>
@@ -10,9 +14,9 @@
 			<div class="text--right padding--10">
 				<div class="u__dropdown">
 					<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
-						<img src="https://icongr.am/feather/plus-square.svg?color=999999">
+						<i class="feather icon-plus-square icon--medium text--dark-grey u__margin--12" style="margin-right: 0px"></i>
 					</a>
-					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px; text-align: left">
+					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white">
 						<ul>
 							<li ng-click="addParticipant($event)">
 								<a>Nieuwe deelnemer</a>
@@ -25,23 +29,23 @@
 				</div>
 				<div class="u__dropdown">
 					<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
-						<img src="https://icongr.am/feather/filter.svg?color=999999">
+						<i class="feather icon-filter icon--medium text--dark-grey u__margin--12"></i>
 					</a>
-					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px;text-align: left">
+					<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white">
 						<ul>
 							<li class="u__dropdownmenu--header">Account</li>
 							<li ng-click="filter.inactive = !filter.inactive">
-								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.inactive">
+								<i class="feather icon-check icon--medium text--green u__no-margin" ng-if="filter.inactive"></i>
 								Inactive
 							</li>
 							<li ng-click="filter.active = !filter.active">
-								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="filter.active">
+								<i class="feather icon-check icon--medium text--green u__no-margin" ng-if="filter.active"></i>
 								Active
 							</li>
 							<li class="u__dropdownmenu--header">Rollen</li>
 							<li ng-repeat="role in system.roles" ng-click="toggleRole(filter.roles, role)">
-								<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="inRoles(filter.roles, role)">
-								{{role}}
+								<i class="feather icon-check icon--medium text--green u__no-margin" ng-if="inRoles(filter.roles, role)"></i>
+								{{role.type}}
 							</li>
 						</ul>
 					</div>
@@ -66,9 +70,9 @@
 				Acties
 			</div>
 		</div>
-		<div class="twelve columns row table__row" ng-repeat="participant in participants" ng-if="filterParticipants(participant)">
+		<div class="twelve columns row table__row" ng-repeat="participant in participants" ng-if="filterParticipants(participant)" ng-class="{'table__row--inactive': participant.status < 1}">
 			<div class="four columns text-overflow--ellipsis">
-				<span ng-if="participant.status > -1">{{participant.name}} <i style="font-size: 80%">({{participant.mail}})</i></span>
+				<span ng-if="participant.status > -1">{{participant.mail}}</span>
 			</div>
 			<div class="two columns">
 				<span ng-if="participant.status == 1">Actief</span>
@@ -76,7 +80,7 @@
 			</div>
 			<div class="three columns">
 				<span ng-repeat="role in participant.roles" class="text--lowercase">
-					{{role}}
+					{{role.type}}
 					<span ng-if="$index < participant.roles.length-1">, </span>
 				</span>
 				<span ng-if="participant.roles.length == 0">
@@ -88,14 +92,14 @@
 					<li class="u__no-margin">
 						<div class="u__dropdown">
 							<a class="u__dropdowntoggle" ng-click="toggleDropdown($event)">
-								<img src="https://icongr.am/feather/users.svg?color=999999">
+								<i class="feather icon-users icon--medium text--dark-grey u__margin--12" style="line-height: 36px"></i>
 							</a>
-							<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white" style="min-width: 150px;text-align: left;">
+							<div class="u__dropdownmenu u__dropdownmenu--boxed u__dropdownmenu--white">
 								<ul>
 									<li class="u__dropdownmenu--header">Toggle role</li>
-									<li ng-repeat="role in system.roles" ng-click="toggleRole(participant.roles, role)">
-										<img src="https://icongr.am/feather/check.svg?color=19b319" class="u__no-margin" ng-if="inRoles(participant.roles, role)">
-										{{role}}
+									<li ng-repeat="role in system.roles" ng-click="editRoles(participant, role)">
+										<i class="feather icon-check icon--medium text--green u__no-margin" ng-if="inRoles(participant.roles, role)"></i>
+										{{role.type}}
 									</li>
 								</ul>
 							</div>
@@ -103,26 +107,26 @@
 					</li>
 					<!-- Participant is active, deactivate it -->
 					<li class="u__no-margin" ng-if="participant.status == 1">
-						<a ng-click="participant.status = !participant.status" title="Deelnemer deactiveren">
-							<img src="https://icongr.am/feather/pause-circle.svg?color=999999" alt="Deelnemer deactiveren">
+						<a ng-click="editStatus(participant, 0)" title="Deelnemer deactiveren">
+							<i class="feather icon-pause-circle icon--medium text--dark-grey u__margin--12" style="line-height: 36px"></i>
 						</a>
 					</li>
 					<!-- Participant is active, edit it -->
 					<li class="u__no-margin" ng-if="participant.status == 1">
 						<a ng-click="editParticipant($index)" title="Deelnemer bewerken">
-							<img src="https://icongr.am/feather/edit-2.svg?color=999999" alt="Deelnemer bewerken">
+							<i class="feather icon-edit-2 icon--medium text--dark-grey u__margin--12" style="line-height: 36px"></i>
 						</a>
 					</li>
 					<!-- Participant is inactive, activate it -->
 					<li class="u__no-margin" ng-if="participant.status == 0">
-						<a ng-click="participant.status = !participant.status" title="Deelnemer activeren">
-							<img src="https://icongr.am/feather/play-circle.svg?color=999999" alt="Deelnemer activeren">
+						<a ng-click="editStatus(participant, 1)" title="Deelnemer activeren">
+							<i class="feather icon-play-circle icon--medium text--dark-grey u__margin--12" style="line-height: 36px"></i>
 						</a>
 					</li>
 					<!-- Participant is inactive, remove it -->
 					<li class="u__no-margin" ng-if="participant.status == 0">
 						<a ng-click="deleteParticipant($index)" title="Deelnemer verwijderen">
-							<img src="https://icongr.am/feather/minus-circle.svg?color=999999" alt="Deelnemer verwijderen">
+							<i class="feather icon-minus-circle icon--medium text--dark-grey u__margin--12" style="line-height: 36px"></i>
 						</a>
 					</li>
 				</ul>
@@ -132,30 +136,37 @@
 
 	<!-- Import view -->
 	<section class="row" ng-if="system.import">
-		This is the import view.
-
-		To switch back to the list, click <a ng-click="system.import = false">here</a>.
+		Hier kan je deelnemers importeren, volgens volgend schema (in CSV):<br/>
+		<pre>
+			<code>
+mail, name, status
+email@live.com,Frank Franklin,0
+ugasson4@ft.com,Uriel Gasson,1
+			</code>
+		</pre>
+		<p>Upload csv-document:</p>
+		<input type="file" id="csv-file">
+		<button ng-click="submitCSV()" class="button button-primary">Import CSV</button>
 	</section>
 </div>
 <skematik-sidebar position="right" title="{{system.edit.index > -1 ? 'Deelnemer wijzigen' : 'Nieuwe deelnemer'}}" uuid="edit-participant">
 	<div class="row">
-		<div class="twelve columns">
+		<div class="twelve columns wizard">
 			<div class="input__group">
 				<label for="mail">Mail</label>
-				<input type="email" id="mail" ng-model="system.edit.user.mail" placeholder="mail@live.com" />
+				<input class="u-full-width input--with-feedback" type="email" id="mail" ng-model="system.edit.user.mail" placeholder="mail@live.com" required />
+				<span class="input__feedback" data-text-invalid="Da's geen geldig e-mailadres" data-text-empty="Wat is het e-mailadres?" data-text-valid="Check."></span>
 			</div>
 			<div class="input__group">
 				<label for="status">Status</label>
-				<select ng-model="system.edit.user.status">
-					<option value="1">Actief</option>
-					<option value="0">Inactief</option>
+				<select ng-options="i.value as i.label for i in system.status" ng-model="system.edit.user.status">
 				</select>
 			</div>
 			<div class="input__group">
 				<label>Roles</label>
 				<div class="button__group button__group--white">
 					<a href="#" ng-repeat="role in system.roles" ng-click="toggleRole(system.edit.user.roles, role)" ng-class="{'button--active': inRoles(system.edit.user.roles, role)}">
-						{{role}}
+						{{role.type}}
 					</a>
 				</div>
 			</div>
