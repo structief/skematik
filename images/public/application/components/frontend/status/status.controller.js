@@ -1,4 +1,4 @@
-skematikControllers.controller('StatusController',["$scope", "$state", "$rootScope", "$http", function($scope, $stateProvider, $rootScope, $http) {
+skematikControllers.controller('StatusController',["$scope", "$state", "$rootScope", "$http", "$location", function($scope, $stateProvider, $rootScope, $http, $location) {
 	//Some things
 	$scope.status = {
 		apps: [
@@ -42,7 +42,7 @@ skematikControllers.controller('StatusController',["$scope", "$state", "$rootSco
 
 	$http({
 		method: 'GET',
-		url: 'http://localhost:3000/check'
+		url: $location.protocol() + '://api.' + $location.host() + 'check'
 	}).then(function successCallback(response) {
 		var translate = {"API": 0, "FRONT": 1, "STORE": 2};
 		for(var i = 0; i<response.data.length;i++){

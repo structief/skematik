@@ -35,7 +35,7 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
       MODE: start
-      VIRTUAL_HOST: ~^api\.(localhost|skematik\.io)
+      VIRTUAL_HOST: ~api\.(localhost|skematik\.io)
     links:
       - db
     depends_on:
@@ -51,7 +51,7 @@ services:
     networks:
       - default
     environment:
-      VIRTUAL_HOST: ~^(www\.)?(localhost|skematik\.io)
+      VIRTUAL_HOST: ~(www\.)?(localhost|skematik\.io)
 
     ports:
       - "4000:4000"
