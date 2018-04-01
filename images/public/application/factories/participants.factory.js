@@ -1,6 +1,6 @@
 //Participants factory
 skematikFactories.factory('ParticipantsFactory',["$resource", "$location", function($resource, $location) {
-  return $resource($location.protocol() + '://api.' + $location.host() + '/participants/:uuid/:type', {uuid: "@uuid"}, {
+  return $resource($location.protocol() + '://api.' + $location.host().replace("www.", "") + '/participants/:uuid/:type', {uuid: "@uuid"}, {
   	//Gets all participants for this organisation
     get: {
       method: 'GET',
