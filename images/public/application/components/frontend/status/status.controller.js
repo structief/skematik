@@ -42,7 +42,7 @@ skematikControllers.controller('StatusController',["$scope", "$state", "$rootSco
 
 	$http({
 		method: 'GET',
-		url: $location.protocol() + '://api.' + $location.host() + 'check'
+		url: $location.protocol() + '://api.' + $location.host() + '/check'
 	}).then(function successCallback(response) {
 		var translate = {"API": 0, "FRONT": 1, "STORE": 2};
 		for(var i = 0; i<response.data.length;i++){
