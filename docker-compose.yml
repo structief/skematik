@@ -51,7 +51,7 @@ services:
     networks:
       - default
     environment:
-      VIRTUAL_HOST: ~(www\.)?(localhost|skematik\.io)
+      VIRTUAL_HOST: ~(?<!api.)(localhost|skematik\.io)
 
     ports:
       - "4000:4000"
