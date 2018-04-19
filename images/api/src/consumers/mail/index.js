@@ -7,7 +7,6 @@ const base_type = "mail";
 // Subscribe to certain events.
 // Best to document them properly
 emitter.on(base_type + '.subscription.added', function(data){
-	console.log('got this', data)
 	var mail = new Mail();
 	mail.recipients = [data.insert[0].participant];
 	mail.subject = "Bevestig jouw inschrijving op Skematik";
@@ -19,7 +18,7 @@ emitter.on(base_type + '.subscription.added', function(data){
 		title: "Require some lines",
 		firstname: "Franklin",
 		buttonName: "Confirm subscription",
-		buttonUrl: `localhost:3000/confirm/${data.insert[0].confirm_token}`
+		buttonUrl: `http://localhost:3000/confirm/${data.insert[0].confirm_token}`
 	};
 
 	var response = mail.send();
