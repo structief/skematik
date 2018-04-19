@@ -18,13 +18,13 @@ emitter.on(base_type + '.subscription.added', function(data){
 		title: "Require some lines",
 		firstname: "Franklin",
 		buttonName: "Confirm subscription",
-		buttonUrl: `http://localhost:3000/confirm/${data.insert[0].confirm_token}`
+		buttonUrl: `http://localhost/confirm/${data.insert[0].confirm_token}`
 	};
 
 	var response = mail.send();
 	if(response === true){
 		console.log("Yay");
 	}else{
-		console.error("stuff did not do what we asked", response);
+		console.error("Stuff did not do what we asked", response);
 	}
 });
