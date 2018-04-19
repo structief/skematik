@@ -24,7 +24,7 @@ class Answers {
       })
     })
 
-    app.post('/confirm/:token', async(req, res, next) => {
+    app.get('/confirm/:token', async(req, res, next) => {
       await pg.select('uuid').table('answers').where({confirm_token: req.params.token}).then(async(cells) => {
         if(cells) { 
           await pg.table("answers").returning(['tableID']).update({activated: true}).where({confirm_token: req.params.token}).then((data) => {
@@ -57,7 +57,7 @@ class Answers {
           if(d.length > 0 && d.length >= d[0].max) {
             //do not allow
             return res.send(417, { message: 'no more place', cell: {uuid: participation['cell']['uuid']}});
-          }else{
+          } else {
             const uuid = uuidV1();
             // send out token for mail
 
