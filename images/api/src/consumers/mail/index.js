@@ -7,8 +7,9 @@ const base_type = "mail";
 // Subscribe to certain events.
 // Best to document them properly
 emitter.on(base_type + '.subscription.added', function(data){
+	console.log('got this', data)
 	var mail = new Mail();
-	mail.recipients = [data.mail];
+	mail.recipients = [data.insert[0].participant];
 	mail.subject = "Bevestig jouw inschrijving op Skematik";
 	mail.text = "Preview text voor mailclients";
 	mail.body = "Yay, fijn dat je mee wil werken, go for it!";
@@ -17,14 +18,14 @@ emitter.on(base_type + '.subscription.added', function(data){
 		body: mail.body,
 		title: "Require some lines",
 		firstname: "Franklin",
-		buttonName: "Call on me",
-		buttonUrl: "http://www.google.com"
+		buttonName: "Confirm subscription",
+		buttonUrl: `localhost:3000/confirm/${data.insert[0].confirm_token}`
 	};
 
 	var response = mail.send();
 	if(response === true){
 		console.log("Yay");
 	}else{
-		console.error(response);
+		console.error("stuff did not do what we asked", response);
 	}
 });
