@@ -24,9 +24,8 @@ class Answers {
       })
     })
 
-    app.get('/confirm/:token', async(req, res, next) => {
+    app.post('/confirm/:token', async(req, res, next) => {
       await pg.select('uuid').table('answers').where({confirm_token: req.params.token}).then(async(cells) => {
-        console.log("cell", cells)
         if(cells) { 
           await pg.table("answers").returning(['tableID']).update({activated: true}).where({confirm_token: req.params.token}).then((data) => {
             
