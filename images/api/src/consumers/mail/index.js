@@ -18,8 +18,8 @@ emitter.on(base_type + '.subscription.added', function(data){
 		body: mail.body,
 		title: "Require some lines",
 		firstname: "Franklin",
-		buttonName: "Call on me",
-		buttonUrl: "http://www.google.com"
+		buttonName: "Confirm subscription",
+		buttonUrl: `localhost:3000/confirm/${data.insert[0].confirm_token}`
 	};
 
 	var response = mail.send();
