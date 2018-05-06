@@ -30,7 +30,6 @@ const app = express();
 const server = http.Server(app);
 const PORT = 3000;
 
-
 class App {
 
   constructor(opts) {

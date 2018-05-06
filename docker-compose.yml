@@ -52,7 +52,6 @@ services:
       - default
     environment:
       VIRTUAL_HOST: ~(?<!api.)(localhost|skematik\.io)
-
     ports:
       - "4000:4000"
     volumes:
