@@ -7,6 +7,7 @@ const config = require('./config.js');
 // Best to document them properly
 emitter.on(config.type + '.subscription.added', function(data){
 	var mail = new Mail();
+	mail.template_id(subscriptionTemplateId);
 	mail.recipients = [data.insert[0].participant];
 	mail.subject = "Bevestig jouw inschrijving op Skematik";
 	mail.text = "Preview text voor mailclients";

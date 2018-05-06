@@ -5,14 +5,14 @@ const config = require('./../config.js');
 
 class Mail {
   constructor() {
-    sgMail.setApiKey(config.ApiKey);
+    sgMail.setApiKey(config.apiKey);
     sgMail.setSubstitutionWrappers('{{', '}}');
 
     this._recipients = [];
     this._subject = "A Skematik mail";
     this._text = "Default texting, please do replace me";
     this._body = null; // Replace by body
-    this._template_id = config.DefaultTemplateId;
+    this._templateId = config.subscriptionTemplateId;
     this._substitutions = {};
   }
 
@@ -49,11 +49,11 @@ class Mail {
   }
 
   //Template ID
-  set template_id(template_id){
-    this._template_id = template_id;
+  set templateId(templateId){
+    this._templateId = templateId;
   }
-  get template_id(){
-    return this._template_id;
+  get templateId(){
+    return this._templateId;
   }
 
   //Substitutions
@@ -71,7 +71,7 @@ class Mail {
       subject: this.subject,
       text: this.text,
       html: this.body,
-      templateId: this._template_id,
+      templateId: this._templateId,
       substitutions: this._substitutions
     }, true)
     .then(function(){
@@ -91,7 +91,7 @@ class Mail {
       subject: this.subject,
       text: this.text,
       html: this.body,
-      templateId: this._template_id,
+      templateId: this._templateId,
       substitutions: this._substitutions
     };
   }
