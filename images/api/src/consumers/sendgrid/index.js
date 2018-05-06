@@ -1,12 +1,11 @@
 // Load the emitter, this one contains all the events
 const emitter = require('../../helpers/emitter.js');
 const Mail = require("./classes/SendGrid.js");
-// Base event listener
-const base_type = "mail";
+const config = require('./config.js');
 
 // Subscribe to certain events.
 // Best to document them properly
-emitter.on(base_type + '.subscription.added', function(data){
+emitter.on(config.type + '.subscription.added', function(data){
 	var mail = new Mail();
 	mail.recipients = [data.insert[0].participant];
 	mail.subject = "Bevestig jouw inschrijving op Skematik";
@@ -28,3 +27,7 @@ emitter.on(base_type + '.subscription.added', function(data){
 		console.error("Stuff did not do what we asked", response);
 	}
 });
+
+emitter.on(config.type + '.subscription.confirmed', function(data){
+	console.log(data);
+})
