@@ -11,7 +11,7 @@ exports.checkCalls = async (res, pg) => {
     },
     {
       "name": "FRONT",
-      "url": "http://front_server:3000/",
+      "url": "http://localhost:3000/",
       "status": -1,
       "info": "-"
     },
