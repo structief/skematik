@@ -26,7 +26,7 @@ class Answers {
     })
 
     app.get('/confirm/:token', async(req, res, next) => {
-        await pg.table("answers").returning(["*"]).update({activated: true}).where({confirm_token: req.params.token}).then(async(data) => {
+        await pg.table("answers").returning("*").update({activated: true}).where({confirm_token: req.params.token}).then(async(data) => {
           if(data){
             // Subscription worked, fire event
             const eventData = {
@@ -50,7 +50,7 @@ class Answers {
             res.status(404).send({message: "No participation found"});
           }
         }).catch((error) => {
-          res.status(404).send({message: "No participation found"});
+          res.status(400).send({message: "Something went wrong, please try again later"});
         });
     })
 
