@@ -25,19 +25,32 @@ class Answers {
     })
 
     app.get('/confirm/:token', async(req, res, next) => {
-      await pg.select('uuid').table('answers').where({confirm_token: req.params.token}).then(async(cells) => {
-        if(cells) { 
-          await pg.table("answers").returning(['tableID']).update({activated: true}).where({confirm_token: req.params.token}).then((data) => {
-            
-            res.status(200).send({tableID: data[0].tableID})
-          }).catch((error) => {
-            console.log(error);
-            res.status(401).send(error)
-          })
-        } else {
-          res.status(400);
-        }
-      })
+        await pg.table("answers").returning(["*"]).update({activated: true}).where({confirm_token: req.params.token}).then(async(data) => {
+          if(data){
+            // Subscription worked, fire event
+            const eventData = {
+              participant: null,
+              participations: []
+            };
+            eventData.participant = data[0].participant;
+            //Loop over answers and put them in event emitter
+            for(var i = 0; i < data.length; i++){
+              await pg.select().table('cells').where({uuid: data[0].cellID}).then(async(cell) => {
+                eventData.participations.push({"col": cell[0].col, "row": cell[0].row});
+              });
+            }
+            await pg.select('consumer').table('schema').where({uuid: data[0].tableID}).then(async(schema) => {
+              emitter.emit(schema[0].consumer['index'] + '.subscription.confirmed', {eventData});
+            });
+
+            // Return tableId to front-end for redirection
+            res.status(200).send({tableID: data[0].tableID});
+          }else{
+            res.status(404).send({message: "No participation found"});
+          }
+        }).catch((error) => {
+          res.status(404).send({message: "No participation found"});
+        });
     })
 
     app.post('/schema/:uuid/answer', async (req, res, next) => {
@@ -157,10 +170,9 @@ class Answers {
                 result['answers'] = answers;
 
                 // Subscription worked, fire event
-                // Replace 'mail' by the selected method by the admin
-                // But this is just a first setup
-                emitter.emit('mail.subscription.added', {insert});
+                emitter.emit(r[0].consumer['index'] + '.subscription.added', {insert});
 
+                // Return scheme to front-end
                 res.send(result);
               } else {
                 res.sendStatus(404);
