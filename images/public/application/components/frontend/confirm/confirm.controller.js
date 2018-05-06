@@ -23,7 +23,7 @@ skematikControllers.controller('ConfirmController',["$scope", "$state", "$rootSc
 	}, function(error){
 		$scope.meta = {
 			"icon": "text--red icon-x",
-			"message": "Can't confirm, please try again later!"
+			"message": error.data.message || "Can't confirm, please try again later!"
 		};
 	});
 }]);

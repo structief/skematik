@@ -94,6 +94,9 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 					window.location.reload();
 				});
 			}
+
+			//Empty participations
+			$scope.participations = [];
 		}, function(error){
 			if(error.status == 401 || error.status == 417){
 				//Show the error

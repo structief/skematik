@@ -38,16 +38,16 @@ class Auth {
               })
             } else {
               if(req.query.path.includes("/admin/")) {
-                res.send(401, {message: "No user found with given token"}); 
+                res.status(401).send( {message: "No user found with given token"}); 
               }
               else {
-                res.send(200, {}); 
+                res.status(200).send({}); 
               }
             }
           })
         }, res)
       } else{
-        res.send(200)
+        res.status(200).send()
       }
     })
 
