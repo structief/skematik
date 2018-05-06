@@ -89,6 +89,15 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 			}
 		}
 	})
+	.state('fe.confirm', {
+		url: "/confirm/:token",
+		views: {
+			"pageContent@": {
+				templateUrl: base_url + "frontend/confirm/confirm.view.html",
+				controller: "ConfirmController",
+			}
+		}
+	})
 	.state('be', {
 		url: '/admin',
 		views: {
@@ -160,7 +169,7 @@ skematik.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", "$
 	        }
 	        return localStorage.getItem('jwt-token');
 		}],
-		whiteListedDomains: ['api.skematik.io', 'localhost', 'skematik.localhost', 'skematik.online', '146.185.161.104', 'api.localhost'],
+		whiteListedDomains: ['api.skematik.io', 'localhost'],
 		unauthenticatedRedirectPath: '/login'
     });
 

@@ -49,14 +49,6 @@ class Auth {
       } else{
         res.send(200)
       }
-      // } else {
-      //   
-      //     res.send(401, {message: "Please log in, no token found"}); 
-      //   }
-      //   else {
-      //     res.send(200, {}); 
-      //   }
-      // }
     })
 
     app.post('/login',  async (req, res, next) => {

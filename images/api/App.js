@@ -146,6 +146,10 @@ class App {
       table.string("participant");
       table.uuid("tableID");
       table.timestamps();
+      table.string("confirm_token", "longtext");
+      table.string("expires_on");
+      table.boolean("activated");
+      table.uuid("uuid");
     }).then(function() {
       console.log("created answers")
     });

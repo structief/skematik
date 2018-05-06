@@ -62,8 +62,6 @@ class Schema {
       }, res)
     })
 
-
-
     app.put('/schema/:uuid', async (req, res, next) => {
 
       if (req.headers.authorization) {
@@ -217,7 +215,7 @@ class Schema {
 
 
       let answers = [];
-      await pg.select("answers.cellID", "answers.participant", "answers.created_at", "answers.updated_at", "cells.row", "cells.col").table("answers").where({"answers.tableID": req.params.uuid}).join('cells', 'cells.uuid', '=', 'answers.cellID').then(function(a) {
+      await pg.select("answers.cellID", "answers.participant", "answers.created_at", "answers.activated", "answers.updated_at", "cells.row", "cells.col").table("answers").where({"answers.tableID": req.params.uuid}).join('cells', 'cells.uuid', '=', 'answers.cellID').then(function(a) {
         answers = a;
       })
 
