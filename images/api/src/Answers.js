@@ -2,6 +2,7 @@ const uuidV1 = require('uuid/v1');
 const emitter = require('./helpers/emitter.js');
 const jwt = require("jwt-simple");
 const config = require('./helpers/config.js') 
+const { getSchema } = require('./helpers/getScheme');
 
 class Answers {
 
@@ -111,77 +112,13 @@ class Answers {
             answers = a;
           });
 
+          // Emit event for consumers
+          await pg.select('consumer').table('schema').where({uuid: req.params.uuid}).then(async(schema) => {
+            emitter.emit(schema[0].consumer['index'] + '.subscription.added', {insert});
+          });
 
-          //Get scheme again
-          await pg.select()
-            .table('schema')
-            .where({'schema.uuid': req.params.uuid})
-            .join('cells', 'schema.id', '=', 'cells.tableID')
-            .then( function (r) {
-              if(r.length > 0) {
-
-                result['uuid'] = req.params.uuid;
-                result['title'] = r[0].title;
-                const temp = [];
-                Object.keys(r[0].headers).map((key, index) => {
-                  temp.push(key);
-                });
-                result['headers'] = temp;
-
-
-                result['created_at'] = r[0].created_at;
-                result['created_at'] = r[0].created_at;
-                result['updated_at'] = r[0].updated_at;
-
-
-                Object.keys(r[0].rows).map((key, index) => {
-                  const found = [];
-                  for (let i = 0; i < r.length; i++) {
-                    if (r[i]['row'] === key) {
-                      const num = answers.filter(answer => answer.cellID === r[i].uuid);
-                      found.push({
-                        max: r[i].max,
-                        current: num,
-                        col: r[i].col,
-                        uuid: r[i].uuid
-                      })
-                    }
-                  }
-
-                  const intermediary = [];
-
-                  for(let i = 0; i < temp.length; i++) {
-                    for(let j = 0; j < found.length; j++) {
-                      if(found[j].col === temp[i]) {
-                        intermediary.push(found[j])
-                      }
-                    }
-                  }
-
-                  rowstructure.push({
-                    name: key,
-                    cells: intermediary
-                  });
-                });
-
-
-                result['rows'] = rowstructure;
-
-                result['answers'] = answers;
-
-                // Subscription worked, fire event
-                emitter.emit(r[0].consumer['index'] + '.subscription.added', {insert});
-
-                // Return scheme to front-end
-                res.send(result);
-              } else {
-                res.sendStatus(404);
-              }
-            })
-            .then(function() {})
-            .catch(function(error) {
-              res.sendStatus(404);
-            })
+          // Return schema for front-end
+          getSchema(pg, req.params.uuid, res);
         }).catch(function(error) {
           return res.send('error' + error)
         })
