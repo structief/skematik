@@ -47,6 +47,7 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 	$scope.participate = function(row, cell){
 		//Depending on login-state, show different information
 		if($rootScope.isAuthenticated){
+			// @TODO: check again, because after subscription, this bar opens for non-authenticated users
 			$rootScope.$broadcast("sidebar.open", {uuid: "participants-overview"});
 		}else{
 			//Is there still room in this spot?
@@ -82,12 +83,16 @@ skematikControllers.controller('TableController',["$scope", "$rootScope", "Schem
 			$rootScope.$broadcast('sidebar.close', {uuid: "schedule-participate"});
 
 			//Update scheme
-			if(response.scheme !== undefined){
+			if(response.uuid !== undefined){
 				//Expect a scheme from the server
-				$scope.scheme = response.scheme;
+				$scope.scheme = response;
 			}else{
-				//Reload the page for updates
-				window.location.reload();
+				//Reload the scheme for updates
+				SchemeFactory.getOne({uuid: $scope.scheme.uuid}, function(response){
+					$scope.scheme = response;
+				}, function(error){
+					window.location.reload();
+				});
 			}
 		}, function(error){
 			if(error.status == 401 || error.status == 417){
