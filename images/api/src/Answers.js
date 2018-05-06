@@ -28,9 +28,10 @@ class Answers {
     app.get('/confirm/:token', async(req, res, next) => {
         await pg.table("answers").returning("*").update({activated: true}).where({confirm_token: req.params.token}).then(async(data) => {
           if(data){
-            // Subscription worked, fire event
+            // Confirmation worked, fire event
             const eventData = {
               participant: null,
+              scheme: {},
               participations: []
             };
             eventData.participant = data[0].participant;
@@ -40,7 +41,8 @@ class Answers {
                 eventData.participations.push({"col": cell[0].col, "row": cell[0].row});
               });
             }
-            await pg.select('consumer').table('schema').where({uuid: data[0].tableID}).then(async(schema) => {
+            await pg.select().table('schema').where({uuid: data[0].tableID}).then(async(schema) => {
+              eventData.scheme = schema;
               emitter.emit(schema[0].consumer['index'] + '.subscription.confirmed', {eventData});
             });
 
@@ -73,7 +75,6 @@ class Answers {
             return res.send(417, { message: 'no more place', cell: {uuid: participation['cell']['uuid']}});
           } else {
             const uuid = uuidV1();
-            // send out token for mail
 
             //Add participation for insertion
             insert.push({
@@ -113,14 +114,28 @@ class Answers {
           });
 
           // Emit event for consumers
-          await pg.select('consumer').table('schema').where({uuid: req.params.uuid}).then(async(schema) => {
-            emitter.emit(schema[0].consumer['index'] + '.subscription.added', {insert});
+          // Subscription worked, fire event
+          const eventData = {
+            participant: null,
+            scheme: {},
+            participations: []
+          };
+          eventData.participant = insert[0].participant;
+          //Loop over answers and put them in event emitter
+          for(var i = 0; i < insert.length; i++){
+            await pg.select().table('cells').where({uuid: insert[0].cellID}).then(async(cell) => {
+              eventData.participations.push({"col": cell[0].col, "row": cell[0].row});
+            });
+          }
+          await pg.select().table('schema').where({uuid: req.params.uuid}).then(async(schema) => {
+            eventData.scheme = schema; 
+            emitter.emit(schema[0].consumer['index'] + '.subscription.added', {eventData});
           });
 
           // Return schema for front-end
           getSchema(pg, req.params.uuid, res);
         }).catch(function(error) {
-          return res.send('error' + error)
+          return res.status(400).send('error' + error)
         })
       }
     })
