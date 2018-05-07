@@ -6,16 +6,27 @@ const config = require('./config.js');
 // Subscribe to certain events.
 // Best to document them properly
 emitter.on(config.type + '.subscription.added', function(data){
+	//Check origin for url
+	switch(data.origin){
+		case "http://localhost":
+		case "https://www.skematik.io":
+			break;
+		default:
+			data.origin = "https://www.skematik.io";
+			break;
+	}
+	data = data.eventData;
+
 	//Load shifts into <ul>
-	const shifts = "";
+	var shifts = "";
 	for(var i = 0; i < data.participations.length; i++){
 		shifts += "<li>" + data.participations[i].row + " <i>" + data.participations[i].col + "</i></li>";
 	}
 
 	//Create mail
 	var mail = new Mail();
-	mail.template_id(subscriptionTemplateId);
-	mail.recipients = [data.insert[0].participant];
+	mail.templateId = config.subscriptionTemplateId;
+	mail.recipients = [data.participant];
 	mail.subject = "Bevestig jouw inschrijving op Skematik";
 	mail.text = "Bevestig jouw inschrijving voor " + data.scheme.title + " op Skematik";
 	mail.body = "Leuk dat je wil meewerken, ga ervoor!";
@@ -25,42 +36,50 @@ emitter.on(config.type + '.subscription.added', function(data){
 		schemeName: data.scheme.title,
 		shifts: shifts,
 		buttonName: "Confirm subscription",
-		buttonUrl: `http://localhost/confirm/${data.insert[0].confirm_token}`
+		buttonUrl: data.origin + "/confirm/" + data.confirmToken
 	};
 
-	var response = mail.send();
-	if(response === true){
-		console.log("Yay");
-	}else{
-		console.error("Stuff did not do what we asked", response);
-	}
+	mail.send().then(function(response){
+		if(response === true){
+			//Do nothing, this is good.
+		}else{
+			console.error("Stuff did not do what we asked", response);
+		}
+	}).catch(function(error){
+		console.log(error);
+	});
 });
 
 emitter.on(config.type + '.subscription.confirmed', function(data){
+	data = data.eventData;
+
 	//Load shifts into <ul>
-	const shifts = "";
+	var shifts = "";
 	for(var i = 0; i < data.participations.length; i++){
 		shifts += "<li>" + data.participations[i].row + " <i>" + data.participations[i].col + "</i></li>";
 	}
 
 	//Create mail
 	var mail = new Mail();
-	mail.template_id(confirmationTemplateId);
+	mail.templateId = config.confirmationTemplateId;
 	mail.recipients = [data.participant];
 	mail.subject = "Inschrijving bevestigd op Skematik";
 	mail.text = "Inschrijving voor " + data.scheme.title + " bevestigd op Skematik";
+	mail.body = "Bedankt voor jouw bevesting, da's in orde!";
 	mail.substitutions = {
 		previewText: mail.text,
-		schemeName: data.scheme.title
+		schemeName: data.scheme.title,
 		firstname: "daar",
 		shifts: shifts
 	};
 
-	var response = mail.send();
-	console.log(response);
-	if(response === true){
-		console.log("Yay");
-	}else{
-		console.error("Stuff did not do what we asked", response);
-	}
+	mail.send().then(function(response){
+		if(response === true){
+			//Do nothing, this is good.
+		}else{
+			console.error("Stuff did not do what we asked", response);
+		}
+	}).catch(function(error){
+		console.log(error);
+	});
 })

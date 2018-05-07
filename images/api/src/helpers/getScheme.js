@@ -4,7 +4,6 @@ const moment = require('moment');
 exports.getSchema = async (pg, schemaUUID, res) => {
   let result = {};
 
-  console.log(schemaUUID)
   if (schemaUUID == "new"){
     result = {
       "uuid": "new",
