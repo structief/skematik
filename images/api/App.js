@@ -53,23 +53,23 @@ class App {
   }
 
   async start() {
-    //Initiate consumer-scripts for listening
-    fs.readdirSync(consumers).forEach(consumer => {
-      if(consumer.indexOf(".DS_Store") == -1 ){
-        if(fs.existsSync(consumers + consumer + "/index.js")){
-          require(consumers + consumer + "/index.js");
+    //Initiate consumer-scripts for listening;
+    try {
+      fs.readdirSync(consumers).forEach(consumer => {
+        if(consumer.indexOf(".DS_Store") == -1 ){
+          if(fs.existsSync(consumers + consumer + "/index.js")){
+            require(consumers + consumer + "/index.js");
+          }
         }
-      }
-    });
-    //Emit an example event
-    emitter.emit("server.start", {});
+      });
+    } catch (err) {
+      console.log("# ------ You have an error in the consumer-files ------ #");
+      console.log(err);
+    }
 
+    app.use(bodyParser.json());       // to support JSON-encoded bodies
 
-    app.use( bodyParser.json() );       // to support JSON-encoded bodies
-
-    app.use(cors({credentials: false, origin: '*'}))
-
-
+    app.use(cors({credentials: false, origin: '*'}));
 
     app.get('/', async (req, res, next) => {
       const result = {};
