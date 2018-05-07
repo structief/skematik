@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "v": {
     "app": "0.0.8",
-    "build": "0.0.8-compile.334"
+    "build": "0.0.8-compile.338"
   },
   "features": [
     {
@@ -31,8 +31,12 @@
       "progress": 95
     },
     {
-      "name": "Modulesysteem voor integratie SendGrid & Smartschool",
-      "progress": 24
+      "name": "Integratie SendGrid",
+      "progress": 100
+    },
+    {
+      "name": "Integratie Smartschool",
+      "progress": 15
     },
     {
       "name": "Page-part systeem voor front-end",
