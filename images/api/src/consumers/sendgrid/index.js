@@ -82,4 +82,31 @@ emitter.on(config.type + '.subscription.confirmed', function(data){
 	}).catch(function(error){
 		console.log(error);
 	});
+});
+
+//Send a registered user an e-mail
+emitter.on(config.type + '.register', function(data){
+	//Create mail
+	var mail = new Mail();
+	mail.templateId = config.registerTemplateId;
+	mail.recipients = [data[0].mail];
+	mail.subject = "Welkom bij Skematik";
+	mail.text = "Bevestiging account registratie op Skematik";
+	mail.body = "Bevestiging account registratie op Skematik";
+	mail.substitutions = {
+		previewText: mail.text,
+		firstname: data[0].given_name,
+		buttonName: "Naar jouw dashboard",
+		buttonUrl: "https://www.skematik.io/login"
+	};
+
+	mail.send().then(function(response){
+		if(response === true){
+			//Do nothing, this is good.
+		}else{
+			console.error("Stuff did not do what we asked", response);
+		}
+	}).catch(function(error){
+		console.log(error);
+	});
 })
