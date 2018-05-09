@@ -26,8 +26,8 @@ class Answers {
     })
 
     app.get('/confirm/:token', async(req, res, next) => {
-        await pg.table("answers").returning("*").update({activated: true}).where({confirm_token: req.params.token}).then(async(data) => {
-          if(data){
+        await pg.table("answers").returning("*").update({activated: true}).where({confirm_token: req.params.token, activated: null}).then(async(data) => {
+          if(data.length > 0){
             // Confirmation worked, fire event
             var eventData = {
               participant: null,
@@ -49,11 +49,21 @@ class Answers {
             // Return tableId to front-end for redirection
             res.status(200).send({tableID: data[0].tableID});
           }else{
-            res.status(404).send({message: "No participation found"});
+            //Check if this code exists, but was already activated
+            await pg.table("answers").select("*").where({confirm_token: req.params.token}).then(async(data) => {
+              console.log(data);
+              if(data.length > 0){
+                //Answers found, but they were already confirmed
+                res.status(408).send({message: "Inschrijving reeds bevestigd, we sturen je terug naar het schema.", tableID: data[0].tableID});
+              }else{
+                //No Answers found
+                res.status(404).send({message: "Geen inschrijving gevonden met deze code.."});
+              }
+            });
           }
         }).catch((error) => {
           console.log(error);
-          res.status(400).send({message: "Something went wrong, please try again later"});
+          res.status(400).send({message: "Er ging iets mis, 't kan vanalles zijn", error: error});
         });
     })
 
