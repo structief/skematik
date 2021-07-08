@@ -9,6 +9,8 @@ skematikControllers.controller('FeedbackBoxController',["$scope", "$rootScope", 
 		name: null
 	};
 
+	$scope.hide = false;
+
 	$scope.reactions = {
 		'joy': {
 			'emoji': 'heart_eyes',
@@ -37,6 +39,15 @@ skematikControllers.controller('FeedbackBoxController',["$scope", "$rootScope", 
 		}
 	};
 
+	//Update showing of this element
+	$rootScope.$on("feedback.hide", function(event, data){
+		$scope.hide = true;
+	});
+	$rootScope.$on("feedback.show", function(event, data){
+		$scope.hide = false;
+	});
+
+
 	$scope.toStep = function(name, index){
 		//Add step
 		$scope.step.index = index;
@@ -52,7 +63,6 @@ skematikControllers.controller('FeedbackBoxController',["$scope", "$rootScope", 
 			'url': $location.url()
 		};
 
-		console.log($scope.message);
 		//Send $scope.success to certain endpoint
 		FeedbackFactory.sendFeedback({"feeling": $scope.success.name, "message": $scope.message, "url": $scope.success.url}, function(response){
 			//Add this page to the localStorage

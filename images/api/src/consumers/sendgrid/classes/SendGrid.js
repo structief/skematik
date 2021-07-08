@@ -65,35 +65,46 @@ class Mail {
   }
 
   send(){
-    sgMail.send({
-      to: this.recipients,
-      from: 'hello@skematik.io',
-      subject: this.subject,
-      text: this.text,
-      html: this.body,
-      templateId: this._templateId,
-      substitutions: this._substitutions
-    }, true)
-    .then(function(){
-      //Celebrate
-      return true;
-    })
-    .catch(function(error){
-      //Log friendly error
-      return error.toString();
+    var _this = this;
+    //Returns promise
+    return new Promise(function(resolve, reject) {
+      sgMail.send({
+        to: _this.recipients,
+        from: 'Skematik <hello@skematik.io>',
+        subject: _this.subject,
+        text: _this.text,
+        html: _this.body,
+        templateId: _this._templateId,
+        substitutions: _this._substitutions
+      },  (error, result) => {
+        if (error) {
+          //Log friendly error
+          console.log("# ------ Mail error ------ #");
+          reject(error);
+        } else {
+          //Celebrate
+-          resolve(true);
+        }
+      });
     });
   }
 
   fake(){
-    return {
-      to: this.recipients,
-      from: 'hello@skematik.io',
-      subject: this.subject,
-      text: this.text,
-      html: this.body,
-      templateId: this._templateId,
-      substitutions: this._substitutions
-    };
+     var _this = this;
+    //Returns promise
+    return new Promise(function(resolve, reject) {
+      // Do async job
+      console.log({
+        to: _this.recipients,
+        from: 'Skematik <hello@skematik.io>',
+        subject: _this.subject,
+        text: _this.text,
+        html: _this.body,
+        templateId: _this._templateId,
+        substitutions: _this._substitutions
+      });
+      resolve(true);
+    });
   }
 }
 

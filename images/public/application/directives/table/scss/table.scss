@@ -5,6 +5,10 @@
 	.scheme--no-box{
 		min-height: 60px;
 		margin-bottom: 0px;
+		
+		&:last-of-type{
+			margin-bottom: 100px !important;
+		}
 
 		&.has__overlay{
 			height: 81px;

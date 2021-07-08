@@ -26,31 +26,44 @@ class Answers {
     })
 
     app.get('/confirm/:token', async(req, res, next) => {
-        await pg.table("answers").returning("*").update({activated: true}).where({confirm_token: req.params.token}).then(async(data) => {
-          if(data){
-            // Subscription worked, fire event
-            const eventData = {
+        await pg.table("answers").returning("*").update({activated: true}).where({confirm_token: req.params.token, activated: null}).then(async(data) => {
+          if(data.length > 0){
+            // Confirmation worked, fire event
+            var eventData = {
               participant: null,
+              scheme: {},
               participations: []
             };
             eventData.participant = data[0].participant;
             //Loop over answers and put them in event emitter
             for(var i = 0; i < data.length; i++){
-              await pg.select().table('cells').where({uuid: data[0].cellID}).then(async(cell) => {
+              await pg.select().table('cells').where({uuid: data[i].cellID}).then(async(cell) => {
                 eventData.participations.push({"col": cell[0].col, "row": cell[0].row});
               });
             }
-            await pg.select('consumer').table('schema').where({uuid: data[0].tableID}).then(async(schema) => {
+            await pg.select().table('schema').where({uuid: data[0].tableID}).then(async(schema) => {
+              eventData.scheme = schema[0];
               emitter.emit(schema[0].consumer['index'] + '.subscription.confirmed', {eventData});
             });
 
             // Return tableId to front-end for redirection
             res.status(200).send({tableID: data[0].tableID});
           }else{
-            res.status(404).send({message: "No participation found"});
+            //Check if this code exists, but was already activated
+            await pg.table("answers").select("*").where({confirm_token: req.params.token}).then(async(data) => {
+              console.log(data);
+              if(data.length > 0){
+                //Answers found, but they were already confirmed
+                res.status(408).send({message: "Inschrijving reeds bevestigd, we sturen je terug naar het schema.", tableID: data[0].tableID});
+              }else{
+                //No Answers found
+                res.status(404).send({message: "Geen inschrijving gevonden met deze code.."});
+              }
+            });
           }
         }).catch((error) => {
-          res.status(400).send({message: "Something went wrong, please try again later"});
+          console.log(error);
+          res.status(400).send({message: "Er ging iets mis, 't kan vanalles zijn", error: error});
         });
     })
 
@@ -73,7 +86,6 @@ class Answers {
             return res.send(417, { message: 'no more place', cell: {uuid: participation['cell']['uuid']}});
           } else {
             const uuid = uuidV1();
-            // send out token for mail
 
             //Add participation for insertion
             insert.push({
@@ -99,28 +111,33 @@ class Answers {
         
         //Add entire stuff to db
         await pg('answers').insert(insert).then(async(id) => {
-          
-
-
-          let result = {};
-          const rowstructure = [];
-
-
-          let answers = [];
-
-          await pg.select().table('answers').where({tableID: req.params.uuid}).then((a) => {
-            answers = a;
-          });
-
           // Emit event for consumers
-          await pg.select('consumer').table('schema').where({uuid: req.params.uuid}).then(async(schema) => {
-            emitter.emit(schema[0].consumer['index'] + '.subscription.added', {insert});
+          // Subscription worked, fire event
+          const eventData = {
+            participant: null,
+            scheme: {},
+            participations: [],
+            confirmToken: null,
+            origin: req.get("Origin")
+          };
+
+          eventData.participant = insert[0].participant;
+          //Loop over answers and put them in event emitter
+          for(var i = 0; i < insert.length; i++){
+            eventData.confirmToken = insert[i].confirm_token;
+            await pg.select().table('cells').where({uuid: insert[i].cellID}).then(async(cell) => {
+              eventData.participations.push({"col": cell[0].col, "row": cell[0].row});
+            });
+          }
+          await pg.select().table('schema').where({uuid: req.params.uuid}).then(async(schema) => {
+            eventData.scheme = schema[0]; 
+            emitter.emit(schema[0].consumer['index'] + '.subscription.added', {eventData});
           });
 
           // Return schema for front-end
           getSchema(pg, req.params.uuid, res);
         }).catch(function(error) {
-          return res.send('error' + error)
+          return res.status(400).send('error' + error);
         })
       }
     })
@@ -128,5 +145,3 @@ class Answers {
 }
 
 module.exports = Answers;
-
-

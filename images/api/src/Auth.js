@@ -5,6 +5,7 @@ const { checkToken } = require("./helpers/auth")
 const config = require('./helpers/config.js') 
 const Cryptr = require('cryptr'),
     cryptr = new Cryptr(config.auth.secret);
+const emitter = require('./helpers/emitter.js');
 
 
 class Auth {
@@ -106,7 +107,10 @@ class Auth {
 
     app.post('/register',  async (req, res, next) => {
       await this.createUser(req, pg).then((result) => {
-        res.send(200)
+        res.send(200);
+
+        //Send out email for a heads-up to the registrar, which is nice
+        emitter.emit('sendgrid.register', result);
       }).catch((error) => {
         res.send(400, error)
       })
@@ -171,8 +175,7 @@ class Auth {
         given_name: req.body.account.givenName,
         family_name: req.body.account.familyName,
         roles: { roles: [{uuid: insertRolesOwner[0]}]}
-      }).returning('uuid')
-    
+      }).returning(['uuid', 'mail', 'given_name']);    
   }
 }
 

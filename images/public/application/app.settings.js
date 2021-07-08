@@ -205,11 +205,18 @@ skematik.run(["$rootScope", "$state", "$stateParams", "authManager", "AccountFac
 
 	$transitions.onSuccess({ to: 'fe.**' }, function(trans) {
 		//Fire event to hide/show navigation
-		var hideMenuOnPages = ["fe.login", "fe.register"];
-		if(hideMenuOnPages.indexOf(trans.to().name) !== -1){
+		var hideOnPages = ["fe.login", "fe.register"];
+		if(hideOnPages.indexOf(trans.to().name) !== -1){
 			$rootScope.$broadcast("menu.hide", {});
 		}else{
 			$rootScope.$broadcast("menu.show", {});
+		}
+
+		//Hide/show feedback-bar
+		if(trans.to().name === "fe.confirm"){
+			$rootScope.$broadcast("feedback.hide", {});
+		}else{
+			$rootScope.$broadcast("feedback.show", {});
 		}
 	});
 

@@ -1,9 +1,11 @@
 <!-- Container with loading icon -->
-<section class="u__loading">
-	<div>
-		<i class="feather icon--large {{meta.icon}}"></i>
-		<span>
-			{{meta.message}}
-		</span>
+<div class="container u__vertical--center u__horizontal--center">
+	<div class="offset-by-one-third one-third columns box--white text--center scheme__box padding--20 loading__box">
+			<i class="feather {{meta.icon}} icon--large"></i>
+			<h6>{{meta.message.title}}</h6>
+			<div class="row row--close">
+				<p>{{meta.message.message}}</p>
+			</div>
+		</a>
 	</div>
-</section>
+</div>
